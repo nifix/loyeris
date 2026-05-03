@@ -1,0 +1,9 @@
+﻿<Solution>
+  <Folder Name="/Loyeris.Auth/">
+    <Project Path="Loyeris.Auth.App/Loyeris.Auth.App.csproj" />
+    <Project Path="Loyeris.Auth.Core/Loyeris.Auth.Core.csproj" />
+    <Project Path="Loyeris.Auth.Infrastructure/Loyeris.Auth.Infrastructure.csproj" />
+  </Folder>
+  <Project Path="Loyeris.Api/Loyeris.Api.csproj" />
+  <Project Path="Loyeris.Shared/Loyeris.Shared.csproj" />
+</Solution>

@@ -1,0 +1,11 @@
+### OpenAPI endpoint (returns .json)
+
+GET {{HostAddress}}/openapi/v1.json
+Accept: application/json
+
+### Sample auth test endpoint
+
+GET {{HostAddress}}/api/auth
+Accept: application/json
+
+###
