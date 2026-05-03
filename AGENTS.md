@@ -34,8 +34,9 @@ No lint or typecheck scripts exist (`ng lint` not configured). CI not set up (no
 
 ## Tooling quirks
 
-- **Package manager:** `yarn` (v1.22.22) — `angular.json` has `cli.packageManager: "npm"`, so `ng` subcommands may default to npm. Always use `yarn`.
+- **Package manager:** `yarn` (v1.22.22) — lockfile is `yarn.lock` and `packageManager` field is set. Use `yarn`, never `npm`.
 - **Tailwind v4:** CSS-first config — no `tailwind.config.js`. Imported in `src/styles.css` via `@import "tailwindcss"`; daisyUI via `@plugin "daisyui"`. PostCSS at `.postcssrc.json`.
+- **daisyUI must be installed:** `@plugin "daisyui"` in `styles.css` requires the npm package. Currently NOT in `node_modules` or `package.json`. Run `yarn add --dev daisyui` before building.
 - **TypeScript:** strict mode, `module: "preserve"`, decorators enabled, Vitest globals in `tsconfig.spec.json`.
 - **EditorConfig:** 2-space indent, single quotes for `.ts`.
 - **Angular build:** uses `@angular/build:application` (Application builder, not deprecated).
