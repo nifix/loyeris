@@ -18,7 +18,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// RegisterWeatherforecastEndpoints
+// RegisterAuthEndpoints
 app.RegisterAuthEndpointGroup(app.Services.GetRequiredService<IMediator>());
 
 app.Run();
