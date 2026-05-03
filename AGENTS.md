@@ -52,10 +52,9 @@ No lint or typecheck scripts (`ng lint` not configured). No CI (no `.github/work
 ## Current state
 
 - **Very early:** single `App` component, empty routes, no pages wired
-- **Broken test:** `app.spec.ts` asserts `<h1>` with "Hello, loyeris-app" but template only has `<button>` "Testouille"
 - **`index.html`** has `lang="en"` — should be `"fr"`
-- No services, no HTTP layer, no state management beyond `signal()`
 - Plus Jakarta Sans font and `data-theme="corporate"` not yet imported in Angular app
+- No services, no HTTP layer, no state management beyond `signal()`
 
 ## UI Kit (design reference)
 
