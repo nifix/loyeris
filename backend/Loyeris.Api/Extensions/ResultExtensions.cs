@@ -16,7 +16,7 @@ public static class ResultExtensions
     /// <returns>An <see cref="IResult"/> representing the corresponding HTTP response.</returns>
     public static IResult ToHttpResult<T>(this Result<T> result)
     {
-        // Si success
+        // If success
         if (result.IsSuccess)
         {
             return result.SuccessType switch
