@@ -1,6 +1,7 @@
 {
-  "name": "loyeris-app",
-  "version": "0.0.0",
+  "license": "UNLICENSED",
+  "version": "0.0.1",
+  "name": "loyeris",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -21,7 +22,7 @@
     ]
   },
   "private": true,
-  "packageManager": "npm@11.13.0",
+  "packageManager": "yarn@1.22.22",
   "dependencies": {
     "@angular/common": "^21.1.0",
     "@angular/compiler": "^21.1.0",
