@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="corporate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loyeris · Locataires</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="drawer lg:drawer-open">
+    <input id="app-drawer" type="checkbox" class="drawer-toggle" />
+
+    <div class="drawer-content min-h-screen">
+      <div class="navbar sticky top-0 z-30 border-b border-base-200 bg-base-100/90 px-4 backdrop-blur lg:hidden">
+        <div class="flex-1">
+          <label for="app-drawer" class="btn btn-square btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </label>
+          <a href="dashboard.html" class="ml-2 flex items-center gap-3">
+            <div class="brand-mark brand-mark-sm">L</div>
+            <div>
+              <p class="font-semibold text-slate-900">Loyeris</p>
+              <p class="text-xs text-slate-500">Gestion locative SCI</p>
+            </div>
+          </a>
+        </div>
+        <a class="btn btn-primary btn-sm" href="tenant-detail.html">Nouveau</a>
+      </div>
+
+      <main class="space-y-6 p-4 md:p-6 lg:p-8">
+        <section class="page-header card rounded-3xl border border-base-200 shadow-sm">
+          <div class="card-body p-5 md:p-6">
+            <div class="page-header-copy">
+              <div class="badge badge-primary badge-outline">Occupants</div>
+              <div>
+                <h1 class="text-4xl font-bold text-slate-900">Locataires</h1>
+                <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-500">Retrouvez rapidement les locataires actifs, leur logement actuel et leur situation de paiement.</p>
+              </div>
+              <div class="page-header-meta">
+                <div class="page-header-chip">3 locataires actifs</div>
+                <div class="page-header-chip">1 sortie archivee</div>
+                <div class="page-header-chip">1 retard a surveiller</div>
+              </div>
+            </div>
+            <div class="page-toolbar">
+              <button class="btn btn-sm btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Ajouter un locataire
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-4 md:grid-cols-3">
+          <article class="stat rounded-3xl border border-base-200 bg-base-100 shadow-sm">
+            <div class="stat-title">Locataires actifs</div>
+            <div class="stat-value text-success">3</div>
+            <div class="stat-desc">1 locataire sorti</div>
+          </article>
+          <article class="stat rounded-3xl border border-base-200 bg-base-100 shadow-sm">
+            <div class="stat-title">Entrées récentes</div>
+            <div class="stat-value text-primary">1</div>
+            <div class="stat-desc">Depuis février 2026</div>
+          </article>
+          <article class="stat rounded-3xl border border-base-200 bg-base-100 shadow-sm">
+            <div class="stat-title">Retards en cours</div>
+            <div class="stat-value text-warning">1</div>
+            <div class="stat-desc">Camille Robert</div>
+          </article>
+        </section>
+
+        <section class="card rounded-3xl border border-base-200 bg-base-100 shadow-sm">
+          <div class="card-body gap-5">
+            <div>
+              <h2 class="card-title text-xl">Liste des locataires</h2>
+              <p class="text-sm leading-6 text-slate-500">Informations clés, coordonnées et accès direct à l'historique locatif.</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="table table-nowrap">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>SCI</th>
+                    <th>Lot actuel</th>
+                    <th>Entrée</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-semibold text-slate-900">Sophie Martin</td>
+                    <td>SCI Les Tilleuls</td>
+                    <td>Lot A01</td>
+                    <td>15/09/2025</td>
+                    <td>sophie.martin@email.fr</td>
+                    <td>06 11 22 33 44</td>
+                    <td><span class="badge badge-pastel-success">Actif</span></td>
+                    <td><a class="btn btn-sm btn-ghost text-primary" href="tenant-detail.html">Voir →</a></td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold text-slate-900">Camille Robert</td>
+                    <td>SCI Les Tilleuls</td>
+                    <td>Lot A02</td>
+                    <td>01/02/2026</td>
+                    <td>camille.robert@email.fr</td>
+                    <td>06 22 33 44 55</td>
+                    <td><span class="badge badge-pastel-success">Actif</span></td>
+                    <td><a class="btn btn-sm btn-ghost text-primary" href="tenant-detail.html">Voir →</a></td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold text-slate-900">Louis Mercier</td>
+                    <td>SCI Carnot</td>
+                    <td>Lot B01</td>
+                    <td>01/10/2025</td>
+                    <td>louis.mercier@email.fr</td>
+                    <td>06 33 44 55 66</td>
+                    <td><span class="badge badge-pastel-success">Actif</span></td>
+                    <td><a class="btn btn-sm btn-ghost text-primary" href="tenant-detail.html">Voir →</a></td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold text-slate-900">Élodie Marchal</td>
+                    <td>SCI Les Tilleuls</td>
+                    <td>—</td>
+                    <td>01/05/2024</td>
+                    <td>elodie.marchal@email.fr</td>
+                    <td>06 44 55 66 77</td>
+                    <td><span class="badge badge-pastel-neutral">Parti</span></td>
+                    <td><a class="btn btn-sm btn-ghost text-primary" href="tenant-detail.html">Voir →</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="drawer-side z-40">
+      <label for="app-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+      <aside class="app-sidebar flex min-h-full w-72 flex-col px-5 py-6 text-white">
+        <a href="dashboard.html" class="flex items-center gap-4 px-3">
+          <div class="brand-mark brand-mark-sm">L</div>
+          <div>
+            <p class="text-xl font-semibold">Loyeris</p>
+            <p class="text-sm text-white/60">Gestion locative SCI</p>
+          </div>
+        </a>
+
+        <div class="mt-8">
+          <p class="px-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/40">Navigation</p>
+          <ul class="menu mt-3 gap-1 p-0">
+            <li><a href="dashboard.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+              Dashboard
+            </a></li>
+            <li><a href="scis.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              SCI
+            </a></li>
+            <li><a href="lots.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+              Lots
+            </a></li>
+            <li><a class="active" href="tenants.html" aria-current="page">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              Locataires
+            </a></li>
+            <li><a href="rents.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              Loyers
+            </a></li>
+            <li><a href="settings.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Paramètres
+            </a></li>
+          </ul>
+        </div>
+
+        <div class="mt-auto rounded-3xl border border-white/10 bg-white/5 p-4">
+          <div class="flex items-center gap-3">
+            <div class="avatar placeholder">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-sm font-semibold text-white">
+                <span>NF</span>
+              </div>
+            </div>
+            <div>
+              <p class="font-semibold text-white">nifix</p>
+              <p class="text-sm text-white/55">contact@loyeris.app</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>

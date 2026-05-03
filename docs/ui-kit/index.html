@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="corporate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loyeris UI Kit</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="auth-shell min-h-screen px-4 py-6 md:px-8 lg:px-12 lg:py-10">
+    <div class="mx-auto grid min-h-[calc(100vh-3rem)] max-w-7xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+      <section class="space-y-8 text-white">
+        <div class="flex items-center gap-4">
+          <div class="brand-mark brand-mark-lg">L</div>
+          <div>
+            <p class="text-2xl font-semibold">Loyeris</p>
+            <p class="text-sm text-white/70">UI kit modernise pour la gestion locative SCI</p>
+          </div>
+        </div>
+
+        <div class="space-y-5">
+          <div class="badge badge-lg border-white/20 bg-white/10 px-4 py-3 text-white">Base HTML + daisyUI CDN</div>
+          <h1 class="max-w-3xl text-5xl font-black leading-tight md:text-6xl">
+            Une base produit plus nette, plus moderne et beaucoup plus simple a faire evoluer.
+          </h1>
+          <p class="max-w-2xl text-lg leading-8 text-white/75">
+            Cette version remet le kit Loyeris sur une vraie fondation design system:
+            navigation propre, cartes plus premium, tableaux mieux hierarchises et composants
+            directement appuyes sur daisyUI.
+          </p>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div class="glass-panel rounded-3xl p-5">
+            <p class="text-sm font-semibold text-white/65">Style produit</p>
+            <p class="mt-2 text-xl font-semibold">SaaS clair et premium</p>
+            <p class="mt-2 text-sm leading-6 text-white/70">Une direction plus elegante pour dashboard, listes et fiches detail.</p>
+          </div>
+          <div class="glass-panel rounded-3xl p-5">
+            <p class="text-sm font-semibold text-white/65">Composants</p>
+            <p class="mt-2 text-xl font-semibold">daisyUI d'abord</p>
+            <p class="mt-2 text-sm leading-6 text-white/70">Cards, stats, badges, menus, formulaires et tables remplacent la plupart du CSS custom.</p>
+          </div>
+          <div class="glass-panel rounded-3xl p-5">
+            <p class="text-sm font-semibold text-white/65">Projection front</p>
+            <p class="mt-2 text-xl font-semibold">Pret pour integration</p>
+            <p class="mt-2 text-sm leading-6 text-white/70">Une base statique plus propre a reutiliser ensuite dans Angular ou un autre framework.</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <a class="btn btn-primary btn-lg" href="dashboard.html">Ouvrir le dashboard</a>
+          <a class="btn btn-outline btn-lg border-white/25 text-white hover:border-white hover:bg-white hover:text-slate-900" href="login.html">Voir la connexion</a>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <div class="card surface-panel border border-white/10 bg-base-100/95">
+          <div class="card-body gap-5">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Pages incluses</p>
+                <h2 class="mt-2 text-3xl font-bold text-slate-900">Kit de navigation</h2>
+                <p class="mt-2 text-sm leading-6 text-slate-500">Toutes les maquettes principales sont maintenant alignees sur la meme grammaire visuelle.</p>
+              </div>
+              <div class="badge badge-primary badge-outline">v2</div>
+            </div>
+
+            <div class="grid gap-3 sm:grid-cols-2">
+              <a class="card border border-base-200 bg-base-100 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md" href="login.html">
+                <div class="card-body gap-2 p-4">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Accueil</p>
+                  <p class="text-lg font-semibold">Connexion</p>
+                  <p class="text-sm text-slate-500">Point d'entree du produit et parcours d'authentification.</p>
+                </div>
+              </a>
+              <a class="card border border-base-200 bg-base-100 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md" href="dashboard.html">
+                <div class="card-body gap-2 p-4">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Pilotage</p>
+                  <p class="text-lg font-semibold">Dashboard</p>
+                  <p class="text-sm text-slate-500">Vue globale des loyers, retards et occupation.</p>
+                </div>
+              </a>
+              <a class="card border border-base-200 bg-base-100 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md" href="scis.html">
+                <div class="card-body gap-2 p-4">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Structures</p>
+                  <p class="text-lg font-semibold">SCI</p>
+                  <p class="text-sm text-slate-500">Vue portefeuille pour chaque structure et ses KPIs.</p>
+                </div>
+              </a>
+              <a class="card border border-base-200 bg-base-100 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md" href="lots.html">
+                <div class="card-body gap-2 p-4">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Parc</p>
+                  <p class="text-lg font-semibold">Lots</p>
+                  <p class="text-sm text-slate-500">Inventaire des biens, statuts et liens rapides.</p>
+                </div>
+              </a>
+              <a class="card border border-base-200 bg-base-100 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md" href="tenant-detail.html">
+                <div class="card-body gap-2 p-4">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Locataires</p>
+                  <p class="text-lg font-semibold">Fiches detail</p>
+                  <p class="text-sm text-slate-500">Parcours locatif, infos pratiques et historique de paiement.</p>
+                </div>
+              </a>
+              <a class="card border border-base-200 bg-base-100 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md" href="rents.html">
+                <div class="card-body gap-2 p-4">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Encaissements</p>
+                  <p class="text-lg font-semibold">Loyers</p>
+                  <p class="text-sm text-slate-500">Vue operationnelle pour solder, relancer et suivre le mois.</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mockup-window border border-white/10 bg-neutral/20 shadow-2xl">
+          <div class="grid gap-4 bg-base-100 p-6 md:grid-cols-2">
+            <div class="rounded-3xl border border-base-200 bg-base-100 p-5">
+              <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Direction</p>
+              <h3 class="mt-2 text-xl font-bold">Look plus dashboard SaaS</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-500">Des surfaces plus propres, une meilleure respiration et un systeme de composants plus coherent.</p>
+            </div>
+            <div class="rounded-3xl border border-base-200 bg-base-100 p-5">
+              <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Gain</p>
+              <h3 class="mt-2 text-xl font-bold">Moins de CSS sur mesure</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-500">Le kit repose surtout sur daisyUI, avec seulement quelques helpers de marque et de mise en scene.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

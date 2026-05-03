@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="corporate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loyeris · Paramètres</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="drawer lg:drawer-open">
+    <input id="app-drawer" type="checkbox" class="drawer-toggle" />
+
+    <div class="drawer-content min-h-screen">
+      <div class="navbar sticky top-0 z-30 border-b border-base-200 bg-base-100/90 px-4 backdrop-blur lg:hidden">
+        <div class="flex-1">
+          <label for="app-drawer" class="btn btn-square btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </label>
+          <a href="dashboard.html" class="ml-2 flex items-center gap-3">
+            <div class="brand-mark brand-mark-sm">L</div>
+            <div>
+              <p class="font-semibold text-slate-900">Loyeris</p>
+              <p class="text-xs text-slate-500">Gestion locative SCI</p>
+            </div>
+          </a>
+        </div>
+        <a class="btn btn-primary btn-sm" href="dashboard.html">Dashboard</a>
+      </div>
+
+      <main class="space-y-6 p-4 md:p-6 lg:p-8 pb-32">
+        <section class="page-header card rounded-3xl border border-base-200 shadow-sm">
+          <div class="card-body p-5 md:p-6">
+            <div class="page-header-copy">
+              <div class="badge badge-primary badge-outline">Mon compte</div>
+              <div>
+                <h1 class="text-4xl font-bold text-slate-900">Paramètres</h1>
+                <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-500">Gérez vos informations personnelles, vos préférences de notification et la sécurité de votre compte.</p>
+              </div>
+              <div class="page-header-meta">
+                <div class="page-header-chip">Compte actif</div>
+                <div class="page-header-chip">Dernière connexion : aujourd'hui</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid gap-6 xl:grid-cols-3">
+          <!-- Profil -->
+          <section class="card rounded-3xl border border-base-200 bg-base-100 shadow-sm xl:col-span-2">
+            <div class="card-body gap-6 p-6 md:p-8">
+              <div class="flex items-center gap-4">
+                <div class="avatar placeholder">
+                  <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">
+                    <span>NF</span>
+                  </div>
+                </div>
+                <div>
+                  <h2 class="text-xl font-bold text-slate-900">Profil</h2>
+                  <p class="text-sm text-slate-500">Vos informations personnelles visibles dans l'application.</p>
+                </div>
+              </div>
+
+              <form class="grid gap-5 md:grid-cols-2">
+                <label class="form-control w-full">
+                  <div class="label px-1 pb-1">
+                    <span class="label-text font-medium text-slate-700">Prénom</span>
+                  </div>
+                  <input class="input input-bordered w-full rounded-xl" type="text" value="Nifix" />
+                </label>
+                <label class="form-control w-full">
+                  <div class="label px-1 pb-1">
+                    <span class="label-text font-medium text-slate-700">Nom</span>
+                  </div>
+                  <input class="input input-bordered w-full rounded-xl" type="text" value="Ferrand" />
+                </label>
+                <label class="form-control w-full md:col-span-2">
+                  <div class="label px-1 pb-1">
+                    <span class="label-text font-medium text-slate-700">Adresse email</span>
+                  </div>
+                  <input class="input input-bordered w-full rounded-xl" type="email" value="contact@loyeris.app" />
+                </label>
+                <label class="form-control w-full md:col-span-2">
+                  <div class="label px-1 pb-1">
+                    <span class="label-text font-medium text-slate-700">Téléphone</span>
+                  </div>
+                  <input class="input input-bordered w-full rounded-xl" type="tel" value="06 12 34 56 78" />
+                </label>
+              </form>
+
+              <div class="flex justify-end gap-3 pt-2">
+                <button type="button" class="btn btn-ghost">Annuler</button>
+                <button type="button" class="btn btn-primary">Enregistrer le profil</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Sécurité -->
+          <section class="card rounded-3xl border border-base-200 bg-base-100 shadow-sm">
+            <div class="card-body gap-6 p-6 md:p-8">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">Sécurité</h2>
+                <p class="text-sm text-slate-500">Protégez l'accès à votre compte.</p>
+              </div>
+
+              <div class="space-y-4">
+                <div class="rounded-2xl border border-base-200 bg-base-50 p-4">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="font-semibold text-slate-900">Mot de passe</p>
+                      <p class="text-sm text-slate-500">Dernière modification il y a 3 mois</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm">Modifier</button>
+                  </div>
+                </div>
+
+                <div class="rounded-2xl border border-base-200 bg-base-50 p-4">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="font-semibold text-slate-900">Authentification à deux facteurs</p>
+                      <p class="text-sm text-slate-500">Désactivée</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm">Activer</button>
+                  </div>
+                </div>
+
+                <div class="rounded-2xl border border-base-200 bg-base-50 p-4">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="font-semibold text-slate-900">Sessions actives</p>
+                      <p class="text-sm text-slate-500">1 appareil connecté</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm">Gérer</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Préférences -->
+          <section class="card rounded-3xl border border-base-200 bg-base-100 shadow-sm xl:col-span-2">
+            <div class="card-body gap-6 p-6 md:p-8">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">Préférences</h2>
+                <p class="text-sm text-slate-500">Personnalisez votre expérience dans l'application.</p>
+              </div>
+
+              <div class="grid gap-5 md:grid-cols-2">
+                <label class="form-control w-full">
+                  <div class="label px-1 pb-1">
+                    <span class="label-text font-medium text-slate-700">Langue</span>
+                  </div>
+                  <select class="select select-bordered w-full rounded-xl">
+                    <option selected>Français</option>
+                    <option>English</option>
+                  </select>
+                </label>
+                <label class="form-control w-full">
+                  <div class="label px-1 pb-1">
+                    <span class="label-text font-medium text-slate-700">Devise</span>
+                  </div>
+                  <select class="select select-bordered w-full rounded-xl">
+                    <option selected>Euro (€)</option>
+                    <option>Dollar ($)</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="divider my-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Notifications</div>
+
+              <div class="space-y-3">
+                <div class="flex items-center justify-between rounded-xl border border-base-200 bg-base-50 px-4 py-3">
+                  <div>
+                    <p class="font-semibold text-slate-800">Retards de paiement</p>
+                    <p class="text-sm text-slate-500">Recevoir un email lorsqu'un loyer est en retard.</p>
+                  </div>
+                  <input type="checkbox" checked="checked" class="toggle toggle-primary" />
+                </div>
+                <div class="flex items-center justify-between rounded-xl border border-base-200 bg-base-50 px-4 py-3">
+                  <div>
+                    <p class="font-semibold text-slate-800">Nouveaux paiements</p>
+                    <p class="text-sm text-slate-500">Recevoir un email lorsqu'un paiement est enregistré.</p>
+                  </div>
+                  <input type="checkbox" checked="checked" class="toggle toggle-primary" />
+                </div>
+                <div class="flex items-center justify-between rounded-xl border border-base-200 bg-base-50 px-4 py-3">
+                  <div>
+                    <p class="font-semibold text-slate-800">Fin de bail</p>
+                    <p class="text-sm text-slate-500">Être alerté 3 mois avant la fin d'un bail.</p>
+                  </div>
+                  <input type="checkbox" class="toggle toggle-primary" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Apparence -->
+          <section class="card rounded-3xl border border-base-200 bg-base-100 shadow-sm">
+            <div class="card-body gap-6 p-6 md:p-8">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">Apparence</h2>
+                <p class="text-sm text-slate-500">Adaptez l'interface à votre convenance.</p>
+              </div>
+
+              <div class="flex flex-col gap-4">
+                <label class="form-control w-full">
+                  <div class="label px-1 pb-1">
+                    <span class="label-text font-medium text-slate-700">Thème</span>
+                  </div>
+                  <select class="select select-bordered w-full rounded-xl">
+                    <option selected>Clair (Corporate)</option>
+                    <option>Sombre</option>
+                    <option>Automatique</option>
+                  </select>
+                </label>
+
+                <div class="rounded-2xl border border-base-200 bg-base-50 p-4">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="font-semibold text-slate-900">Affichage compact</p>
+                      <p class="text-sm text-slate-500">Réduire les espaces dans les tableaux.</p>
+                    </div>
+                    <input type="checkbox" class="toggle toggle-primary" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div class="drawer-side z-40">
+      <label for="app-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+      <aside class="app-sidebar flex min-h-full w-72 flex-col px-5 py-6 text-white">
+        <a href="dashboard.html" class="flex items-center gap-4 px-3">
+          <div class="brand-mark brand-mark-sm">L</div>
+          <div>
+            <p class="text-xl font-semibold">Loyeris</p>
+            <p class="text-sm text-white/60">Gestion locative SCI</p>
+          </div>
+        </a>
+
+        <div class="mt-8">
+          <p class="px-3 text-xs font-semibold uppercase tracking-[0.22em] text-white/40">Navigation</p>
+          <ul class="menu mt-3 gap-1 p-0">
+            <li><a href="dashboard.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+              Dashboard
+            </a></li>
+            <li><a href="scis.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              SCI
+            </a></li>
+            <li><a href="lots.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+              Lots
+            </a></li>
+            <li><a href="tenants.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              Locataires
+            </a></li>
+            <li><a href="rents.html">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              Loyers
+            </a></li>
+            <li><a class="active" href="settings.html" aria-current="page">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Paramètres
+            </a></li>
+          </ul>
+        </div>
+
+        <div class="mt-auto rounded-3xl border border-white/10 bg-white/5 p-4">
+          <div class="flex items-center gap-3">
+            <div class="avatar placeholder">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-sm font-semibold text-white">
+                <span>NF</span>
+              </div>
+            </div>
+            <div>
+              <p class="font-semibold text-white">nifix</p>
+              <p class="text-sm text-white/55">contact@loyeris.app</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
