@@ -6,4 +6,5 @@
   </Folder>
   <Project Path="Loyeris.Api/Loyeris.Api.csproj" />
   <Project Path="Loyeris.Shared/Loyeris.Shared.csproj" />
+  <Project Path="Loyeris.Tests/Loyeris.Tests.csproj" />
 </Solution>

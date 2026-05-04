@@ -23,18 +23,27 @@ Mono-repo, two independent projects:
 | `Loyeris.Auth.Core/` | Domain — empty stub |
 | `Loyeris.Auth.Infrastructure/` | Infrastructure — empty stub |
 | `Loyeris.Shared/` | Shared kernel — `Result<T>`, `Error` types |
+| `Loyeris.Tests/` | NUnit test project (Moq, FluentAssertions) |
 
 All target `net10.0`, `Nullable: disable`, `ImplicitUsings: enable`.
 
 ## Commands
 
-Run everything from `frontend/loyeris-app/`:
+### Frontend (`frontend/loyeris-app/`)
 
 ```bash
 yarn start   # ng serve — http://localhost:4200
 yarn build   # ng build
 yarn test    # ng test — Vitest (not Karma)
 yarn watch   # ng build --watch --configuration development
+```
+
+### Backend (`backend/`)
+
+```bash
+dotnet build        # from Loyeris.Api/
+dotnet test          # from Loyeris.Tests/
+dotnet run           # from Loyeris.Api/ — http://localhost:5000
 ```
 
 No lint or typecheck scripts (`ng lint` not configured). No CI (no `.github/workflows/`). Prettier config embedded in `package.json`.
@@ -59,6 +68,13 @@ No lint or typecheck scripts (`ng lint` not configured). No CI (no `.github/work
 ## UI Kit (design reference)
 
 Open `docs/ui-kit/index.html` in a browser. Mockups for: login, dashboard, SCI list, lots, tenants, rent tracking, settings. Uses `data-theme="corporate"`, Plus Jakarta Sans, custom CSS classes (`auth-shell`, `glass-panel`, `brand-mark`, `page-header`, etc.) in `docs/ui-kit/styles.css` — replicate with Tailwind/daisyUI utilities in Angular.
+
+## Test conventions
+
+- **Framework:** NUnit with Moq for mocking and FluentAssertions for assertions.
+- **Structure:** Tests mirror the production namespace — e.g. `Loyeris.Auth.App.Handlers` maps to `Loyeris.Tests.Auth.Handlers`.
+- **AAA pattern:** Each test method contains `// Arrange`, `// Act`, `// Assert` comments separating the three phases.
+- **XML doc:** Classes have a `<summary>` describing their purpose; each test method has a `<summary>` with `<see cref/>` for referenced types.
 
 ## Conventions
 
