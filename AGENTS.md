@@ -2,83 +2,63 @@
 
 ## Product
 
-SaaS de gestion locative pour les SCI à l'IR françaises. SCI → lots → locataires assignés aux lots. Alertes/relances sur échéances mensuelles.
+Loyeris is a SaaS de gestion locative for French SCI à l'IR. The product model is:
 
-## Structure
+- SCI own lots.
+- Tenants are assigned to lots.
+- Monthly rent deadlines drive alerts, reminders, and rent tracking.
 
-Mono-repo, two independent projects:
+Keep product language and UI copy in French.
+
+## Repository structure
+
+This is a mono-repo with two independent projects plus a static design reference:
 
 | Path | Role |
 |---|---|
-| `frontend/loyeris-app/` | Angular 21 app (standalone, no NgModules) |
-| `backend/` | .NET 10 solution (`.slnx` format), MediatR minimal API |
-| `docs/ui-kit/` | Static HTML/CSS design reference (daisyUI 5 + Tailwind 4) |
+| `frontend/loyeris-app/` | Angular 21 app, standalone components, no NgModules |
+| `backend/` | .NET 10 solution using `.slnx`, Minimal API, MediatR |
+| `docs/ui-kit/` | Static HTML/CSS design reference using Tailwind 4 and daisyUI 5 |
 
-### Backend projects (`backend/Loyeris.slnx`)
+More specific instructions exist in:
 
-| Project | Layer |
-|---|---|
-| `Loyeris.Api/` | Minimal API host (MediatR, OpenAPI) |
-| `Loyeris.Auth.App/` | Application — CQRS queries/handlers |
-| `Loyeris.Auth.Core/` | Domain — empty stub |
-| `Loyeris.Auth.Infrastructure/` | Infrastructure — empty stub |
-| `Loyeris.Shared/` | Shared kernel — `Result<T>`, `Error` types |
-| `Loyeris.Tests/` | NUnit test project (Moq, FluentAssertions) |
+- `backend/AGENTS.md` for backend work.
+- `frontend/AGENTS.md` for frontend work.
 
-All target `net10.0`, `Nullable: disable`, `ImplicitUsings: enable`.
+When files fall under one of those folders, follow the closest `AGENTS.md` first.
 
 ## Commands
 
-### Frontend (`frontend/loyeris-app/`)
+Frontend commands are run from `frontend/loyeris-app/`:
 
 ```bash
-yarn start   # ng serve — http://localhost:4200
-yarn build   # ng build
-yarn test    # ng test — Vitest (not Karma)
-yarn watch   # ng build --watch --configuration development
+yarn start
+yarn build
+yarn test
+yarn watch
 ```
 
-### Backend (`backend/`)
+Backend commands are run from the project folders noted in `backend/AGENTS.md`:
 
 ```bash
-dotnet build        # from Loyeris.Api/
-dotnet test          # from Loyeris.Tests/
-dotnet run           # from Loyeris.Api/ — http://localhost:5000
+dotnet build
+dotnet test
+dotnet run
 ```
 
-No lint or typecheck scripts (`ng lint` not configured). No CI (no `.github/workflows/`). Prettier config embedded in `package.json`.
+There is no CI configuration in `.github/workflows/`.
 
-## Tooling quirks
+## Design reference
 
-- **Package manager:** `yarn` v1.22.22 — lockfile `yarn.lock`, `packageManager` field set. Never `npm`.
-- **Tailwind v4:** CSS-first — no `tailwind.config.js`. Imports in `src/styles.css` via `@import "tailwindcss"`; daisyUI via `@plugin "daisyui"`. PostCSS at `.postcssrc.json`.
-- **TypeScript:** strict mode, `module: "preserve"`, decorators enabled. Vitest globals in `tsconfig.spec.json`.
-- **EditorConfig:** 2-space indent, single quotes for `.ts`.
-- **Angular build:** `@angular/build:application` (Application builder). Vitest via `@angular/build:unit-test` builder — no `vitest.config.*` file.
-- **Test env:** jsdom (no Karma anywhere).
-- **Prettier:** embedded in `package.json` — `printWidth: 100`, `singleQuote: true`, Angular HTML parser.
+Use `docs/ui-kit/index.html` as the design map. It links mockups for login, dashboard, SCI list, lots, tenants, rent tracking, and settings.
 
-## Current state
+The UI kit uses `data-theme="corporate"`, Plus Jakarta Sans, Tailwind 4, daisyUI 5, and custom reference classes in `docs/ui-kit/styles.css`. When implementing Angular screens, reproduce the visual language with app-local CSS, Tailwind utilities, and daisyUI classes rather than copying the static files wholesale.
 
-- **Very early:** single `App` component, empty routes, no pages wired
-- **`index.html`** has `lang="en"` — should be `"fr"`
-- Plus Jakarta Sans font and `data-theme="corporate"` not yet imported in Angular app
-- No services, no HTTP layer, no state management beyond `signal()`
+## General conventions
 
-## UI Kit (design reference)
-
-Open `docs/ui-kit/index.html` in a browser. Mockups for: login, dashboard, SCI list, lots, tenants, rent tracking, settings. Uses `data-theme="corporate"`, Plus Jakarta Sans, custom CSS classes (`auth-shell`, `glass-panel`, `brand-mark`, `page-header`, etc.) in `docs/ui-kit/styles.css` — replicate with Tailwind/daisyUI utilities in Angular.
-
-## Test conventions
-
-- **Framework:** NUnit with Moq for mocking and FluentAssertions for assertions.
-- **Structure:** Tests mirror the production namespace — e.g. `Loyeris.Auth.App.Handlers` maps to `Loyeris.Tests.Auth.Handlers`.
-- **AAA pattern:** Each test method contains `// Arrange`, `// Act`, `// Assert` comments separating the three phases.
-- **XML doc:** Classes have a `<summary>` describing their purpose; each test method has a `<summary>` with `<see cref/>` for referenced types.
-
-## Conventions
-
-- Standalone components, `templateUrl` + `styleUrl` (not inline), `protected readonly` for signals
-- Angular CLI prefix: `app`
-- HTML is French (`lang="fr"`)
-- **File naming:** Component files omit `.component` infix — `app.ts`, `app.html`, `app.css` (not `app.component.*`)
+- Keep changes scoped to the requested project unless cross-project behavior requires otherwise.
+- Prefer existing project patterns over introducing new architecture.
+- Do not mix package managers. The frontend uses Yarn v1 only.
+- Keep generated or dependency folders out of manual edits.
+- Use French for end-user HTML text and labels.
+- Update or add focused tests when changing behavior.
