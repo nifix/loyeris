@@ -1,0 +1,33 @@
+﻿:host {
+  display: block;
+}
+
+.auth-shell {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0a1628 0%, #12326e 52%, #1a5faa 100%);
+}
+
+.auth-shell::before,
+.auth-shell::after {
+  position: absolute;
+  border-radius: 9999px;
+  content: '';
+  pointer-events: none;
+}
+
+.auth-shell::before {
+  top: -12rem;
+  left: -10rem;
+  width: 36rem;
+  height: 36rem;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, transparent 68%);
+}
+
+.auth-shell::after {
+  right: -10rem;
+  bottom: -14rem;
+  width: 40rem;
+  height: 40rem;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.14) 0%, transparent 68%);
+}

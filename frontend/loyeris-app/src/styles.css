@@ -1,4 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import "tailwindcss";
 @plugin "daisyui";
+
+html {
+  scrollbar-gutter: stable;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: #f8fafc;
+  font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}

@@ -14,10 +14,11 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('"Testouille" btn should exist', async () => {
+  it('should render the auth page', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.btn.btn-primary')).toBeTruthy();
+    expect(compiled.querySelector('app-auth')).toBeTruthy();
+    expect(compiled.textContent).toContain('Connexion');
   });
 });
