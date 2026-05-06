@@ -2,21 +2,21 @@
   display: block;
 }
 
-.auth-shell {
+.login-page-shell {
   position: relative;
   overflow: hidden;
   background: linear-gradient(145deg, #0a1628 0%, #12326e 52%, #1a5faa 100%);
 }
 
-.auth-shell::before,
-.auth-shell::after {
+.login-page-shell::before,
+.login-page-shell::after {
   position: absolute;
   border-radius: 9999px;
   content: '';
   pointer-events: none;
 }
 
-.auth-shell::before {
+.login-page-shell::before {
   top: -12rem;
   left: -10rem;
   width: 36rem;
@@ -24,7 +24,7 @@
   background: radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, transparent 68%);
 }
 
-.auth-shell::after {
+.login-page-shell::after {
   right: -10rem;
   bottom: -14rem;
   width: 40rem;

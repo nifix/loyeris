@@ -1,12 +1,11 @@
 ﻿import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'app-auth-feature-card',
-  templateUrl: './auth-feature-card.html',
-  styleUrl: './auth-feature-card.css',
+  selector: 'app-feature-card',
+  templateUrl: './feature-card.html',
+  styleUrl: './feature-card.css',
 })
-
-export class AuthFeatureCard {
+export class FeatureCard {
   readonly header = input.required<string>();
   readonly title = input.required<string>();
   readonly description = input.required<string>();

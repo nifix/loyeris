@@ -65,6 +65,8 @@ The Angular app follows the `core / features / shared` folder structure:
 
 - `src/app/core/` is reserved for app-wide concerns such as layouts, guards, interceptors, global services, and provider helpers.
 - `src/app/features/` contains domain or route-aligned features. Each feature owns its page components and feature-private UI components.
+- Inside a feature, put routed/container screens under `pages/` and feature-private presentation components under `components/`.
+- Keep feature route files at the feature root, for example `src/app/features/login/login.routes.ts`.
 - `src/app/shared/` is reserved for reusable presentation components, directives, pipes, and utilities used by more than one feature.
 - Keep feature-private components colocated inside their feature folder until they are reused across features.
 - Do not introduce barrel files by default; keep imports explicit unless a local convention emerges.
@@ -74,8 +76,8 @@ The Angular app follows the `core / features / shared` folder structure:
 - The app is still early.
 - `App` renders routed content through `RouterOutlet`.
 - Routes are wired in `src/app/app.routes.ts`.
-- The auth screen lives under `src/app/features/auth/`.
-- Auth-only UI components live under `src/app/features/auth/`.
+- The login page lives under `src/app/features/login/pages/login-page/`.
+- Login-only UI components live under `src/app/features/login/components/`.
 - `core/` and `shared/` exist as placeholders until app-wide or cross-feature concerns appear.
 - There is no HTTP layer, no services, and no state management beyond Angular primitives.
 
