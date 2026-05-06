@@ -16,7 +16,7 @@ This is a mono-repo with two independent projects plus a static design reference
 
 | Path | Role |
 |---|---|
-| `frontend/loyeris-app/` | Angular 21 app, standalone components, no NgModules |
+| `frontend/loyeris-app/` | Angular 21 app, standalone components, no NgModules, `core / features / shared` app structure |
 | `backend/` | .NET 10 solution using `.slnx`, Minimal API, MediatR |
 | `docs/ui-kit/` | Static HTML/CSS design reference using Tailwind 4 and daisyUI 5 |
 
@@ -58,6 +58,7 @@ The UI kit uses `data-theme="corporate"`, Plus Jakarta Sans, Tailwind 4, daisyUI
 
 - Keep changes scoped to the requested project unless cross-project behavior requires otherwise.
 - Prefer existing project patterns over introducing new architecture.
+- Frontend features are organized under `src/app/features/`, with app-wide concerns reserved for `src/app/core/` and cross-feature reusable code reserved for `src/app/shared/`.
 - Do not mix package managers. The frontend uses Yarn v1 only.
 - Keep generated or dependency folders out of manual edits.
 - Use French for end-user HTML text and labels.

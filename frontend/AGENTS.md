@@ -57,15 +57,26 @@ Use `../../docs/ui-kit/` as the design reference for Angular screens. Recreate t
 - Prefer `protected readonly` for signals and template-facing immutable fields.
 - Keep templates and styles out of inline component metadata unless the nearby component already uses that pattern.
 - Keep end-user copy in French.
-- Keep routes in `src/app/app.routes.ts`; it is currently empty even though `App` directly imports the login page.
+- Keep routes in `src/app/app.routes.ts`; feature screens should be route-aligned and lazy-loaded where practical.
+
+## Application architecture
+
+The Angular app follows the `core / features / shared` folder structure:
+
+- `src/app/core/` is reserved for app-wide concerns such as layouts, guards, interceptors, global services, and provider helpers.
+- `src/app/features/` contains domain or route-aligned features. Each feature owns its page components and feature-private UI components.
+- `src/app/shared/` is reserved for reusable presentation components, directives, pipes, and utilities used by more than one feature.
+- Keep feature-private components colocated inside their feature folder until they are reused across features.
+- Do not introduce barrel files by default; keep imports explicit unless a local convention emerges.
 
 ## Current application state
 
 - The app is still early.
-- `App` renders the login page directly.
-- Routes are not wired yet.
-- Existing UI components live under `src/app/ui-components/`.
-- The login page lives under `src/app/pages/login/`.
+- `App` renders routed content through `RouterOutlet`.
+- Routes are wired in `src/app/app.routes.ts`.
+- The auth screen lives under `src/app/features/auth/`.
+- Auth-only UI components live under `src/app/features/auth/`.
+- `core/` and `shared/` exist as placeholders until app-wide or cross-feature concerns appear.
 - There is no HTTP layer, no services, and no state management beyond Angular primitives.
 
 ## Testing
