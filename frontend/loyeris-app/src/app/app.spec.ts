@@ -17,16 +17,16 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render the auth page', async () => {
+  it('should render the login page', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
-    await router.navigateByUrl('/auth');
+    await router.navigateByUrl('/login');
     fixture.detectChanges();
     await fixture.whenStable();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-auth')).toBeTruthy();
+    expect(compiled.querySelector('app-login-page')).toBeTruthy();
     expect(compiled.textContent).toContain('Connexion');
   });
 });

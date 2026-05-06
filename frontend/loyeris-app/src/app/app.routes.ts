@@ -4,10 +4,10 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'auth',
+    redirectTo: 'login',
   },
   {
-    path: 'auth',
-    loadComponent: () => import('./features/auth/auth').then((m) => m.Auth),
+    path: 'login',
+    loadChildren: () => import('./features/login/login.routes').then((m) => m.loginRoutes),
   },
 ];
