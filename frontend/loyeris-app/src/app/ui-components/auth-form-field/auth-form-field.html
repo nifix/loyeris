@@ -1,0 +1,22 @@
+﻿<label class="form-control w-full" [for]="fieldId()">
+  <div class="label px-1 pb-1.5">
+    <span class="label-text font-semibold text-base-content/80">{{ label() }}</span>
+    @if (forgotLabel()) {
+      <a href="#" class="label-text-alt link link-primary text-sm font-medium">{{ forgotLabel() }}</a>
+    }
+  </div>
+  <div class="group relative">
+    <span
+      class="pointer-events-none absolute left-3.5 top-1/2 grid h-[1.1rem] w-[1.1rem] -translate-y-1/2 place-items-center text-base-content/40 transition-colors group-focus-within:text-primary"
+    >
+      <ng-content select="[fieldIcon]" />
+    </span>
+    <input
+      class="input input-bordered h-12 w-full rounded-xl pl-11 transition-all focus:border-primary"
+      [autocomplete]="autocomplete()"
+      [id]="fieldId()"
+      [placeholder]="placeholder()"
+      [type]="type()"
+    />
+  </div>
+</label>
