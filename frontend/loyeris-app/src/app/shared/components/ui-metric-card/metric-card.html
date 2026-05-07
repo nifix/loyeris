@@ -1,0 +1,13 @@
+<article class="stat metric-card h-full rounded-lg border border-base-200 bg-base-100 shadow-sm">
+  <div class="stat-title">{{ title() }}</div>
+  <div
+    class="stat-value"
+    [class.text-primary]="tone() === 'primary'"
+    [class.text-success]="tone() === 'success'"
+    [class.text-warning]="tone() === 'warning'"
+    [class.text-slate-900]="tone() === 'neutral'"
+  >
+    {{ value() }}
+  </div>
+  <div class="stat-desc">{{ description() }}</div>
+</article>

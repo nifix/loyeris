@@ -29,4 +29,17 @@ describe('App', () => {
     expect(compiled.querySelector('app-login-page')).toBeTruthy();
     expect(compiled.textContent).toContain('Connexion');
   });
+
+  it('should render the dashboard page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/dashboard');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-dashboard-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Loyers attendus');
+  });
 });

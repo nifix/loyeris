@@ -1,0 +1,22 @@
+<div class="form-control w-full">
+  <div class="label px-1 pb-1.5">
+    <label class="label-text font-semibold text-base-content/80" [for]="fieldId()">
+      {{ label() }}
+    </label>
+    @if (forgotLabel()) {
+      <a href="#" class="label-text-alt link link-primary text-sm font-medium">{{ forgotLabel() }}</a>
+    }
+  </div>
+  <label
+    class="input input-bordered group flex h-12 w-full items-center gap-3 rounded-xl transition-all focus-within:border-primary"
+    [for]="fieldId()"
+  >
+    <input
+      class="grow bg-transparent outline-none pl-1"
+      [autocomplete]="autocomplete()"
+      [id]="fieldId()"
+      [placeholder]="placeholder()"
+      [type]="type()"
+    />
+  </label>
+</div>
