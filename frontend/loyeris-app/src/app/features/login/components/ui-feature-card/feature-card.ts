@@ -1,7 +1,7 @@
 ﻿import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'app-feature-card',
+  selector: 'ui-feature-card',
   templateUrl: './feature-card.html',
   styleUrl: './feature-card.css',
 })

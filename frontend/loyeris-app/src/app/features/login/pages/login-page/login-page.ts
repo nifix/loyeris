@@ -1,7 +1,7 @@
 ﻿import { Component } from '@angular/core';
-import { BrandMark } from '../../components/brand-mark/brand-mark';
-import { FeatureCard } from '../../components/feature-card/feature-card';
-import { FormField } from '../../components/form-field/form-field';
+import { FeatureCard } from '../../components/ui-feature-card/feature-card';
+import { FormField } from '../../components/ui-form-field/form-field';
+import { BrandMark } from '../../../../shared/components/ui-brand-mark/brand-mark';
 
 @Component({
   selector: 'app-login-page',

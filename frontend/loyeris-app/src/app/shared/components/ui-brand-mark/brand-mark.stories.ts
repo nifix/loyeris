@@ -3,13 +3,16 @@ import { componentWrapperDecorator, type Meta, type StoryObj } from '@storybook/
 import { BrandMark } from './brand-mark';
 
 const meta: Meta<BrandMark> = {
-  title: 'Features/Login/Components/Brand Mark',
+  title: 'Shared/Components/Brand Mark',
   component: BrandMark,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+  },
   decorators: [
     componentWrapperDecorator(
       story => `
-        <div class="grid min-h-48 place-items-center bg-[#0a1628] p-8 text-white">
+        <div class="inline-grid place-items-center rounded-lg bg-[#0a1628] p-8 text-white">
           ${story}
         </div>
       `,
@@ -42,8 +45,8 @@ export const Sizes: Story = {
   render: () => ({
     template: `
       <div class="flex items-center gap-5">
-        <app-brand-mark size="lg" />
-        <app-brand-mark size="sm" />
+        <ui-brand-mark size="lg" />
+        <ui-brand-mark size="sm" />
       </div>
     `,
   }),

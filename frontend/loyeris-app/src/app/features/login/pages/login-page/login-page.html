@@ -4,7 +4,7 @@
   >
     <section class="space-y-10 text-white">
       <a class="inline-flex items-center gap-4 transition-opacity hover:opacity-90" href="#">
-        <app-brand-mark />
+        <ui-brand-mark />
         <div>
           <p class="text-2xl font-semibold tracking-tight">Loyeris</p>
           <p class="text-sm text-white/80">Gestion locative claire pour vos SCI</p>
@@ -27,17 +27,17 @@
       </div>
 
       <div class="grid gap-4 sm:grid-cols-3">
-        <app-feature-card
+        <ui-feature-card
           header="Multi-SCI"
           title="Tout sous un compte"
           description="Conservez une vue portefeuille tout en gardant le détail par structure."
         />
-        <app-feature-card
+        <ui-feature-card
           header="Suivi locatif"
           title="Lots et occupants"
           description="Historique, occupation actuelle et accès rapide aux fiches détail."
         />
-        <app-feature-card
+        <ui-feature-card
           header="Encaissements"
           title="Alertes et retards"
           description="Visualisez tout de suite ce qui est payé, partiel ou à relancer."
@@ -58,29 +58,16 @@
         </div>
 
         <form class="space-y-5">
-          <app-form-field
+          <ui-form-field
             fieldId="email"
             label="Adresse email"
             type="email"
             autocomplete="email"
             placeholder="nom@exemple.com"
           >
-            <svg
-              fieldIcon
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-            >
-              <rect width="20" height="16" x="2" y="4" rx="2" />
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-            </svg>
-          </app-form-field>
+          </ui-form-field>
 
-          <app-form-field
+          <ui-form-field
             fieldId="password"
             label="Mot de passe"
             type="password"
@@ -88,20 +75,7 @@
             placeholder="********"
             forgotLabel="Mot de passe oublié ?"
           >
-            <svg
-              fieldIcon
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-            >
-              <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-          </app-form-field>
+          </ui-form-field>
 
           <div class="form-control mt-2 w-full">
             <label

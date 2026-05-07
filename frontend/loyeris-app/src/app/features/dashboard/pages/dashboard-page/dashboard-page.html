@@ -1,0 +1,137 @@
+<ui-app-shell>
+  <ui-page-header
+    badge="Vue globale"
+    title="Dashboard"
+    description="Vue globale des encaissements, des retards et du taux d'occupation pour garder le portefeuille locatif sous contrôle."
+    [chips]="headerChips"
+    actionLabel="Enregistrer un paiement"
+  />
+
+  <section class="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-4">
+    @for (metric of metrics; track metric.title) {
+      <ui-metric-card
+        [title]="metric.title"
+        [value]="metric.value"
+        [description]="metric.description"
+        [tone]="metric.tone"
+      />
+    }
+  </section>
+
+  <section class="grid items-stretch gap-6 xl:grid-cols-2">
+    <ui-dashboard-card
+      title="Loyers en retard"
+      description="Paiements non soldés ou non reçus à surveiller en priorité."
+      linkLabel="Voir tous"
+      linkUrl="#"
+    >
+      <div class="overflow-x-auto">
+        <table class="table table-nowrap">
+          <thead>
+            <tr>
+              <th>Lot</th>
+              <th>Locataire</th>
+              <th>SCI</th>
+              <th>Montant</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rent of overdueRents; track rent.lot) {
+              <tr>
+                <td>{{ rent.lot }}</td>
+                <td>{{ rent.tenant }}</td>
+                <td>{{ rent.sci }}</td>
+                <td>{{ rent.amount }}</td>
+                <td><ui-status-badge [tone]="rent.tone">{{ rent.status }}</ui-status-badge></td>
+                <td>
+                  <a
+                    class="btn btn-sm"
+                    [class.btn-outline]="rent.actionTone !== 'primary'"
+                    [class.btn-error]="rent.actionTone === 'error'"
+                    [class.btn-warning]="rent.actionTone === 'warning'"
+                    [class.btn-ghost]="rent.actionTone === 'primary'"
+                    [class.text-primary]="rent.actionTone === 'primary'"
+                    href="#"
+                  >
+                    {{ rent.action }}
+                  </a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </ui-dashboard-card>
+
+    <ui-dashboard-card
+      title="Paiements récents"
+      description="Les derniers encaissements qui ont fait bouger le mois."
+      linkLabel="Historique"
+      linkUrl="#"
+    >
+      <div class="space-y-3">
+        @for (payment of recentPayments; track payment.tenant) {
+          <div class="surface-row flex items-center justify-between px-4 py-3">
+            <div>
+              <p class="font-semibold text-slate-900">{{ payment.tenant }}</p>
+              <p class="text-sm text-slate-500">{{ payment.details }}</p>
+            </div>
+            <span class="font-semibold text-slate-900">{{ payment.amount }}</span>
+          </div>
+        }
+      </div>
+    </ui-dashboard-card>
+  </section>
+
+  <section class="grid items-stretch gap-6 xl:grid-cols-2">
+    <ui-dashboard-card
+      title="Répartition par SCI"
+      description="Encaissements du mois par structure."
+    >
+      <div class="space-y-5">
+        @for (sci of sciBreakdown; track sci.name) {
+          <div class="surface-row p-4">
+            <div class="mb-3 flex items-center justify-between gap-4">
+              <span class="font-semibold text-slate-900">{{ sci.name }}</span>
+              <span class="text-sm text-slate-500">{{ sci.amounts }}</span>
+            </div>
+            <progress
+              class="progress w-full"
+              [class.progress-primary]="sci.tone === 'primary'"
+              [class.progress-success]="sci.tone === 'success'"
+              [value]="sci.progress"
+              max="100"
+            ></progress>
+          </div>
+        }
+      </div>
+    </ui-dashboard-card>
+
+    <ui-dashboard-card
+      title="Occupation des lots"
+      description="La santé actuelle du parc locatif."
+    >
+      <div class="stats stats-vertical rounded-lg border border-base-200 bg-slate-50 lg:stats-horizontal">
+        <div class="stat">
+          <div class="stat-title">Lots occupés</div>
+          <div class="stat-value text-success">7</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Lots vacants</div>
+          <div class="stat-value text-warning">2</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Potentiel mensuel</div>
+          <div class="stat-value text-slate-900">5 080 €</div>
+        </div>
+      </div>
+
+      <div class="rounded-lg border border-base-200 bg-primary/5 px-4 py-4 text-sm leading-6 text-slate-600">
+        Le portefeuille reste bien orienté, mais deux vacances et trois paiements incomplets
+        justifient un suivi actif cette semaine.
+      </div>
+    </ui-dashboard-card>
+  </section>
+</ui-app-shell>

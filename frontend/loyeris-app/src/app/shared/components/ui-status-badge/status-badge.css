@@ -1,0 +1,24 @@
+.status-badge {
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.status-badge-success {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-badge-warning {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.status-badge-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-badge-neutral {
+  background-color: #f1f5f9;
+  color: #475569;
+}
