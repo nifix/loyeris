@@ -25,6 +25,8 @@ yarn start   # ng serve, http://localhost:4200
 yarn build   # ng build
 yarn test    # ng test, Vitest/jsdom
 yarn watch   # ng build --watch --configuration development
+yarn storybook        # ng run loyeris-app:storybook, http://localhost:6006
+yarn build-storybook  # ng run loyeris-app:build-storybook
 ```
 
 There is no `ng lint` setup and no separate typecheck script.
@@ -38,6 +40,12 @@ There is no `ng lint` setup and no separate typecheck script.
 - Test builder is `@angular/build:unit-test`.
 - Prettier config is embedded in `package.json`.
 - `.editorconfig` uses 2-space indent, final newline, and single quotes for TypeScript.
+
+## Storybook
+
+- Storybook config lives in `frontend/loyeris-app/.storybook/`.
+- Stories are discovered from `src/**/*.stories.ts`.
+- Keep stories colocated with components and use Angular Storybook patterns (`Meta`/`StoryObj`).
 
 ## Styling and UI
 

@@ -51,3 +51,6 @@ bin/
 obj/
 
 
+
+*storybook.log
+storybook-static

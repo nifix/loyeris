@@ -36,6 +36,8 @@ yarn start
 yarn build
 yarn test
 yarn watch
+yarn storybook
+yarn build-storybook
 ```
 
 Backend commands are run from the project folders noted in `backend/AGENTS.md`:
