@@ -64,5 +64,6 @@ Current API shape:
 - Follow the existing namespace style and folder boundaries.
 - Keep public APIs documented when the surrounding code is documented.
 - Prefer small request/handler classes over adding behavior directly in endpoint lambdas.
+- Do not change the `MediatR` version. Keep all backend projects pinned to `12.5.0`; do not upgrade to `13.0.0+` because those releases are under the commercial licensing model.
 - Preserve nullable settings per project; do not flip nullable globally as part of unrelated work.
 - Keep error handling expressed through `Result<T>` and `Error` unless there is an established exception-based pattern nearby.

@@ -60,6 +60,7 @@ The UI kit uses `data-theme="corporate"`, Plus Jakarta Sans, Tailwind 4, daisyUI
 
 - Keep changes scoped to the requested project unless cross-project behavior requires otherwise.
 - Prefer existing project patterns over introducing new architecture.
+- Do not change the MediatR version. Keep backend projects pinned to `MediatR` `12.5.0`; versions `13.0.0+` are under the commercial licensing model and must not be introduced.
 - Frontend features are organized under `src/app/features/`, with app-wide concerns reserved for `src/app/core/` and cross-feature reusable code reserved for `src/app/shared/`.
 - Within frontend feature folders, routed screens belong in `pages/`, feature-private UI components belong in `components/`, and the feature route file stays at the feature root.
 - The current login feature lives under `frontend/loyeris-app/src/app/features/login/`.
