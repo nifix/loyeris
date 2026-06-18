@@ -8,11 +8,26 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Loyeris.Auth.App\Loyeris.Auth.App.csproj" />
+    <ProjectReference Include="..\Loyeris.IdentityAccess.App\Loyeris.IdentityAccess.App.csproj" />
+    <ProjectReference Include="..\Loyeris.IdentityAccess.Infrastructure\Loyeris.IdentityAccess.Infrastructure.csproj" />
+    <ProjectReference Include="..\Loyeris.Leasing.App\Loyeris.Leasing.App.csproj" />
+    <ProjectReference Include="..\Loyeris.Leasing.Infrastructure\Loyeris.Leasing.Infrastructure.csproj" />
+    <ProjectReference Include="..\Loyeris.Messaging.App\Loyeris.Messaging.App.csproj" />
+    <ProjectReference Include="..\Loyeris.Messaging.Infrastructure\Loyeris.Messaging.Infrastructure.csproj" />
+    <ProjectReference Include="..\Loyeris.Portfolio.App\Loyeris.Portfolio.App.csproj" />
+    <ProjectReference Include="..\Loyeris.Portfolio.Infrastructure\Loyeris.Portfolio.Infrastructure.csproj" />
+    <ProjectReference Include="..\Loyeris.RentCollection.App\Loyeris.RentCollection.App.csproj" />
+    <ProjectReference Include="..\Loyeris.RentCollection.Infrastructure\Loyeris.RentCollection.Infrastructure.csproj" />
+    <ProjectReference Include="..\Loyeris.TaxPreparation.App\Loyeris.TaxPreparation.App.csproj" />
+    <ProjectReference Include="..\Loyeris.TaxPreparation.Infrastructure\Loyeris.TaxPreparation.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

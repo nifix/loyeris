@@ -1,8 +1,33 @@
 ﻿<Solution>
-  <Folder Name="/Loyeris.Auth/">
-    <Project Path="Loyeris.Auth.App/Loyeris.Auth.App.csproj" />
-    <Project Path="Loyeris.Auth.Core/Loyeris.Auth.Core.csproj" />
-    <Project Path="Loyeris.Auth.Infrastructure/Loyeris.Auth.Infrastructure.csproj" />
+  <Folder Name="/Loyeris.IdentityAccess/">
+    <Project Path="Loyeris.IdentityAccess.App/Loyeris.IdentityAccess.App.csproj" />
+    <Project Path="Loyeris.IdentityAccess.Core/Loyeris.IdentityAccess.Core.csproj" />
+    <Project Path="Loyeris.IdentityAccess.Infrastructure/Loyeris.IdentityAccess.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Loyeris.Leasing/">
+    <Project Path="Loyeris.Leasing.App/Loyeris.Leasing.App.csproj" />
+    <Project Path="Loyeris.Leasing.Core/Loyeris.Leasing.Core.csproj" />
+    <Project Path="Loyeris.Leasing.Infrastructure/Loyeris.Leasing.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Loyeris.Messaging/">
+    <Project Path="Loyeris.Messaging.App/Loyeris.Messaging.App.csproj" />
+    <Project Path="Loyeris.Messaging.Core/Loyeris.Messaging.Core.csproj" />
+    <Project Path="Loyeris.Messaging.Infrastructure/Loyeris.Messaging.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Loyeris.Portfolio/">
+    <Project Path="Loyeris.Portfolio.App/Loyeris.Portfolio.App.csproj" />
+    <Project Path="Loyeris.Portfolio.Core/Loyeris.Portfolio.Core.csproj" />
+    <Project Path="Loyeris.Portfolio.Infrastructure/Loyeris.Portfolio.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Loyeris.RentCollection/">
+    <Project Path="Loyeris.RentCollection.App/Loyeris.RentCollection.App.csproj" />
+    <Project Path="Loyeris.RentCollection.Core/Loyeris.RentCollection.Core.csproj" />
+    <Project Path="Loyeris.RentCollection.Infrastructure/Loyeris.RentCollection.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Loyeris.TaxPreparation/">
+    <Project Path="Loyeris.TaxPreparation.App/Loyeris.TaxPreparation.App.csproj" />
+    <Project Path="Loyeris.TaxPreparation.Core/Loyeris.TaxPreparation.Core.csproj" />
+    <Project Path="Loyeris.TaxPreparation.Infrastructure/Loyeris.TaxPreparation.Infrastructure.csproj" />
   </Folder>
   <Project Path="Loyeris.Api/Loyeris.Api.csproj" />
   <Project Path="Loyeris.Shared/Loyeris.Shared.csproj" />

@@ -37,7 +37,7 @@ public static class ResultExtensions
             title: result.Error.Code,
             detail: result.Error.Message,
             statusCode: statusCode,
-            extensions: new Dictionary<string, object?>
+            extensions: new Dictionary<string, object>
             {
                 ["errorCode"] = result.Error.Code
             }
