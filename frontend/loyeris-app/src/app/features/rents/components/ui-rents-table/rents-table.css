@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+.table tbody tr {
+  transition: background 0.12s ease;
+}
+
+.table tbody tr:hover {
+  background: #f1f5f9;
+}

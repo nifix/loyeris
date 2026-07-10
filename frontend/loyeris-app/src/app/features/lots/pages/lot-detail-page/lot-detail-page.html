@@ -1,0 +1,89 @@
+<ui-app-shell activeItem="lots" mobileActionLabel="">
+  <ui-detail-page-header
+    badge="Fiche lot"
+    status="Occupé"
+    statusTone="success"
+    title="Lot A02"
+    description="SCI Les Tilleuls · Studio occupé · 12 rue des Tilleuls, Lyon"
+    [chips]="headerChips"
+    secondaryActionLabel="Modifier"
+    primaryActionLabel="Enregistrer un paiement"
+    primaryActionUrl="/rents"
+  />
+
+  <section class="grid items-stretch gap-6 xl:grid-cols-2">
+    <ui-detail-card
+      title="Informations du lot"
+      description="Données principales du bien et du contrat de location."
+    >
+      <div>
+        <div class="info-pair"><div class="info-label">Référence</div><div class="info-value">Lot A02</div></div>
+        <div class="info-pair"><div class="info-label">SCI</div><div class="info-value">SCI Les Tilleuls</div></div>
+        <div class="info-pair"><div class="info-label">Adresse</div><div class="info-value">12 rue des Tilleuls, 69000 Lyon</div></div>
+        <div class="info-pair"><div class="info-label">Type</div><div class="info-value">Studio</div></div>
+        <div class="info-pair"><div class="info-label">Surface</div><div class="info-value">24 m²</div></div>
+        <div class="info-pair"><div class="info-label">Loyer hors charges</div><div class="info-value">580 €</div></div>
+        <div class="info-pair"><div class="info-label">Charges</div><div class="info-value">40 €</div></div>
+        <div class="info-pair"><div class="info-label">Dépôt de garantie</div><div class="info-value">580 €</div></div>
+      </div>
+    </ui-detail-card>
+
+    <ui-detail-card
+      title="Occupation actuelle"
+      description="Locataire en place et données clés du bail en cours."
+    >
+      <div>
+        <div class="info-pair"><div class="info-label">Locataire</div><div class="info-value"><a class="link link-primary" href="/tenants/camille-robert">Camille Robert</a></div></div>
+        <div class="info-pair"><div class="info-label">Date d'entrée</div><div class="info-value">1 février 2026</div></div>
+        <div class="info-pair"><div class="info-label">Loyer mensuel</div><div class="info-value">620 € charges comprises</div></div>
+        <div class="info-pair"><div class="info-label">Statut</div><div class="info-value"><ui-status-badge tone="success">Occupation active</ui-status-badge></div></div>
+        <div class="info-pair"><div class="info-label">Prochaine échéance</div><div class="info-value">5 mai 2026</div></div>
+      </div>
+    </ui-detail-card>
+  </section>
+
+  <section class="grid items-stretch gap-6 xl:grid-cols-2">
+    <ui-detail-card
+      title="Historique d'occupation"
+      description="Anciennes périodes d'occupation et statut du lot."
+    >
+      <div class="overflow-x-auto">
+        <table class="table table-nowrap">
+          <thead><tr><th>Locataire</th><th>Début</th><th>Fin</th><th>Statut</th></tr></thead>
+          <tbody>
+            @for (occupation of occupationHistory; track occupation.tenant) {
+              <tr>
+                <td class="font-semibold text-slate-900">{{ occupation.tenant }}</td>
+                <td>{{ occupation.start }}</td>
+                <td>{{ occupation.end }}</td>
+                <td><ui-status-badge [tone]="occupation.tone">{{ occupation.status }}</ui-status-badge></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </ui-detail-card>
+
+    <ui-detail-card
+      title="Historique des paiements"
+      description="Situation récente des loyers de ce lot."
+    >
+      <div class="overflow-x-auto">
+        <table class="table table-nowrap">
+          <thead><tr><th>Mois</th><th>Attendu</th><th>Payé</th><th>Reste</th><th>Statut</th></tr></thead>
+          <tbody>
+            @for (payment of paymentHistory; track payment.month) {
+              <tr>
+                <td>{{ payment.month }}</td>
+                <td>{{ payment.expected }}</td>
+                <td>{{ payment.paid }}</td>
+                <td>{{ payment.remaining }}</td>
+                <td><ui-status-badge [tone]="payment.tone">{{ payment.status }}</ui-status-badge></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </ui-detail-card>
+  </section>
+</ui-app-shell>

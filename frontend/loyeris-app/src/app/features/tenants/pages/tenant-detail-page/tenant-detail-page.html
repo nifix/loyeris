@@ -1,0 +1,79 @@
+<ui-app-shell activeItem="tenants" mobileActionLabel="">
+  <ui-detail-page-header
+    badge="Fiche locataire"
+    status="Actif"
+    statusTone="success"
+    title="Camille Robert"
+    description="Locataire actif · SCI Les Tilleuls · Lot A02"
+    [chips]="headerChips"
+    secondaryActionLabel="Modifier"
+    primaryActionLabel="Voir les loyers"
+    primaryActionUrl="/rents"
+  />
+
+  <section class="grid items-stretch gap-6 xl:grid-cols-2">
+    <ui-detail-card
+      title="Coordonnées"
+      description="Informations personnelles et moyens de contact."
+    >
+      <div>
+        <div class="info-pair"><div class="info-label">Nom complet</div><div class="info-value">Camille Robert</div></div>
+        <div class="info-pair"><div class="info-label">Email</div><div class="info-value">camille.robert@email.fr</div></div>
+        <div class="info-pair"><div class="info-label">Téléphone</div><div class="info-value">06 22 33 44 55</div></div>
+        <div class="info-pair"><div class="info-label">Statut</div><div class="info-value"><ui-status-badge tone="success">Actif</ui-status-badge></div></div>
+      </div>
+    </ui-detail-card>
+
+    <ui-detail-card
+      title="Location actuelle"
+      description="Bien actuellement occupé et données du bail."
+    >
+      <div>
+        <div class="info-pair"><div class="info-label">SCI</div><div class="info-value">SCI Les Tilleuls</div></div>
+        <div class="info-pair"><div class="info-label">Lot</div><div class="info-value"><a class="link link-primary" href="/lots/a02">Lot A02</a></div></div>
+        <div class="info-pair"><div class="info-label">Date d'entrée</div><div class="info-value">1 février 2026</div></div>
+        <div class="info-pair"><div class="info-label">Loyer mensuel</div><div class="info-value">620 € charges comprises</div></div>
+      </div>
+    </ui-detail-card>
+  </section>
+
+  <section class="grid items-stretch gap-6 xl:grid-cols-2">
+    <ui-detail-card title="Historique locatif" description="Parcours du locataire dans le temps.">
+      <div class="overflow-x-auto">
+        <table class="table table-nowrap">
+          <thead><tr><th>Lot</th><th>SCI</th><th>Début</th><th>Fin</th><th>Statut</th></tr></thead>
+          <tbody>
+            @for (rental of rentalHistory; track rental.lot) {
+              <tr>
+                <td class="font-semibold text-slate-900">{{ rental.lot }}</td>
+                <td>{{ rental.sci }}</td>
+                <td>{{ rental.start }}</td>
+                <td>{{ rental.end }}</td>
+                <td><ui-status-badge tone="success">{{ rental.status }}</ui-status-badge></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </ui-detail-card>
+
+    <ui-detail-card title="Historique de paiement" description="Situation des loyers du locataire.">
+      <div class="overflow-x-auto">
+        <table class="table table-nowrap">
+          <thead><tr><th>Mois</th><th>Dû</th><th>Payé</th><th>Reste</th><th>Statut</th></tr></thead>
+          <tbody>
+            @for (payment of paymentHistory; track payment.month) {
+              <tr>
+                <td>{{ payment.month }}</td>
+                <td>{{ payment.due }}</td>
+                <td>{{ payment.paid }}</td>
+                <td>{{ payment.remaining }}</td>
+                <td><ui-status-badge [tone]="payment.tone">{{ payment.status }}</ui-status-badge></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </ui-detail-card>
+  </section>
+</ui-app-shell>

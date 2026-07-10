@@ -1,0 +1,45 @@
+<section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
+  <div class="card-body gap-5">
+    <div>
+      <h2 class="card-title text-xl">Liste des locataires</h2>
+      <p class="text-sm leading-6 text-slate-500">
+        Informations clés, coordonnées et accès direct à l'historique locatif.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="table table-nowrap">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>SCI</th>
+            <th>Lot actuel</th>
+            <th>Entrée</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Statut</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (tenant of tenants(); track tenant.email) {
+            <tr>
+              <td class="font-semibold text-slate-900">{{ tenant.name }}</td>
+              <td>{{ tenant.sci }}</td>
+              <td>{{ tenant.currentLot }}</td>
+              <td>{{ tenant.entryDate }}</td>
+              <td>{{ tenant.email }}</td>
+              <td>{{ tenant.phone }}</td>
+              <td>
+                <ui-status-badge [tone]="tenant.statusTone">{{ tenant.status }}</ui-status-badge>
+              </td>
+              <td>
+                <a class="btn btn-sm btn-ghost text-primary" [href]="tenant.detailUrl">Voir →</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,59 @@
+<section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
+  <div class="card-body gap-5">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 class="card-title text-xl">Échéances du mois</h2>
+        <p class="text-sm leading-6 text-slate-500">
+          Écran principal pour piloter les encaissements, identifier les écarts et déclencher les
+          actions.
+        </p>
+      </div>
+      <div class="badge badge-outline shrink-0">{{ period() }}</div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="table table-nowrap">
+        <thead>
+          <tr>
+            <th>Locataire</th>
+            <th>Lot</th>
+            <th>SCI</th>
+            <th>Montant dû</th>
+            <th>Montant payé</th>
+            <th>Reste</th>
+            <th>Date paiement</th>
+            <th>Statut</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (rent of rents(); track rent.tenant) {
+            <tr>
+              <td class="font-semibold text-slate-900">{{ rent.tenant }}</td>
+              <td>{{ rent.lot }}</td>
+              <td>{{ rent.sci }}</td>
+              <td>{{ rent.due }}</td>
+              <td>{{ rent.paid }}</td>
+              <td>{{ rent.remaining }}</td>
+              <td>{{ rent.paymentDate }}</td>
+              <td><ui-status-badge [tone]="rent.statusTone">{{ rent.status }}</ui-status-badge></td>
+              <td>
+                <a
+                  class="btn btn-sm"
+                  [class.btn-primary]="rent.actionTone === 'primary'"
+                  [class.btn-warning]="rent.actionTone === 'warning'"
+                  [class.btn-outline]="rent.actionTone === 'warning'"
+                  [class.btn-ghost]="rent.actionTone === 'ghost'"
+                  [class.text-primary]="rent.actionTone === 'ghost'"
+                  [href]="rent.actionUrl"
+                >
+                  {{ rent.action }}
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

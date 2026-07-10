@@ -1,4 +1,4 @@
-<ui-app-shell>
+<ui-app-shell mobileActionUrl="/rents">
   <ui-page-header
     badge="Vue globale"
     title="Dashboard"
@@ -23,7 +23,7 @@
       title="Loyers en retard"
       description="Paiements non soldés ou non reçus à surveiller en priorité."
       linkLabel="Voir tous"
-      linkUrl="#"
+      linkUrl="/rents"
     >
       <div class="overflow-x-auto">
         <table class="table table-nowrap">
@@ -53,7 +53,7 @@
                     [class.btn-warning]="rent.actionTone === 'warning'"
                     [class.btn-ghost]="rent.actionTone === 'primary'"
                     [class.text-primary]="rent.actionTone === 'primary'"
-                    href="#"
+                    [href]="rent.actionUrl"
                   >
                     {{ rent.action }}
                   </a>
@@ -69,7 +69,7 @@
       title="Paiements récents"
       description="Les derniers encaissements qui ont fait bouger le mois."
       linkLabel="Historique"
-      linkUrl="#"
+      linkUrl="/rents"
     >
       <div class="space-y-3">
         @for (payment of recentPayments; track payment.tenant) {

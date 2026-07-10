@@ -94,7 +94,8 @@ The Angular app follows the `core / features / shared` folder structure:
 - Routes are wired in `src/app/app.routes.ts`.
 - The login page lives under `src/app/features/login/pages/login-page/`.
 - Login-only UI components live under `src/app/features/login/components/`.
-- The SCI portfolio and lots pages live under `src/app/features/scis/` and `src/app/features/lots/`, with their page-private UI under each feature's `components/` folder.
+- Product screens are implemented under `src/app/features/` for login, dashboard, SCI, lots and lot detail, tenants and tenant detail, rents, and settings.
+- Each feature keeps routed screens in `pages/` and page-private UI in `components/`; shared detail headers, cards, metrics, badges, and brand elements live under `src/app/shared/components/`.
 - `core/` contains the application shell, while `shared/` contains reusable presentation components used across features.
 - There is no HTTP layer, no services, and no state management beyond Angular primitives.
 

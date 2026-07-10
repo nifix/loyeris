@@ -1,0 +1,26 @@
+<section class="card h-full rounded-lg border border-base-200 bg-base-100 shadow-sm">
+  <div class="card-body h-full gap-6 p-6 md:p-8">
+    @if (avatarLabel()) {
+      <div class="flex items-center gap-4">
+        <div class="avatar placeholder">
+          <div
+            class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary"
+          >
+            <span>{{ avatarLabel() }}</span>
+          </div>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">{{ title() }}</h2>
+          <p class="text-sm text-slate-500">{{ description() }}</p>
+        </div>
+      </div>
+    } @else {
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">{{ title() }}</h2>
+        <p class="text-sm text-slate-500">{{ description() }}</p>
+      </div>
+    }
+
+    <ng-content />
+  </div>
+</section>

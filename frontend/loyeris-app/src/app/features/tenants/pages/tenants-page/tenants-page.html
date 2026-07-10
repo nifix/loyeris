@@ -1,0 +1,26 @@
+<ui-app-shell
+  activeItem="tenants"
+  mobileActionLabel="Nouveau"
+  mobileActionUrl="/tenants/camille-robert"
+>
+  <ui-page-header
+    badge="Occupants"
+    title="Locataires"
+    description="Retrouvez rapidement les locataires actifs, leur logement actuel et leur situation de paiement."
+    [chips]="headerChips"
+    actionLabel="Ajouter un locataire"
+  />
+
+  <section class="grid items-stretch gap-4 md:grid-cols-3">
+    @for (metric of metrics; track metric.title) {
+      <ui-metric-card
+        [title]="metric.title"
+        [value]="metric.value"
+        [description]="metric.description"
+        [tone]="metric.tone"
+      />
+    }
+  </section>
+
+  <ui-tenants-table [tenants]="tenants" />
+</ui-app-shell>

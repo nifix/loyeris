@@ -68,4 +68,69 @@ describe('App', () => {
     expect(compiled.querySelector('app-lots-page')).toBeTruthy();
     expect(compiled.textContent).toContain('Lot A01');
   });
+
+  it('should render the lot detail page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/lots/a02');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-lot-detail-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Historique des paiements');
+  });
+
+  it('should render the tenants page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/tenants');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-tenants-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Liste des locataires');
+  });
+
+  it('should render the tenant detail page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/tenants/camille-robert');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-tenant-detail-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Coordonnées');
+  });
+
+  it('should render the rents page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/rents');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-rents-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Échéances du mois');
+  });
+
+  it('should render the settings page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/settings');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-settings-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Enregistrer le profil');
+  });
 });

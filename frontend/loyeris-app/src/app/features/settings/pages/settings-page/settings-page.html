@@ -1,0 +1,112 @@
+<ui-app-shell
+  activeItem="settings"
+  mobileActionLabel="Dashboard"
+  mobileActionUrl="/dashboard"
+>
+  <ui-page-header
+    badge="Mon compte"
+    title="Paramètres"
+    description="Gérez vos informations personnelles, vos préférences de notification et la sécurité de votre compte."
+    [chips]="headerChips"
+  />
+
+  <div class="grid items-stretch gap-6 pb-24 xl:grid-cols-3">
+    <ui-settings-panel
+      class="xl:col-span-2"
+      title="Profil"
+      description="Vos informations personnelles visibles dans l'application."
+      avatarLabel="NF"
+    >
+      <form class="grid gap-5 md:grid-cols-2">
+        <label class="form-control w-full">
+          <span class="label px-1 pb-1 font-medium text-slate-700">Prénom</span>
+          <input class="input input-bordered w-full rounded-xl" type="text" value="Nifix" />
+        </label>
+        <label class="form-control w-full">
+          <span class="label px-1 pb-1 font-medium text-slate-700">Nom</span>
+          <input class="input input-bordered w-full rounded-xl" type="text" value="Ferrand" />
+        </label>
+        <label class="form-control w-full md:col-span-2">
+          <span class="label px-1 pb-1 font-medium text-slate-700">Adresse email</span>
+          <input class="input input-bordered w-full rounded-xl" type="email" value="contact@loyeris.app" />
+        </label>
+        <label class="form-control w-full md:col-span-2">
+          <span class="label px-1 pb-1 font-medium text-slate-700">Téléphone</span>
+          <input class="input input-bordered w-full rounded-xl" type="tel" value="06 12 34 56 78" />
+        </label>
+      </form>
+      <div class="flex justify-end gap-3 pt-2">
+        <button type="button" class="btn btn-ghost">Annuler</button>
+        <button type="button" class="btn btn-primary">Enregistrer le profil</button>
+      </div>
+    </ui-settings-panel>
+
+    <ui-settings-panel title="Sécurité" description="Protégez l'accès à votre compte.">
+      <div class="space-y-4">
+        <div class="settings-row">
+          <div><p class="font-semibold text-slate-900">Mot de passe</p><p class="text-sm text-slate-500">Dernière modification il y a 3 mois</p></div>
+          <button type="button" class="btn btn-outline btn-sm">Modifier</button>
+        </div>
+        <div class="settings-row">
+          <div><p class="font-semibold text-slate-900">Authentification à deux facteurs</p><p class="text-sm text-slate-500">Désactivée</p></div>
+          <button type="button" class="btn btn-outline btn-sm">Activer</button>
+        </div>
+        <div class="settings-row">
+          <div><p class="font-semibold text-slate-900">Sessions actives</p><p class="text-sm text-slate-500">1 appareil connecté</p></div>
+          <button type="button" class="btn btn-outline btn-sm">Gérer</button>
+        </div>
+      </div>
+    </ui-settings-panel>
+
+    <ui-settings-panel
+      class="xl:col-span-2"
+      title="Préférences"
+      description="Personnalisez votre expérience dans l'application."
+    >
+      <div class="grid gap-5 md:grid-cols-2">
+        <label class="form-control w-full">
+          <span class="label px-1 pb-1 font-medium text-slate-700">Langue</span>
+          <select class="select select-bordered w-full rounded-xl"><option selected>Français</option><option>English</option></select>
+        </label>
+        <label class="form-control w-full">
+          <span class="label px-1 pb-1 font-medium text-slate-700">Devise</span>
+          <select class="select select-bordered w-full rounded-xl"><option selected>Euro (€)</option><option>Dollar ($)</option></select>
+        </label>
+      </div>
+
+      <div class="divider my-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+        Notifications
+      </div>
+
+      <div class="space-y-3">
+        <label class="settings-row cursor-pointer">
+          <span><span class="block font-semibold text-slate-800">Retards de paiement</span><span class="block text-sm text-slate-500">Recevoir un email lorsqu'un loyer est en retard.</span></span>
+          <input type="checkbox" checked class="toggle toggle-primary" />
+        </label>
+        <label class="settings-row cursor-pointer">
+          <span><span class="block font-semibold text-slate-800">Nouveaux paiements</span><span class="block text-sm text-slate-500">Recevoir un email lorsqu'un paiement est enregistré.</span></span>
+          <input type="checkbox" checked class="toggle toggle-primary" />
+        </label>
+        <label class="settings-row cursor-pointer">
+          <span><span class="block font-semibold text-slate-800">Fin de bail</span><span class="block text-sm text-slate-500">Être alerté 3 mois avant la fin d'un bail.</span></span>
+          <input type="checkbox" class="toggle toggle-primary" />
+        </label>
+      </div>
+    </ui-settings-panel>
+
+    <ui-settings-panel title="Apparence" description="Adaptez l'interface à votre convenance.">
+      <div class="flex flex-col gap-4">
+        <label class="form-control w-full">
+          <span class="label px-1 pb-1 font-medium text-slate-700">Thème</span>
+          <select class="select select-bordered w-full rounded-xl">
+            <option selected>Clair (Corporate)</option><option>Sombre</option><option>Automatique</option>
+          </select>
+        </label>
+        <label class="settings-row cursor-pointer">
+          <span><span class="block font-semibold text-slate-900">Affichage compact</span><span class="block text-sm text-slate-500">Réduire les espaces dans les tableaux.</span></span>
+          <input type="checkbox" class="toggle toggle-primary" />
+        </label>
+      </div>
+    </ui-settings-panel>
+  </div>
+</ui-app-shell>
