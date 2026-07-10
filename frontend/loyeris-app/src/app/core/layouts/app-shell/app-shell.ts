@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { BrandMark } from '../../../shared/components/ui-brand-mark/brand-mark';
 
 type NavigationItem = {
   readonly label: string;
   readonly href: string;
   readonly icon: 'dashboard' | 'sci' | 'lots' | 'tenants' | 'rents' | 'settings' | 'logout';
-  readonly active?: boolean;
   readonly separated?: boolean;
 };
 
@@ -16,9 +15,12 @@ type NavigationItem = {
   styleUrl: './app-shell.css',
 })
 export class AppShell {
+  readonly activeItem = input<NavigationItem['icon']>('dashboard');
+  readonly mobileActionLabel = input('Paiement');
+
   protected readonly navigation: readonly NavigationItem[] = [
-    { label: 'Dashboard', href: '/dashboard', icon: 'dashboard', active: true },
-    { label: 'SCI', href: '#', icon: 'sci' },
+    { label: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
+    { label: 'SCI', href: '/scis', icon: 'sci' },
     { label: 'Lots', href: '#', icon: 'lots' },
     { label: 'Locataires', href: '#', icon: 'tenants' },
     { label: 'Loyers', href: '#', icon: 'rents' },

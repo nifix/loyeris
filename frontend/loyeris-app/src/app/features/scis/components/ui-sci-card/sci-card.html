@@ -1,0 +1,55 @@
+<article class="card h-full rounded-lg border border-base-200 bg-base-100 shadow-sm">
+  <div class="card-body gap-6">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+      <div>
+        <div class="flex flex-wrap items-center gap-3">
+          <h2 class="text-2xl font-bold text-slate-900">{{ name() }}</h2>
+          <ui-status-badge tone="success">{{ status() }}</ui-status-badge>
+        </div>
+        <p class="mt-2 text-sm leading-6 text-slate-500">
+          {{ address() }} · Créée le {{ createdAt() }}
+        </p>
+      </div>
+
+      <div
+        class="stats stats-vertical rounded-lg border border-base-200 bg-slate-50 md:stats-horizontal"
+      >
+        <div class="stat px-5">
+          <div class="stat-title">Lots</div>
+          <div class="stat-value text-lg text-slate-900">{{ lots() }}</div>
+        </div>
+        <div class="stat px-5">
+          <div class="stat-title">Locataires</div>
+          <div class="stat-value text-lg text-slate-900">{{ tenants() }}</div>
+        </div>
+        <div class="stat px-5">
+          <div class="stat-title">Loyer mensuel</div>
+          <div class="stat-value text-lg text-primary">{{ monthlyRent() }}</div>
+        </div>
+        <div class="stat px-5">
+          <div class="stat-title">Occupation</div>
+          <div class="stat-value text-lg text-success">{{ occupancy() }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <div class="flex items-center justify-between text-sm text-slate-500">
+        <span>Performance du mois</span>
+        <span>{{ performance() }}% encaissé</span>
+      </div>
+      <progress
+        class="progress w-full"
+        [class.progress-primary]="performanceTone() === 'primary'"
+        [class.progress-success]="performanceTone() === 'success'"
+        [value]="performance()"
+        max="100"
+      ></progress>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <a class="btn btn-primary btn-sm" [href]="lotsUrl()">Voir les lots</a>
+      <a class="btn btn-outline btn-sm" [href]="rentsUrl()">Voir les loyers</a>
+    </div>
+  </div>
+</article>

@@ -42,4 +42,17 @@ describe('App', () => {
     expect(compiled.querySelector('app-dashboard-page')).toBeTruthy();
     expect(compiled.textContent).toContain('Loyers attendus');
   });
+
+  it('should render the SCI page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/scis');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-scis-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('SCI Les Tilleuls');
+  });
 });

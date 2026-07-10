@@ -1,0 +1,36 @@
+<ui-app-shell activeItem="sci" mobileActionLabel="Ajouter">
+  <ui-page-header
+    badge="Portefeuille"
+    title="SCI"
+    description="Gérez plusieurs structures depuis un seul cockpit tout en gardant la vision exploitation et rendement."
+    [chips]="headerChips"
+    actionLabel="Ajouter une SCI"
+  />
+
+  <section class="grid items-stretch gap-4 md:grid-cols-3">
+    @for (metric of metrics; track metric.title) {
+      <ui-metric-card
+        [title]="metric.title"
+        [value]="metric.value"
+        [description]="metric.description"
+        [tone]="metric.tone"
+      />
+    }
+  </section>
+
+  <section class="grid items-stretch gap-6">
+    @for (sci of scis; track sci.name) {
+      <ui-sci-card
+        [name]="sci.name"
+        [address]="sci.address"
+        [createdAt]="sci.createdAt"
+        [lots]="sci.lots"
+        [tenants]="sci.tenants"
+        [monthlyRent]="sci.monthlyRent"
+        [occupancy]="sci.occupancy"
+        [performance]="sci.performance"
+        [performanceTone]="sci.performanceTone"
+      />
+    }
+  </section>
+</ui-app-shell>

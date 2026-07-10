@@ -14,4 +14,8 @@ export const routes: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes),
   },
+  {
+    path: 'scis',
+    loadChildren: () => import('./features/scis/scis.routes').then((m) => m.scisRoutes),
+  },
 ];
