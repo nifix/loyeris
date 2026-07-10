@@ -11,5 +11,6 @@ export class FormField {
   readonly forgotLabel = input<string>();
   readonly label = input.required<string>();
   readonly placeholder = input.required<string>();
+  readonly required = input(false);
   readonly type = input<'email' | 'password' | 'text'>('text');
 }

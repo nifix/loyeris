@@ -1,0 +1,145 @@
+<ui-auth-layout [widePanel]="true">
+  <div auth-intro class="space-y-12 lg:max-w-xl">
+    <a
+      class="inline-flex items-center gap-4 transition-opacity hover:opacity-90"
+      routerLink="/login"
+    >
+      <ui-brand-mark />
+      <div>
+        <p class="text-2xl font-semibold tracking-tight">Loyeris</p>
+        <p class="text-sm text-white/80">Gestion locative claire pour vos SCI</p>
+      </div>
+    </a>
+
+    <div class="space-y-5">
+      <div
+        class="badge badge-lg border-white/25 bg-white/10 px-4 py-3 font-medium text-white backdrop-blur-sm"
+      >
+        Création de compte
+      </div>
+      <h1
+        class="max-w-3xl break-words text-5xl font-black leading-[1.1] tracking-tight md:text-6xl"
+      >
+        Votre espace Loyeris commence ici.
+      </h1>
+      <p class="max-w-2xl text-lg leading-relaxed text-white/85">
+        Renseignez vos informations pour accéder à votre tableau de bord.
+      </p>
+    </div>
+  </div>
+
+  <div auth-panel class="space-y-5">
+    <div class="space-y-3">
+      <div class="badge badge-primary badge-outline badge-lg font-medium">Nouvel espace</div>
+      <div class="pt-1">
+        <h2 class="text-3xl font-bold tracking-tight text-base-content">Créer votre compte</h2>
+        <p class="mt-2 text-sm leading-6 text-base-content/70">
+          Quelques informations suffisent pour commencer à organiser votre patrimoine.
+        </p>
+      </div>
+    </div>
+
+    <form class="min-w-0 space-y-4">
+      <div class="grid min-w-0 gap-4 sm:grid-cols-2">
+        <ui-form-field
+          fieldId="first-name"
+          label="Prénom"
+          autocomplete="given-name"
+          placeholder="Camille"
+          [required]="true"
+        />
+        <ui-form-field
+          fieldId="last-name"
+          label="Nom"
+          autocomplete="family-name"
+          placeholder="Robert"
+          [required]="true"
+        />
+      </div>
+
+      <ui-form-field
+        fieldId="register-email"
+        label="Adresse email"
+        type="email"
+        autocomplete="email"
+        placeholder="nom@exemple.com"
+        [required]="true"
+      />
+
+      <div class="grid min-w-0 gap-4 sm:grid-cols-2">
+        <ui-form-field
+          fieldId="register-password"
+          label="Mot de passe"
+          type="password"
+          autocomplete="new-password"
+          placeholder="********"
+          [required]="true"
+        />
+        <ui-form-field
+          fieldId="password-confirmation"
+          label="Confirmation"
+          type="password"
+          autocomplete="new-password"
+          placeholder="********"
+          [required]="true"
+        />
+      </div>
+
+      <ui-password-checklist />
+
+      <div class="form-control w-full">
+        <label
+          class="label w-full cursor-pointer items-start justify-start gap-3 rounded-xl border border-base-200 bg-base-100 px-4 py-3 transition-colors hover:bg-base-200/50"
+        >
+          <input
+            type="checkbox"
+            class="checkbox checkbox-primary checkbox-sm mt-0.5 shrink-0 rounded"
+            required
+          />
+          <span
+            class="label-text min-w-0 whitespace-normal break-words text-sm leading-5 text-base-content/75"
+          >
+            J’accepte les
+            <a class="link link-primary font-medium" href="#">conditions d’utilisation</a>
+            et la
+            <a class="link link-primary font-medium" href="#">politique de confidentialité</a>.
+          </span>
+        </label>
+      </div>
+
+      @if (submissionError(); as error) {
+        <ui-auth-submission-error [title]="error.title" [message]="error.message">
+          @if (error.showLoginAction) {
+            <a
+              auth-error-action
+              class="link link-error mt-2 inline-flex text-sm font-semibold"
+              routerLink="/login"
+            >
+              Se connecter
+            </a>
+          }
+        </ui-auth-submission-error>
+      }
+
+      <button
+        type="button"
+        class="btn btn-primary btn-block h-12 rounded-xl text-base font-semibold shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40"
+      >
+        Créer mon espace
+      </button>
+    </form>
+
+    <div
+      class="divider mb-3 mt-0 text-xs font-semibold uppercase tracking-[0.2em] text-base-content/50"
+    >
+      Déjà inscrit ?
+    </div>
+
+    <a
+      class="btn btn-outline btn-block h-12 rounded-xl border-base-300 text-base font-semibold text-base-content/80 transition-all hover:border-base-300 hover:bg-base-200"
+      routerLink="/login"
+    >
+      Se connecter
+    </a>
+  </div>
+</ui-auth-layout>

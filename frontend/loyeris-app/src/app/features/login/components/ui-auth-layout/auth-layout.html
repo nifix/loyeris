@@ -1,0 +1,19 @@
+<main class="auth-page-shell min-h-screen px-4 py-6 md:px-8 lg:px-12 lg:py-10">
+  <div
+    class="auth-layout-grid relative z-10 mx-auto grid min-h-[calc(100vh-3rem)] min-w-0 max-w-7xl gap-10 lg:items-center"
+    [class.auth-layout-grid-centered]="centered()"
+    [class.auth-layout-grid-wide]="widePanel()"
+  >
+    <section class="auth-layout-intro min-w-0 text-white">
+      <ng-content select="[auth-intro]" />
+    </section>
+
+    <section
+      class="card min-w-0 max-w-full rounded-3xl border border-base-200/60 bg-base-100 shadow-2xl"
+    >
+      <div class="card-body min-w-0 p-8 md:p-10">
+        <ng-content select="[auth-panel]" />
+      </div>
+    </section>
+  </div>
+</main>

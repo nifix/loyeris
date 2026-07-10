@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+.auth-page-shell {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0a1628 0%, #12326e 52%, #1a5faa 100%);
+}
+
+.auth-page-shell::before,
+.auth-page-shell::after {
+  position: absolute;
+  border-radius: 9999px;
+  content: '';
+  pointer-events: none;
+}
+
+.auth-page-shell::before {
+  top: -12rem;
+  left: -10rem;
+  width: 36rem;
+  height: 36rem;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, transparent 68%);
+}
+
+.auth-page-shell::after {
+  right: -10rem;
+  bottom: -14rem;
+  width: 40rem;
+  height: 40rem;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.14) 0%, transparent 68%);
+}
+
+.auth-layout-grid-centered {
+  width: min(31rem, 100%);
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+}
+
+.auth-layout-grid-centered .auth-layout-intro {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .auth-layout-grid {
+    grid-template-columns: minmax(0, 1fr) 28rem;
+  }
+
+  .auth-layout-grid-wide {
+    grid-template-columns: minmax(0, 1fr) 31rem;
+  }
+
+  .auth-layout-grid-centered {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

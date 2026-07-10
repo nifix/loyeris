@@ -30,6 +30,32 @@ describe('App', () => {
     expect(compiled.textContent).toContain('Connexion');
   });
 
+  it('should render the register page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/register');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-register-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Créer votre compte');
+  });
+
+  it('should render the email verification page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/verify-email?token=verified-token');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-email-verification-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Votre adresse email est vérifiée');
+  });
+
   it('should render the dashboard page', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
