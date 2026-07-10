@@ -29,7 +29,7 @@ const meta: Meta<MetricCard> = {
     },
     tone: {
       control: 'radio',
-      options: ['primary', 'success', 'warning', 'neutral'],
+      options: ['primary', 'success', 'warning', 'error', 'neutral'],
     },
   },
   args: {

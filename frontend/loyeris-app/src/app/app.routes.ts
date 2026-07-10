@@ -22,4 +22,16 @@ export const routes: Routes = [
     path: 'lots',
     loadChildren: () => import('./features/lots/lots.routes').then((m) => m.lotsRoutes),
   },
+  {
+    path: 'tenants',
+    loadChildren: () => import('./features/tenants/tenants.routes').then((m) => m.tenantsRoutes),
+  },
+  {
+    path: 'rents',
+    loadChildren: () => import('./features/rents/rents.routes').then((m) => m.rentsRoutes),
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./features/settings/settings.routes').then((m) => m.settingsRoutes),
+  },
 ];

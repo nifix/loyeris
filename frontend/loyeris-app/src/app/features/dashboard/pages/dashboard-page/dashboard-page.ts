@@ -51,6 +51,7 @@ export class DashboardPage {
       tone: 'error' as const,
       action: 'Relancer',
       actionTone: 'error' as const,
+      actionUrl: '/rents',
     },
     {
       lot: 'Lot B01',
@@ -61,6 +62,7 @@ export class DashboardPage {
       tone: 'warning' as const,
       action: 'Compléter',
       actionTone: 'warning' as const,
+      actionUrl: '/rents',
     },
     {
       lot: 'Lot C03',
@@ -71,6 +73,7 @@ export class DashboardPage {
       tone: 'success' as const,
       action: 'Détail →',
       actionTone: 'primary' as const,
+      actionUrl: '/tenants/camille-robert',
     },
   ];
 

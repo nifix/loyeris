@@ -9,5 +9,5 @@ export class MetricCard {
   readonly title = input.required<string>();
   readonly value = input.required<string>();
   readonly description = input.required<string>();
-  readonly tone = input<'primary' | 'success' | 'warning' | 'neutral'>('neutral');
+  readonly tone = input<'primary' | 'success' | 'warning' | 'error' | 'neutral'>('neutral');
 }

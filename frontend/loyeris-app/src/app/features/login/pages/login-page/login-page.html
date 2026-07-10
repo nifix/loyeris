@@ -1,8 +1,8 @@
 ﻿<main class="login-page-shell min-h-screen px-4 py-6 md:px-8 lg:px-12 lg:py-10">
   <div
-    class="relative z-10 mx-auto grid min-h-[calc(100vh-3rem)] max-w-7xl gap-10 lg:grid-cols-[1fr_28rem] lg:items-center"
+    class="relative z-10 mx-auto grid min-h-[calc(100vh-3rem)] min-w-0 max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_28rem] lg:items-center"
   >
-    <section class="space-y-10 text-white">
+    <section class="min-w-0 space-y-10 text-white">
       <a class="inline-flex items-center gap-4 transition-opacity hover:opacity-90" href="#">
         <ui-brand-mark />
         <div>
@@ -17,7 +17,7 @@
         >
           Connexion sécurisée
         </div>
-        <h1 class="max-w-3xl text-5xl font-black leading-[1.1] tracking-tight md:text-6xl">
+        <h1 class="max-w-3xl break-words text-5xl font-black leading-[1.1] tracking-tight md:text-6xl">
           Le cockpit locatif pensé pour remplacer Excel sans alourdir la gestion.
         </h1>
         <p class="max-w-2xl text-lg leading-relaxed text-white/85">
@@ -45,8 +45,8 @@
       </div>
     </section>
 
-    <section class="card rounded-3xl border border-base-200/60 bg-base-100 shadow-2xl">
-      <div class="card-body gap-7 p-8 md:p-10">
+    <section class="card min-w-0 max-w-full rounded-3xl border border-base-200/60 bg-base-100 shadow-2xl">
+      <div class="card-body min-w-0 gap-7 p-8 md:p-10">
         <div class="space-y-3">
           <div class="badge badge-primary badge-outline badge-lg font-medium">Espace gestionnaire</div>
           <div class="pt-1">
@@ -57,7 +57,7 @@
           </div>
         </div>
 
-        <form class="space-y-5">
+        <form class="min-w-0 space-y-5">
           <ui-form-field
             fieldId="email"
             label="Adresse email"
@@ -82,7 +82,7 @@
               class="label w-full cursor-pointer justify-start gap-3 rounded-xl border border-base-200 bg-base-100 px-4 py-3 transition-colors hover:bg-base-200/50"
             >
               <input type="checkbox" checked class="checkbox checkbox-primary checkbox-sm rounded" />
-              <span class="label-text text-sm font-medium text-base-content/80">
+              <span class="label-text min-w-0 text-sm font-medium text-base-content/80">
                 Garder ma session active sur cet appareil
               </span>
             </label>
@@ -118,6 +118,15 @@
             <p class="mt-1 text-sm leading-6 text-base-content/70">
               Une interface simple, structurée et rassurante pour les SCI et les propriétaires
               bailleurs.
+            </p>
+          </article>
+          <article
+            class="rounded-xl border border-base-200 bg-base-100/80 px-5 py-4 transition-colors hover:bg-base-200/40"
+          >
+            <p class="font-semibold text-base-content">Pages déjà maquettées</p>
+            <p class="mt-1 text-sm leading-6 text-base-content/70">
+              Dashboard, lots, locataires, loyers et fiches détail sont prêts à structurer votre
+              gestion.
             </p>
           </article>
         </div>

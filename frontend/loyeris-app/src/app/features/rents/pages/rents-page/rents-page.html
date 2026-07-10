@@ -1,0 +1,27 @@
+<ui-app-shell activeItem="rents" mobileActionLabel="Paiement">
+  <ui-page-header
+    badge="Encaissements"
+    title="Loyers"
+    description="Suivi mensuel des montants attendus, encaissés et restants avec une vue opérationnelle centrée sur les actions à mener."
+    [chips]="headerChips"
+    actionLabel="Enregistrer un paiement"
+  />
+
+  <section class="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-4">
+    @for (metric of metrics; track metric.title) {
+      <ui-metric-card
+        [title]="metric.title"
+        [value]="metric.value"
+        [description]="metric.description"
+        [tone]="metric.tone"
+      />
+    }
+  </section>
+
+  <section class="alert border border-warning/20 bg-warning/10 text-slate-700">
+    <span class="font-medium">Deux actions prioritaires aujourd'hui :</span>
+    <span>relancer Camille Robert et compléter le solde du lot B01.</span>
+  </section>
+
+  <ui-rents-table [rents]="rents" />
+</ui-app-shell>

@@ -17,14 +17,15 @@ type NavigationItem = {
 export class AppShell {
   readonly activeItem = input<NavigationItem['icon']>('dashboard');
   readonly mobileActionLabel = input('Paiement');
+  readonly mobileActionUrl = input('#');
 
   protected readonly navigation: readonly NavigationItem[] = [
     { label: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
     { label: 'SCI', href: '/scis', icon: 'sci' },
     { label: 'Lots', href: '/lots', icon: 'lots' },
-    { label: 'Locataires', href: '#', icon: 'tenants' },
-    { label: 'Loyers', href: '#', icon: 'rents' },
-    { label: 'Paramètres', href: '#', icon: 'settings' },
+    { label: 'Locataires', href: '/tenants', icon: 'tenants' },
+    { label: 'Loyers', href: '/rents', icon: 'rents' },
+    { label: 'Paramètres', href: '/settings', icon: 'settings' },
     { label: 'Déconnexion', href: '#', icon: 'logout', separated: true },
   ];
 }

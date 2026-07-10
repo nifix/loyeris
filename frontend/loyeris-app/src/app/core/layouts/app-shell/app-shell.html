@@ -1,7 +1,7 @@
 <div class="drawer lg:drawer-open">
   <input id="app-drawer" type="checkbox" class="drawer-toggle" />
 
-  <div class="drawer-content min-h-screen">
+  <div class="drawer-content min-h-screen min-w-0">
     <div
       class="navbar sticky top-0 z-30 border-b border-base-200 bg-base-100/90 px-4 backdrop-blur lg:hidden"
     >
@@ -29,10 +29,14 @@
           </div>
         </a>
       </div>
-      <a class="btn btn-primary btn-sm shrink-0" href="#">{{ mobileActionLabel() }}</a>
+      @if (mobileActionLabel()) {
+        <a class="btn btn-primary btn-sm shrink-0" [href]="mobileActionUrl()">
+          {{ mobileActionLabel() }}
+        </a>
+      }
     </div>
 
-    <main class="flex flex-col gap-6 p-4 md:p-6 lg:p-8">
+    <main class="flex min-w-0 flex-col gap-6 p-4 md:p-6 lg:p-8">
       <ng-content />
     </main>
   </div>
