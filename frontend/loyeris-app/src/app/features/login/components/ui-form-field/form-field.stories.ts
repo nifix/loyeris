@@ -44,6 +44,9 @@ const meta: Meta<FormField> = {
     placeholder: {
       control: 'text',
     },
+    required: {
+      control: 'boolean',
+    },
     type: {
       control: 'radio',
       options: ['text', 'email', 'password'],
@@ -80,6 +83,17 @@ export const Password: Story = {
     placeholder: 'Votre mot de passe',
     forgotLabel: 'Mot de passe oublié ?',
     type: 'password',
+  },
+};
+
+export const Name: Story = {
+  args: {
+    autocomplete: 'given-name',
+    fieldId: 'first-name',
+    label: 'Prénom',
+    placeholder: 'Camille',
+    required: true,
+    type: 'text',
   },
 };
 

@@ -1,0 +1,27 @@
+<div
+  class="flex items-start gap-3 rounded-xl border border-error/20 bg-error/10 p-4 text-left"
+  role="alert"
+>
+  <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-error/15 text-error">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.25"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 8v4" />
+      <path d="M12 16h.01" />
+    </svg>
+  </span>
+
+  <div class="min-w-0 flex-1">
+    <p class="text-sm font-semibold text-error">{{ title() }}</p>
+    <p class="mt-1 text-sm leading-5 text-base-content/70">{{ message() }}</p>
+    <ng-content select="[auth-error-action]" />
+  </div>
+</div>

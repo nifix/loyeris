@@ -92,8 +92,9 @@ The Angular app follows the `core / features / shared` folder structure:
 - The app is still early.
 - `App` renders routed content through `RouterOutlet`.
 - Routes are wired in `src/app/app.routes.ts`.
-- The login page lives under `src/app/features/login/pages/login-page/`.
-- Login-only UI components live under `src/app/features/login/components/`.
+- Login, account registration, and email verification pages live under `src/app/features/login/pages/` and are exposed at `/login`, `/register`, and `/verify-email`.
+- Authentication-only UI components, including the shared authentication layout and form helpers, live under `src/app/features/login/components/`.
+- Every routed frontend page has a full-page Storybook story; authentication stories additionally cover submission-error and verification-status variants.
 - Product screens are implemented under `src/app/features/` for login, dashboard, SCI, lots and lot detail, tenants and tenant detail, rents, and settings.
 - Each feature keeps routed screens in `pages/` and page-private UI in `components/`; shared detail headers, cards, metrics, badges, and brand elements live under `src/app/shared/components/`.
 - `core/` contains the application shell, while `shared/` contains reusable presentation components used across features.

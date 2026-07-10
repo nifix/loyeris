@@ -11,6 +11,15 @@ export const routes: Routes = [
     loadChildren: () => import('./features/login/login.routes').then((m) => m.loginRoutes),
   },
   {
+    path: 'register',
+    loadChildren: () => import('./features/login/login.routes').then((m) => m.registerRoutes),
+  },
+  {
+    path: 'verify-email',
+    loadChildren: () =>
+      import('./features/login/login.routes').then((m) => m.emailVerificationRoutes),
+  },
+  {
     path: 'dashboard',
     loadChildren: () => import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes),
   },

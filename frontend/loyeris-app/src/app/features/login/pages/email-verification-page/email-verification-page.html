@@ -1,0 +1,23 @@
+<ui-auth-layout [centered]="true">
+  <div auth-panel class="space-y-7">
+    <a class="mx-auto flex w-fit items-center gap-3" routerLink="/login">
+      <ui-brand-mark size="sm" />
+      <span class="text-xl font-semibold tracking-tight text-base-content">Loyeris</span>
+    </a>
+
+    <ui-email-verification-message [status]="status()" />
+
+    <div
+      class="divider mb-3 mt-0 text-xs font-semibold uppercase tracking-[0.2em] text-base-content/50"
+    >
+      Prochaine étape
+    </div>
+
+    <a
+      class="btn btn-primary btn-block h-12 rounded-xl text-base font-semibold shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40"
+      routerLink="/login"
+    >
+      Aller à la connexion
+    </a>
+  </div>
+</ui-auth-layout>
