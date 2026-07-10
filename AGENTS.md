@@ -16,7 +16,7 @@ This is a mono-repo with two independent projects plus a static design reference
 
 | Path | Role |
 |---|---|
-| `frontend/loyeris-app/` | Angular 21 app, standalone components, no NgModules, `core / features / shared` app structure |
+| `frontend/loyeris-app/` | Angular 22 app, standalone components, no NgModules, `core / features / shared` app structure |
 | `backend/` | .NET 10 solution using `.slnx`, Minimal API, MediatR |
 | `docs/ui-kit/` | Static HTML/CSS design reference using Tailwind 4 and daisyUI 5 |
 

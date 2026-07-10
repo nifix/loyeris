@@ -6,13 +6,16 @@ These instructions apply to everything under `frontend/`. The Angular applicatio
 
 ## Stack
 
-- Angular 21.
+- Angular 22.0.
 - Standalone components only; no NgModules.
-- TypeScript strict mode with `module: "preserve"` and decorators enabled.
-- Tailwind 4 using CSS-first configuration.
-- daisyUI 5 loaded from CSS.
-- Vitest through Angular's `@angular/build:unit-test` builder.
+- TypeScript 6.0 in strict mode with `module: "preserve"` and decorators enabled.
+- Tailwind 4.3 using CSS-first configuration.
+- daisyUI 5.6 loaded from CSS.
+- Storybook 10.5 for component stories and documentation.
+- Vitest 4.1 through Angular's `@angular/build:unit-test` builder.
 - Package manager: Yarn v1.22.22 only.
+
+Angular 22 requires Node.js `^22.22.3`, `^24.15.0`, or `>=26.0.0`. The current frontend has been validated with Node.js 24.15.0.
 
 Do not add Karma, `vitest.config.*`, `tailwind.config.js`, or npm lockfiles unless explicitly requested.
 
@@ -35,6 +38,8 @@ There is no `ng lint` setup and no separate typecheck script.
 
 - `packageManager` is `yarn@1.22.22`.
 - Lockfile is `yarn.lock`.
+- Angular packages and Angular CLI are on 22.0.x.
+- Keep TypeScript on `>=6.0 <6.1`, as required by Angular 22.0.x.
 - Angular CLI package manager is set to Yarn in `angular.json`.
 - Build builder is `@angular/build:application`.
 - Test builder is `@angular/build:unit-test`.
@@ -43,9 +48,11 @@ There is no `ng lint` setup and no separate typecheck script.
 
 ## Storybook
 
+- Storybook is on 10.5.x.
 - Storybook config lives in `frontend/loyeris-app/.storybook/`.
 - Stories are discovered from `src/**/*.stories.ts`.
 - Keep stories colocated with components and use Angular Storybook patterns (`Meta`/`StoryObj`).
+- Storybook 10.5's published TypeScript peer range does not yet include TypeScript 6, but `yarn build-storybook` is validated with this Angular 22/TypeScript 6 setup. Do not downgrade TypeScript to silence that peer warning.
 
 ## Styling and UI
 
@@ -60,6 +67,7 @@ Use `../../docs/ui-kit/` as the design reference for Angular screens. Recreate t
 ## Angular conventions
 
 - Components are standalone and use `templateUrl` plus `styleUrl`.
+- Prefer signals for component state and keep Angular 22's default OnPush change-detection behavior.
 - Component filenames omit the `.component` infix, for example `login.ts`, `login.html`, `login.css`.
 - Angular CLI prefix is `app`.
 - Prefer `protected readonly` for signals and template-facing immutable fields.
