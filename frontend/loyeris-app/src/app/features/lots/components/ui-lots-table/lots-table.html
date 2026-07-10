@@ -1,0 +1,43 @@
+<section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
+  <div class="card-body gap-5">
+    <div>
+      <h2 class="card-title text-xl">Liste des lots</h2>
+      <p class="text-sm leading-6 text-slate-500">
+        Vue d'ensemble des logements et locaux avec une lecture plus rapide des statuts.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Lot</th>
+            <th>SCI</th>
+            <th>Adresse</th>
+            <th>Type</th>
+            <th>Occupation</th>
+            <th>Loyer</th>
+            <th>Statut</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (lot of lots(); track lot.reference) {
+            <tr>
+              <td class="font-semibold text-slate-900">{{ lot.reference }}</td>
+              <td>{{ lot.sci }}</td>
+              <td>{{ lot.address }}</td>
+              <td>{{ lot.type }}</td>
+              <td>{{ lot.occupation }}</td>
+              <td>{{ lot.rent }}</td>
+              <td><ui-status-badge [tone]="lot.statusTone">{{ lot.status }}</ui-status-badge></td>
+              <td>
+                <a class="btn btn-sm btn-ghost text-primary" [href]="lot.detailUrl">Voir →</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
