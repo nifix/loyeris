@@ -1,0 +1,22 @@
+<ui-app-shell activeItem="lots" mobileActionLabel="Nouveau">
+  <ui-page-header
+    badge="Parc immobilier"
+    title="Lots"
+    description="Liste des biens gérés par SCI avec l'occupation actuelle, le loyer et l'accès direct à la fiche détaillée."
+    [chips]="headerChips"
+    actionLabel="Ajouter un lot"
+  />
+
+  <section class="grid items-stretch gap-4 md:grid-cols-3">
+    @for (metric of metrics; track metric.title) {
+      <ui-metric-card
+        [title]="metric.title"
+        [value]="metric.value"
+        [description]="metric.description"
+        [tone]="metric.tone"
+      />
+    }
+  </section>
+
+  <ui-lots-table [lots]="lots" />
+</ui-app-shell>

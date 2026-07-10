@@ -55,4 +55,17 @@ describe('App', () => {
     expect(compiled.querySelector('app-scis-page')).toBeTruthy();
     expect(compiled.textContent).toContain('SCI Les Tilleuls');
   });
+
+  it('should render the lots page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/lots');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-lots-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Lot A01');
+  });
 });

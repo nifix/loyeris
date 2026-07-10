@@ -21,7 +21,7 @@ export class AppShell {
   protected readonly navigation: readonly NavigationItem[] = [
     { label: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
     { label: 'SCI', href: '/scis', icon: 'sci' },
-    { label: 'Lots', href: '#', icon: 'lots' },
+    { label: 'Lots', href: '/lots', icon: 'lots' },
     { label: 'Locataires', href: '#', icon: 'tenants' },
     { label: 'Loyers', href: '#', icon: 'rents' },
     { label: 'Paramètres', href: '#', icon: 'settings' },

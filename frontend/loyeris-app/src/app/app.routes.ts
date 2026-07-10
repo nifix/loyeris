@@ -18,4 +18,8 @@ export const routes: Routes = [
     path: 'scis',
     loadChildren: () => import('./features/scis/scis.routes').then((m) => m.scisRoutes),
   },
+  {
+    path: 'lots',
+    loadChildren: () => import('./features/lots/lots.routes').then((m) => m.lotsRoutes),
+  },
 ];
