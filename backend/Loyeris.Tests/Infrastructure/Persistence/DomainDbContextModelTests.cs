@@ -201,6 +201,24 @@ public class DomainDbContextModelTests
     }
 
     /// <summary>
+    /// Verifies refresh-token rotation uses optimistic concurrency protection.
+    /// </summary>
+    [Test]
+    public void RefreshToken_ShouldUse_ConsumedAtAsConcurrencyToken()
+    {
+        // Arrange
+        using var identityAccess = CreateIdentityAccessDbContext();
+
+        // Act
+        var consumedAt = GetEntity(identityAccess, typeof(RefreshToken))
+            .FindProperty(nameof(RefreshToken.ConsumedAt));
+
+        // Assert
+        consumedAt.Should().NotBeNull();
+        consumedAt!.IsConcurrencyToken.Should().BeTrue();
+    }
+
+    /// <summary>
     /// Verifies enum status properties are stored as text values.
     /// </summary>
     [Test]

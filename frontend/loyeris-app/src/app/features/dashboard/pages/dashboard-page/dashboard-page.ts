@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AppShell } from '../../../../core/layouts/app-shell/app-shell';
 import { DashboardCard } from '../../components/ui-dashboard-card/dashboard-card';
 import { MetricCard } from '../../../../shared/components/ui-metric-card/metric-card';
@@ -7,7 +8,7 @@ import { StatusBadge } from '../../../../shared/components/ui-status-badge/statu
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [AppShell, DashboardCard, MetricCard, PageHeader, StatusBadge],
+  imports: [AppShell, DashboardCard, MetricCard, PageHeader, RouterLink, StatusBadge],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.css',
 })

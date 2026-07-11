@@ -18,4 +18,14 @@ public interface IIdentityAccessUnitOfWork
     /// <param name="cancellationToken">The cancellation token for the asynchronous operation.</param>
     /// <returns>True when changes were saved; otherwise false when a concurrency conflict occurred.</returns>
     Task<bool> TrySaveChangesAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Executes multiple persistence steps in a single database transaction.
+    /// </summary>
+    /// <param name="operation">The persistence operation to execute.</param>
+    /// <param name="cancellationToken">The cancellation token for the asynchronous operation.</param>
+    /// <returns>True when the transaction committed; otherwise false on an optimistic concurrency conflict.</returns>
+    Task<bool> ExecuteInTransactionAsync(
+        Func<CancellationToken, Task> operation,
+        CancellationToken cancellationToken);
 }

@@ -15,7 +15,7 @@ public static class LeasingEndpoints
     /// <param name="routes">The route builder used to define endpoint routes.</param>
     public static void RegisterLeasingEndpointGroup(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("api/leasing").WithTags("Leasing");
+        var group = routes.MapGroup("api/leasing").WithTags("Leasing").RequireAuthorization();
 
         group.MapGet("/tenants", async (IMediator mediator) =>
                 (await mediator.Send(new GetTenantsQuery())).ToHttpResult())

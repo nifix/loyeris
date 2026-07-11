@@ -34,7 +34,7 @@
                 <ui-status-badge [tone]="tenant.statusTone">{{ tenant.status }}</ui-status-badge>
               </td>
               <td>
-                <a class="btn btn-sm btn-ghost text-primary" [href]="tenant.detailUrl">Voir →</a>
+                <a class="btn btn-sm btn-ghost text-primary" [routerLink]="tenant.detailUrl">Voir →</a>
               </td>
             </tr>
           }

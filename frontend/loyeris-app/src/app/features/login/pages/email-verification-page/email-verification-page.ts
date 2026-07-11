@@ -8,7 +8,7 @@ import {
   EmailVerificationMessage,
   type VerificationStatus,
 } from '../../components/ui-email-verification-message/email-verification-message';
-import { IdentityAccessApi } from '../../services/identity-access-api';
+import { IdentityAccessApi } from '../../../../core/auth/identity-access-api';
 
 @Component({
   selector: 'app-email-verification-page',

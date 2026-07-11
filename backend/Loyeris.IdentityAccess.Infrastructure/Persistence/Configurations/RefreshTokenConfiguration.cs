@@ -26,6 +26,7 @@ public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
 
         builder.Property(refreshToken => refreshToken.TokenHash).HasMaxLength(128).IsRequired();
         builder.Property(refreshToken => refreshToken.CreatedAt).HasDefaultValueSql("now()");
+        builder.Property(refreshToken => refreshToken.ConsumedAt).IsConcurrencyToken();
         builder.Property(refreshToken => refreshToken.RevokedReason).HasMaxLength(240);
         builder.Property(refreshToken => refreshToken.CreatedByIp).HasMaxLength(64);
         builder.Property(refreshToken => refreshToken.ConsumedByIp).HasMaxLength(64);

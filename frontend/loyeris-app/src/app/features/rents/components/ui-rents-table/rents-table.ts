@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { StatusBadge } from '../../../../shared/components/ui-status-badge/status-badge';
 
 export type RentListItem = {
@@ -18,7 +19,7 @@ export type RentListItem = {
 
 @Component({
   selector: 'ui-rents-table',
-  imports: [StatusBadge],
+  imports: [RouterLink, StatusBadge],
   templateUrl: './rents-table.html',
   styleUrl: './rents-table.css',
 })

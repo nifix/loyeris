@@ -21,7 +21,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </label>
-        <a href="/dashboard" class="flex min-w-0 items-center gap-3">
+        <a routerLink="/dashboard" class="flex min-w-0 items-center gap-3">
           <ui-brand-mark size="sm" />
           <div class="min-w-0">
             <p class="truncate font-semibold text-slate-900">Loyeris</p>
@@ -30,9 +30,15 @@
         </a>
       </div>
       @if (mobileActionLabel()) {
-        <a class="btn btn-primary btn-sm shrink-0" [href]="mobileActionUrl()">
-          {{ mobileActionLabel() }}
-        </a>
+        @if (mobileActionUrl().startsWith('/')) {
+          <a class="btn btn-primary btn-sm shrink-0" [routerLink]="mobileActionUrl()">
+            {{ mobileActionLabel() }}
+          </a>
+        } @else {
+          <a class="btn btn-primary btn-sm shrink-0" [href]="mobileActionUrl()">
+            {{ mobileActionLabel() }}
+          </a>
+        }
       }
     </div>
 
@@ -44,7 +50,7 @@
   <div class="drawer-side z-40">
     <label for="app-drawer" aria-label="Fermer la navigation" class="drawer-overlay"></label>
     <aside class="app-sidebar flex min-h-full w-72 flex-col px-5 py-6 text-white">
-      <a href="/dashboard" class="flex items-center gap-4 px-3">
+      <a routerLink="/dashboard" class="flex items-center gap-4 px-3">
         <ui-brand-mark size="sm" />
         <div>
           <p class="text-xl font-semibold">Loyeris</p>
@@ -57,11 +63,24 @@
         <ul class="menu mt-3 gap-1 p-0">
           @for (item of navigation; track item.label) {
             <li [class.separated]="item.separated">
-              <a
-                [class.active]="activeItem() === item.icon"
-                [href]="item.href"
-                [attr.aria-current]="activeItem() === item.icon ? 'page' : null"
-              >
+              @if (item.icon === 'logout') {
+                <button type="button" (click)="logout()">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+                    />
+                  </svg>
+                  {{ item.label }}
+                </button>
+              } @else {
+                <a
+                  [class.active]="activeItem() === item.icon"
+                  [routerLink]="item.href"
+                  [attr.aria-current]="activeItem() === item.icon ? 'page' : null"
+                >
                 @switch (item.icon) {
                   @case ('dashboard') {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,19 +142,10 @@
                       />
                     </svg>
                   }
-                  @case ('logout') {
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-                      />
-                    </svg>
-                  }
                 }
                 {{ item.label }}
-              </a>
+                </a>
+              }
             </li>
           }
         </ul>
@@ -145,12 +155,12 @@
         <div class="flex items-center gap-3">
           <div class="avatar placeholder">
             <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-sm font-semibold text-white">
-              <span>NF</span>
+              <span>{{ userInitials() }}</span>
             </div>
           </div>
           <div>
-            <p class="font-semibold text-white">nifix</p>
-            <p class="text-sm text-white/55">contact&#64;loyeris.app</p>
+            <p class="font-semibold text-white">{{ userName() }}</p>
+            <p class="text-sm text-white/55">{{ userEmail() }}</p>
           </div>
         </div>
       </div>

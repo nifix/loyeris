@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { StatusBadge } from '../ui-status-badge/status-badge';
 
 @Component({
   selector: 'ui-detail-page-header',
-  imports: [StatusBadge],
+  imports: [RouterLink, StatusBadge],
   templateUrl: './detail-page-header.html',
   styleUrl: './detail-page-header.css',
 })

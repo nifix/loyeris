@@ -11,4 +11,9 @@ public interface IAccountPasswordHasher
     /// Creates a password hash tied to the supplied user.
     /// </summary>
     string HashPassword(AppUser user, string password);
+
+    /// <summary>
+    /// Verifies a password against the hash stored for an account.
+    /// </summary>
+    bool VerifyPassword(AppUser user, string password);
 }

@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { LotsPage } from './lots-page';
 
 describe('LotsPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LotsPage],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
