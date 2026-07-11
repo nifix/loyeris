@@ -60,7 +60,8 @@
               "buildTarget": "loyeris-app:build:production"
             },
             "development": {
-              "buildTarget": "loyeris-app:build:development"
+              "buildTarget": "loyeris-app:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

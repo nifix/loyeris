@@ -34,3 +34,10 @@ export const GenericError: Story = {
     submissionErrorCode: 'generic',
   },
 };
+
+export const Loading: Story = {
+  args: {
+    submissionErrorCode: null,
+    submitting: true,
+  },
+};

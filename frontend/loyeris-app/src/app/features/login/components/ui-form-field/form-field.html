@@ -9,6 +9,7 @@
   </div>
   <label
     class="input input-bordered group flex h-12 w-full min-w-0 max-w-full items-center gap-3 rounded-xl transition-all focus-within:border-primary"
+    [class.input-error]="errorMessage()"
     [for]="fieldId()"
   >
     @if (type() === 'text') {
@@ -60,10 +61,21 @@
     <input
       class="min-w-0 grow bg-transparent outline-none"
       [autocomplete]="autocomplete()"
+      [attr.aria-describedby]="errorMessage() ? fieldId() + '-error' : null"
+      [attr.aria-invalid]="errorMessage() ? true : null"
+      [disabled]="disabled()"
       [id]="fieldId()"
       [placeholder]="placeholder()"
       [required]="required()"
       [type]="type()"
+      [value]="value()"
+      (blur)="handleBlur()"
+      (input)="handleInput($event)"
     />
   </label>
+  @if (errorMessage()) {
+    <p class="mt-1 px-1 text-xs font-medium text-error" [id]="fieldId() + '-error'">
+      {{ errorMessage() }}
+    </p>
+  }
 </div>

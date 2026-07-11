@@ -1,9 +1,14 @@
 using Loyeris.IdentityAccess.App.Persistence;
+using Loyeris.IdentityAccess.App.Notifications;
+using Loyeris.IdentityAccess.App.Security;
 using Loyeris.IdentityAccess.Infrastructure.Persistence;
 using Loyeris.IdentityAccess.Infrastructure.Persistence.Repositories;
+using Loyeris.IdentityAccess.Infrastructure.Notifications;
+using Loyeris.IdentityAccess.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Loyeris.IdentityAccess.Infrastructure;
 
@@ -30,12 +35,17 @@ public static class DependencyInjection
                 npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "identity")));
 
         services.AddScoped<IAppUserAuthRepository, AppUserAuthRepository>();
+        services.AddScoped<IAccountRegistrationRepository, AccountRegistrationRepository>();
         services.AddScoped<IAuthSessionRepository, AuthSessionRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IAuthOneTimeTokenRepository, AuthOneTimeTokenRepository>();
         services.AddScoped<IAuthEventRepository, AuthEventRepository>();
         services.AddScoped<IIdentityAccessUnitOfWork, IdentityAccessUnitOfWork>();
         services.AddScoped<IIdentityAccessReadRepository, IdentityAccessReadRepository>();
+        services.AddSingleton<IAccountPasswordHasher, AccountPasswordHasher>();
+        services.AddSingleton<IOneTimeTokenService, OneTimeTokenService>();
+        services.AddSingleton<IEmailVerificationSender, SmtpEmailVerificationSender>();
+        services.TryAddSingleton(TimeProvider.System);
 
         return services;
     }

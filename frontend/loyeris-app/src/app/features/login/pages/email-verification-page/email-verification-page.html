@@ -7,17 +7,19 @@
 
     <ui-email-verification-message [status]="status()" />
 
-    <div
-      class="divider mb-3 mt-0 text-xs font-semibold uppercase tracking-[0.2em] text-base-content/50"
-    >
-      Prochaine étape
-    </div>
+    @if (status() !== 'verifying') {
+      <div
+        class="divider mb-3 mt-0 text-xs font-semibold uppercase tracking-[0.2em] text-base-content/50"
+      >
+        Prochaine étape
+      </div>
 
-    <a
-      class="btn btn-primary btn-block h-12 rounded-xl text-base font-semibold shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40"
-      routerLink="/login"
-    >
-      Aller à la connexion
-    </a>
+      <a
+        class="btn btn-primary btn-block h-12 rounded-xl text-base font-semibold shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40"
+        routerLink="/login"
+      >
+        Aller à la connexion
+      </a>
+    }
   </div>
 </ui-auth-layout>

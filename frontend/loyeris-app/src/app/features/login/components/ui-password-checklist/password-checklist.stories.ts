@@ -18,6 +18,14 @@ const meta: Meta<PasswordChecklist> = {
       `,
     ),
   ],
+  argTypes: {
+    password: {
+      control: 'text',
+    },
+  },
+  args: {
+    password: '',
+  },
 };
 
 export default meta;
@@ -25,3 +33,15 @@ export default meta;
 type Story = StoryObj<PasswordChecklist>;
 
 export const Default: Story = {};
+
+export const PartiallyValid: Story = {
+  args: {
+    password: 'motdepasse',
+  },
+};
+
+export const Valid: Story = {
+  args: {
+    password: 'Loyeris1!',
+  },
+};

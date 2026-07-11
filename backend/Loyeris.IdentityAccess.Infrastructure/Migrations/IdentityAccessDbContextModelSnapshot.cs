@@ -192,6 +192,7 @@ namespace Loyeris.IdentityAccess.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTimeOffset?>("ConsumedAt")
+                        .IsConcurrencyToken()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("consumed_at");
 

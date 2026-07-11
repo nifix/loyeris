@@ -38,6 +38,9 @@ const meta: Meta<FormField> = {
     forgotLabel: {
       control: 'text',
     },
+    errorMessage: {
+      control: 'text',
+    },
     label: {
       control: 'text',
     },
@@ -94,6 +97,17 @@ export const Name: Story = {
     placeholder: 'Camille',
     required: true,
     type: 'text',
+  },
+};
+
+export const InvalidEmail: Story = {
+  args: {
+    autocomplete: 'email',
+    errorMessage: 'Saisissez une adresse email valide.',
+    fieldId: 'invalid-email',
+    label: 'Adresse e-mail',
+    placeholder: 'nom@exemple.fr',
+    type: 'email',
   },
 };
 

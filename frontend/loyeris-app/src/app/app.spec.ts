@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { App } from './app';
@@ -7,7 +8,7 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter(routes)],
+      providers: [provideHttpClient(), provideRouter(routes)],
     }).compileComponents();
   });
 
@@ -47,13 +48,13 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
-    await router.navigateByUrl('/verify-email?token=verified-token');
+    await router.navigateByUrl('/verify-email?status=pending');
     fixture.detectChanges();
     await fixture.whenStable();
 
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-email-verification-page')).toBeTruthy();
-    expect(compiled.textContent).toContain('Votre adresse email est vérifiée');
+    expect(compiled.textContent).toContain('Consultez votre boîte mail');
   });
 
   it('should render the dashboard page', async () => {

@@ -11,11 +11,41 @@ using Loyeris.RentCollection.App;
 using Loyeris.RentCollection.Infrastructure;
 using Loyeris.TaxPreparation.App;
 using Loyeris.TaxPreparation.Infrastructure;
+using Loyeris.Shared.Configuration;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
+builder.Services.Configure<ApplicationUrlOptions>(
+    builder.Configuration.GetSection(ApplicationUrlOptions.SectionName));
+builder.Services.Configure<SmtpOptions>(
+    builder.Configuration.GetSection(SmtpOptions.SectionName));
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    options.AddPolicy("identity-registration", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(15),
+                QueueLimit = 0
+            }));
+
+    options.AddPolicy("identity-email-verification", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 20,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0
+            }));
+});
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblies(
         typeof(IdentityAccessApplicationAssemblyReference).Assembly,
@@ -40,6 +70,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseRateLimiter();
 
 app.RegisterIdentityAccessEndpointGroup();
 app.RegisterPortfolioEndpointGroup();

@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 
-export type VerificationStatus = 'success' | 'error';
+export type VerificationStatus = 'pending' | 'verifying' | 'success' | 'error';
 
 @Component({
   selector: 'ui-email-verification-message',
