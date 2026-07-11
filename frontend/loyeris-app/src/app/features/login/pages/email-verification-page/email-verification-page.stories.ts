@@ -17,6 +17,18 @@ export default meta;
 
 type Story = StoryObj<EmailVerificationPage>;
 
+export const Pending: Story = {
+  args: {
+    verificationStatus: 'pending',
+  },
+};
+
+export const Verifying: Story = {
+  args: {
+    verificationStatus: 'verifying',
+  },
+};
+
 export const Success: Story = {
   args: {
     verificationStatus: 'success',

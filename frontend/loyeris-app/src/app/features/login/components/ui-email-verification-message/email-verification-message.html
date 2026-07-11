@@ -2,39 +2,45 @@
   <div
     class="status-icon mx-auto flex items-center justify-center rounded-full"
     [class.status-icon-error]="status() === 'error'"
+    [class.status-icon-primary]="status() === 'pending' || status() === 'verifying'"
     [class.status-icon-success]="status() === 'success'"
   >
     @if (status() === 'success') {
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
         <path d="m5 12 4 4L19 6" />
       </svg>
-    } @else {
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
+    } @else if (status() === 'error') {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
         <path d="M18 6 6 18" />
         <path d="m6 6 12 12" />
+      </svg>
+    } @else if (status() === 'verifying') {
+      <span class="loading loading-spinner loading-lg" aria-hidden="true"></span>
+    } @else {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect width="20" height="16" x="2" y="4" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
       </svg>
     }
   </div>
 
-  @if (status() === 'success') {
+  @if (status() === 'pending') {
+    <div class="badge badge-primary badge-outline mt-6 font-semibold">Vérification requise</div>
+    <h1 class="mt-4 text-3xl font-bold tracking-tight text-base-content">
+      Consultez votre boîte mail
+    </h1>
+    <p class="mx-auto mt-3 max-w-sm text-sm leading-6 text-base-content/70">
+      Votre espace a bien été créé. Utilisez le lien de vérification pour activer votre compte.
+    </p>
+  } @else if (status() === 'verifying') {
+    <div class="badge badge-primary badge-outline mt-6 font-semibold">Vérification en cours</div>
+    <h1 class="mt-4 text-3xl font-bold tracking-tight text-base-content">
+      Validation de votre adresse email
+    </h1>
+    <p class="mx-auto mt-3 max-w-sm text-sm leading-6 text-base-content/70">
+      Cette opération ne prend que quelques secondes.
+    </p>
+  } @else if (status() === 'success') {
     <div class="badge badge-success badge-outline mt-6 font-semibold">Adresse vérifiée</div>
     <h1 class="mt-4 text-3xl font-bold tracking-tight text-base-content">
       Votre adresse email est vérifiée
@@ -49,8 +55,8 @@
       Ce lien de vérification n’est plus valide
     </h1>
     <p class="mx-auto mt-3 max-w-sm text-sm leading-6 text-base-content/70">
-      Le lien a peut-être expiré ou déjà été utilisé. Connectez-vous pour demander un nouveau lien
-      de vérification.
+      Le lien a peut-être expiré ou déjà été utilisé. Le renvoi d’un nouveau lien sera bientôt
+      disponible.
     </p>
   }
 </div>

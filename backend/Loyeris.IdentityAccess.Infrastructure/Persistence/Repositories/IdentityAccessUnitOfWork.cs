@@ -1,4 +1,5 @@
 using Loyeris.IdentityAccess.App.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Loyeris.IdentityAccess.Infrastructure.Persistence.Repositories;
 
@@ -10,4 +11,18 @@ public class IdentityAccessUnitOfWork(IdentityAccessDbContext dbContext) : IIden
     /// <inheritdoc />
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         => dbContext.SaveChangesAsync(cancellationToken);
+
+    /// <inheritdoc />
+    public async Task<bool> TrySaveChangesAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return false;
+        }
+    }
 }

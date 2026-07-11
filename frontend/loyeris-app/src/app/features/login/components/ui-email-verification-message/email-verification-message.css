@@ -18,6 +18,12 @@
   box-shadow: 0 0 0 0.5rem color-mix(in oklab, var(--color-success) 6%, transparent);
 }
 
+.status-icon-primary {
+  color: color-mix(in oklab, var(--color-primary) 85%, black);
+  background: color-mix(in oklab, var(--color-primary) 14%, transparent);
+  box-shadow: 0 0 0 0.5rem color-mix(in oklab, var(--color-primary) 6%, transparent);
+}
+
 .status-icon-error {
   color: color-mix(in oklab, var(--color-error) 85%, black);
   background: color-mix(in oklab, var(--color-error) 14%, transparent);

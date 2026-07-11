@@ -38,5 +38,15 @@ public enum AuthEventType
     /// <summary>
     /// A user account was temporarily locked.
     /// </summary>
-    AccountLocked = 6
+    AccountLocked = 6,
+
+    /// <summary>
+    /// A self-service account registration was completed.
+    /// </summary>
+    AccountRegistered = 7,
+
+    /// <summary>
+    /// A user confirmed ownership of their email address.
+    /// </summary>
+    EmailVerified = 8
 }

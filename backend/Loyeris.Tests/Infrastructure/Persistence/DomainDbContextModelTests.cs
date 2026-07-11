@@ -1,21 +1,15 @@
 using FluentAssertions;
 using Loyeris.IdentityAccess.Core.Entities;
-using Loyeris.IdentityAccess.Core.Enums;
 using Loyeris.IdentityAccess.Infrastructure.Persistence;
 using Loyeris.Leasing.Core.Entities;
-using Loyeris.Leasing.Core.Enums;
 using Loyeris.Leasing.Infrastructure.Persistence;
 using Loyeris.Messaging.Core.Entities;
-using Loyeris.Messaging.Core.Enums;
 using Loyeris.Messaging.Infrastructure.Persistence;
 using Loyeris.Portfolio.Core.Entities;
-using Loyeris.Portfolio.Core.Enums;
 using Loyeris.Portfolio.Infrastructure.Persistence;
 using Loyeris.RentCollection.Core.Entities;
-using Loyeris.RentCollection.Core.Enums;
 using Loyeris.RentCollection.Infrastructure.Persistence;
 using Loyeris.TaxPreparation.Core.Entities;
-using Loyeris.TaxPreparation.Core.Enums;
 using Loyeris.TaxPreparation.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -186,6 +180,24 @@ public class DomainDbContextModelTests
         // Assert
         activeOneTimeTokenIndex.IsUnique.Should().BeTrue();
         activeOneTimeTokenIndex.GetFilter().Should().Be("consumed_at IS NULL AND revoked_at IS NULL");
+    }
+
+    /// <summary>
+    /// Verifies email verification consumption uses optimistic concurrency protection.
+    /// </summary>
+    [Test]
+    public void AuthOneTimeToken_ShouldUse_ConsumedAtAsConcurrencyToken()
+    {
+        // Arrange
+        using var identityAccess = CreateIdentityAccessDbContext();
+
+        // Act
+        var consumedAt = GetEntity(identityAccess, typeof(AuthOneTimeToken))
+            .FindProperty(nameof(AuthOneTimeToken.ConsumedAt));
+
+        // Assert
+        consumedAt.Should().NotBeNull();
+        consumedAt!.IsConcurrencyToken.Should().BeTrue();
     }
 
     /// <summary>

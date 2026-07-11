@@ -28,6 +28,7 @@ public class AuthOneTimeTokenConfiguration : IEntityTypeConfiguration<AuthOneTim
         builder.Property(oneTimeToken => oneTimeToken.TokenHash).HasMaxLength(128).IsRequired();
         builder.Property(oneTimeToken => oneTimeToken.SentToEmail).HasMaxLength(320);
         builder.Property(oneTimeToken => oneTimeToken.CreatedAt).HasDefaultValueSql("now()");
+        builder.Property(oneTimeToken => oneTimeToken.ConsumedAt).IsConcurrencyToken();
         builder.Property(oneTimeToken => oneTimeToken.RequestedByIp).HasMaxLength(64);
         builder.Property(oneTimeToken => oneTimeToken.UserAgent).HasMaxLength(512);
 

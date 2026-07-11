@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <form class="min-w-0 space-y-4">
+    <form class="min-w-0 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
       <div class="grid min-w-0 gap-4 sm:grid-cols-2">
         <ui-form-field
           fieldId="first-name"
@@ -47,6 +47,8 @@
           autocomplete="given-name"
           placeholder="Camille"
           [required]="true"
+          [errorMessage]="fieldError('firstName')"
+          formControlName="firstName"
         />
         <ui-form-field
           fieldId="last-name"
@@ -54,6 +56,8 @@
           autocomplete="family-name"
           placeholder="Robert"
           [required]="true"
+          [errorMessage]="fieldError('lastName')"
+          formControlName="lastName"
         />
       </div>
 
@@ -64,6 +68,8 @@
         autocomplete="email"
         placeholder="nom@exemple.com"
         [required]="true"
+        [errorMessage]="fieldError('email')"
+        formControlName="email"
       />
 
       <div class="grid min-w-0 gap-4 sm:grid-cols-2">
@@ -74,6 +80,8 @@
           autocomplete="new-password"
           placeholder="********"
           [required]="true"
+          [errorMessage]="fieldError('password')"
+          formControlName="password"
         />
         <ui-form-field
           fieldId="password-confirmation"
@@ -82,10 +90,12 @@
           autocomplete="new-password"
           placeholder="********"
           [required]="true"
+          [errorMessage]="confirmationError()"
+          formControlName="passwordConfirmation"
         />
       </div>
 
-      <ui-password-checklist />
+      <ui-password-checklist [password]="form.controls.password.value" />
 
       <div class="form-control w-full">
         <label
@@ -94,6 +104,7 @@
           <input
             type="checkbox"
             class="checkbox checkbox-primary checkbox-sm mt-0.5 shrink-0 rounded"
+            formControlName="termsAccepted"
             required
           />
           <span
@@ -122,10 +133,16 @@
       }
 
       <button
-        type="button"
+        type="submit"
         class="btn btn-primary btn-block h-12 rounded-xl text-base font-semibold shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40"
+        [disabled]="isSubmitting()"
       >
-        Créer mon espace
+        @if (isSubmitting()) {
+          <span class="loading loading-spinner loading-sm" aria-hidden="true"></span>
+          Création en cours…
+        } @else {
+          Créer mon espace
+        }
       </button>
     </form>
 

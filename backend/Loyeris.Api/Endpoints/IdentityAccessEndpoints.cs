@@ -1,21 +1,59 @@
+using Loyeris.Api.Contracts.IdentityAccess;
 using Loyeris.Api.Extensions;
+using Loyeris.IdentityAccess.App.Commands;
 using Loyeris.IdentityAccess.App.Queries;
 using MediatR;
 
 namespace Loyeris.Api.Endpoints;
 
 /// <summary>
-/// Registers Identity Access read endpoints.
+/// Registers Identity Access endpoints.
 /// </summary>
 public static class IdentityAccessEndpoints
 {
     /// <summary>
-    /// Maps Identity Access GET routes.
+    /// Maps Identity Access read and public account routes.
     /// </summary>
     /// <param name="routes">The route builder used to define endpoint routes.</param>
     public static void RegisterIdentityAccessEndpointGroup(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("api/identity-access").WithTags("Identity Access");
+
+        group.MapPost("/accounts", async (
+                RegisterAccountRequest request,
+                HttpContext httpContext,
+                IMediator mediator,
+                CancellationToken cancellationToken) =>
+            {
+                var command = new RegisterAccountCommand(
+                    request.FirstName,
+                    request.LastName,
+                    request.Email,
+                    request.Password,
+                    request.TermsAccepted,
+                    httpContext.Connection.RemoteIpAddress?.ToString(),
+                    httpContext.Request.Headers.UserAgent.ToString());
+
+                return (await mediator.Send(command, cancellationToken)).ToHttpResult();
+            })
+            .WithName("RegisterIdentityAccessAccount")
+            .RequireRateLimiting("identity-registration");
+
+        group.MapPost("/email-verifications", async (
+                VerifyEmailRequest request,
+                HttpContext httpContext,
+                IMediator mediator,
+                CancellationToken cancellationToken) =>
+            {
+                var command = new VerifyEmailCommand(
+                    request.Token,
+                    httpContext.Connection.RemoteIpAddress?.ToString(),
+                    httpContext.Request.Headers.UserAgent.ToString());
+
+                return (await mediator.Send(command, cancellationToken)).ToHttpResult();
+            })
+            .WithName("VerifyIdentityAccessEmail")
+            .RequireRateLimiting("identity-email-verification");
 
         group.MapGet("/users", async (IMediator mediator) =>
                 (await mediator.Send(new GetUsersQuery())).ToHttpResult())
