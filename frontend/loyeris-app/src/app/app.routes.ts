@@ -23,6 +23,16 @@ export const routes: Routes = [
       import('./features/login/login.routes').then((m) => m.emailVerificationRoutes),
   },
   {
+    path: 'forgot-password',
+    loadChildren: () =>
+      import('./features/login/login.routes').then((m) => m.forgotPasswordRoutes),
+  },
+  {
+    path: 'reset-password',
+    loadChildren: () =>
+      import('./features/login/login.routes').then((m) => m.resetPasswordRoutes),
+  },
+  {
     path: 'dashboard',
     canActivate: [authGuard],
     loadChildren: () => import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes),

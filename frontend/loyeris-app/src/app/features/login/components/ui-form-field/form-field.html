@@ -4,7 +4,15 @@
       {{ label() }}
     </label>
     @if (forgotLabel()) {
-      <a href="#" class="label-text-alt link link-primary text-sm font-medium">{{ forgotLabel() }}</a>
+      @if (forgotUrl().startsWith('/')) {
+        <a [routerLink]="forgotUrl()" class="label-text-alt link link-primary text-sm font-medium">
+          {{ forgotLabel() }}
+        </a>
+      } @else {
+        <a [href]="forgotUrl()" class="label-text-alt link link-primary text-sm font-medium">
+          {{ forgotLabel() }}
+        </a>
+      }
     }
   </div>
   <label

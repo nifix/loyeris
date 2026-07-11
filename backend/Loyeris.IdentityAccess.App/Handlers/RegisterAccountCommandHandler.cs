@@ -162,7 +162,7 @@ public class RegisterAccountCommandHandler(
            && !string.IsNullOrWhiteSpace(lastName)
            && lastName.Length <= 120
            && IsValidEmail(email)
-           && IsValidPassword(password);
+           && AccountPasswordPolicy.IsValid(password);
 
     private static bool IsValidEmail(string email)
         => !string.IsNullOrWhiteSpace(email)
@@ -170,9 +170,4 @@ public class RegisterAccountCommandHandler(
            && MailAddress.TryCreate(email, out var parsed)
            && string.Equals(parsed.Address, email, StringComparison.OrdinalIgnoreCase);
 
-    private static bool IsValidPassword(string password)
-        => password is { Length: >= 8 and <= 128 }
-           && password.Any(char.IsUpper)
-           && password.Any(char.IsDigit)
-           && password.Any(character => !char.IsLetterOrDigit(character));
 }
