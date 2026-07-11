@@ -15,7 +15,7 @@ public static class TaxPreparationEndpoints
     /// <param name="routes">The route builder used to define endpoint routes.</param>
     public static void RegisterTaxPreparationEndpointGroup(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("api/tax-preparation").WithTags("Tax Preparation");
+        var group = routes.MapGroup("api/tax-preparation").WithTags("Tax Preparation").RequireAuthorization();
 
         group.MapGet("/fiscal-periods", async (IMediator mediator) =>
                 (await mediator.Send(new GetFiscalPeriodsQuery())).ToHttpResult())

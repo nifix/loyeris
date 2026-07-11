@@ -42,6 +42,9 @@ public class EndpointGroupRegistrationTests
         routes.Should().Contain([
             "api/identity-access/accounts",
             "api/identity-access/email-verifications",
+            "api/identity-access/auth/login",
+            "api/identity-access/auth/refresh",
+            "api/identity-access/auth/logout",
             "api/identity-access/users",
             "api/identity-access/workspaces",
             "api/identity-access/workspace-members",

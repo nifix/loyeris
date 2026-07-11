@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { ScisPage } from './scis-page';
 
 describe('ScisPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ScisPage],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 

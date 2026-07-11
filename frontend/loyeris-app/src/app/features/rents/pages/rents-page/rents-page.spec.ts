@@ -1,9 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { RentsPage } from './rents-page';
 
 describe('RentsPage', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [RentsPage] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [RentsPage],
+      providers: [provideRouter([])],
+    }).compileComponents();
   });
 
   it('should create the rents page', () => {

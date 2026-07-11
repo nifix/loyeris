@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { StatusBadge } from '../../../../shared/components/ui-status-badge/status-badge';
 
 @Component({
   selector: 'ui-sci-card',
-  imports: [StatusBadge],
+  imports: [RouterLink, StatusBadge],
   templateUrl: './sci-card.html',
   styleUrl: './sci-card.css',
 })

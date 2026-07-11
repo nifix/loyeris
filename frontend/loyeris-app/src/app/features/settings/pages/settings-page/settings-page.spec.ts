@@ -1,9 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { SettingsPage } from './settings-page';
 
 describe('SettingsPage', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [SettingsPage] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [SettingsPage],
+      providers: [provideRouter([])],
+    }).compileComponents();
   });
 
   it('should create the settings page', () => {

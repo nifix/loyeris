@@ -1,9 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { LotDetailPage } from './lot-detail-page';
 
 describe('LotDetailPage', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [LotDetailPage] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [LotDetailPage],
+      providers: [provideRouter([])],
+    }).compileComponents();
   });
 
   it('should create the lot detail page', () => {

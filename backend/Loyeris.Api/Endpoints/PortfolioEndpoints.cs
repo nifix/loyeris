@@ -15,7 +15,7 @@ public static class PortfolioEndpoints
     /// <param name="routes">The route builder used to define endpoint routes.</param>
     public static void RegisterPortfolioEndpointGroup(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("api/portfolio").WithTags("Portfolio");
+        var group = routes.MapGroup("api/portfolio").WithTags("Portfolio").RequireAuthorization();
 
         group.MapGet("/scis", async (IMediator mediator) =>
                 (await mediator.Send(new GetScisQuery())).ToHttpResult())

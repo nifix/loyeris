@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AppShell } from '../../../../core/layouts/app-shell/app-shell';
 import { DetailCard } from '../../../../shared/components/ui-detail-card/detail-card';
 import { DetailPageHeader } from '../../../../shared/components/ui-detail-page-header/detail-page-header';
@@ -6,7 +7,7 @@ import { StatusBadge } from '../../../../shared/components/ui-status-badge/statu
 
 @Component({
   selector: 'app-lot-detail-page',
-  imports: [AppShell, DetailCard, DetailPageHeader, StatusBadge],
+  imports: [AppShell, DetailCard, DetailPageHeader, RouterLink, StatusBadge],
   templateUrl: './lot-detail-page.html',
   styleUrl: './lot-detail-page.css',
 })

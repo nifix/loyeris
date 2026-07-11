@@ -15,7 +15,7 @@ public static class MessagingEndpoints
     /// <param name="routes">The route builder used to define endpoint routes.</param>
     public static void RegisterMessagingEndpointGroup(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("api/messaging").WithTags("Messaging");
+        var group = routes.MapGroup("api/messaging").WithTags("Messaging").RequireAuthorization();
 
         group.MapGet("/notification-preferences", async (IMediator mediator) =>
                 (await mediator.Send(new GetNotificationPreferencesQuery())).ToHttpResult())

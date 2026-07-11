@@ -58,13 +58,15 @@
       </div>
     </div>
 
-    <form class="min-w-0 space-y-5">
+    <form class="min-w-0 space-y-5" [formGroup]="form" (ngSubmit)="submit()">
       <ui-form-field
         fieldId="email"
         label="Adresse email"
         type="email"
         autocomplete="email"
         placeholder="nom@exemple.com"
+        [errorMessage]="fieldError('email')"
+        formControlName="email"
       />
 
       <ui-form-field
@@ -74,13 +76,19 @@
         autocomplete="current-password"
         placeholder="********"
         forgotLabel="Mot de passe oublié ?"
+        [errorMessage]="fieldError('password')"
+        formControlName="password"
       />
 
       <div class="form-control mt-2 w-full">
         <label
           class="label w-full cursor-pointer justify-start gap-3 rounded-xl border border-base-200 bg-base-100 px-4 py-3 transition-colors hover:bg-base-200/50"
         >
-          <input type="checkbox" checked class="checkbox checkbox-primary checkbox-sm rounded" />
+          <input
+            type="checkbox"
+            class="checkbox checkbox-primary checkbox-sm rounded"
+            formControlName="rememberMe"
+          />
           <span class="label-text min-w-0 text-sm font-medium text-base-content/80">
             Garder ma session active sur cet appareil
           </span>
@@ -93,10 +101,16 @@
 
       <div class="space-y-3 pt-1">
         <button
-          type="button"
+          type="submit"
           class="btn btn-primary btn-block h-12 rounded-xl text-base font-semibold shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40"
+          [disabled]="isSubmitting()"
         >
-          Se connecter
+          @if (isSubmitting()) {
+            <span class="loading loading-spinner loading-sm" aria-hidden="true"></span>
+            Connexion en cours…
+          } @else {
+            Se connecter
+          }
         </button>
         <a
           class="btn btn-outline btn-block h-12 rounded-xl border-base-300 text-base font-semibold text-base-content/80 transition-all hover:border-base-300 hover:bg-base-200"

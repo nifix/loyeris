@@ -15,7 +15,7 @@ public static class RentCollectionEndpoints
     /// <param name="routes">The route builder used to define endpoint routes.</param>
     public static void RegisterRentCollectionEndpointGroup(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("api/rent-collection").WithTags("Rent Collection");
+        var group = routes.MapGroup("api/rent-collection").WithTags("Rent Collection").RequireAuthorization();
 
         group.MapGet("/deadlines", async (IMediator mediator) =>
                 (await mediator.Send(new GetRentDeadlinesQuery())).ToHttpResult())

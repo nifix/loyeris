@@ -13,6 +13,7 @@ public class RefreshTokenRepository(IdentityAccessDbContext dbContext) : IRefres
     public Task<RefreshToken> GetByTokenHashAsync(string tokenHash, CancellationToken cancellationToken)
         => dbContext.RefreshTokens
             .Include(refreshToken => refreshToken.Session)
+            .ThenInclude(session => session.User)
             .SingleOrDefaultAsync(refreshToken => refreshToken.TokenHash == tokenHash, cancellationToken);
 
     /// <inheritdoc />

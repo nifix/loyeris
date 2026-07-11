@@ -1,14 +1,40 @@
 import { provideHttpClient } from '@angular/common/http';
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
+import { of } from 'rxjs';
 import { App } from './app';
 import { routes } from './app.routes';
+import { AuthSession } from './core/auth/auth-session';
 
 describe('App', () => {
+  const authenticated = signal(false);
+
   beforeEach(async () => {
+    authenticated.set(false);
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideHttpClient(), provideRouter(routes)],
+      providers: [
+        provideHttpClient(),
+        provideRouter(routes),
+        {
+          provide: AuthSession,
+          useValue: {
+            accessToken: () => (authenticated() ? 'access-token' : null),
+            authenticated: authenticated.asReadonly(),
+            user: () =>
+              authenticated()
+                ? {
+                    userId: 'user-id',
+                    email: 'camille@example.fr',
+                    firstName: 'Camille',
+                    lastName: 'Robert',
+                  }
+                : null,
+            logout: () => of(undefined),
+          },
+        },
+      ],
     }).compileComponents();
   });
 
@@ -58,6 +84,7 @@ describe('App', () => {
   });
 
   it('should render the dashboard page', async () => {
+    authenticated.set(true);
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -71,6 +98,7 @@ describe('App', () => {
   });
 
   it('should render the SCI page', async () => {
+    authenticated.set(true);
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -83,7 +111,29 @@ describe('App', () => {
     expect(compiled.textContent).toContain('SCI Les Tilleuls');
   });
 
+  it('should navigate between authenticated pages without reloading the application', async () => {
+    authenticated.set(true);
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/dashboard');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const sciLink = fixture.nativeElement.querySelector(
+      'ui-app-shell a[href="/scis"]',
+    ) as HTMLAnchorElement;
+    sciLink.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(router.url).toBe('/scis');
+    expect(authenticated()).toBe(true);
+    expect((fixture.nativeElement as HTMLElement).querySelector('app-scis-page')).toBeTruthy();
+  });
+
   it('should render the lots page', async () => {
+    authenticated.set(true);
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -97,6 +147,7 @@ describe('App', () => {
   });
 
   it('should render the lot detail page', async () => {
+    authenticated.set(true);
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -110,6 +161,7 @@ describe('App', () => {
   });
 
   it('should render the tenants page', async () => {
+    authenticated.set(true);
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -123,6 +175,7 @@ describe('App', () => {
   });
 
   it('should render the tenant detail page', async () => {
+    authenticated.set(true);
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -136,6 +189,7 @@ describe('App', () => {
   });
 
   it('should render the rents page', async () => {
+    authenticated.set(true);
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -149,6 +203,7 @@ describe('App', () => {
   });
 
   it('should render the settings page', async () => {
+    authenticated.set(true);
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 

@@ -25,4 +25,24 @@ public class IdentityAccessUnitOfWork(IdentityAccessDbContext dbContext) : IIden
             return false;
         }
     }
+
+    /// <inheritdoc />
+    public async Task<bool> ExecuteInTransactionAsync(
+        Func<CancellationToken, Task> operation,
+        CancellationToken cancellationToken)
+    {
+        await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+
+        try
+        {
+            await operation(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+            return true;
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            return false;
+        }
+    }
 }

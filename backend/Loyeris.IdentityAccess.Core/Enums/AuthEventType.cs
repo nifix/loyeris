@@ -48,5 +48,10 @@ public enum AuthEventType
     /// <summary>
     /// A user confirmed ownership of their email address.
     /// </summary>
-    EmailVerified = 8
+    EmailVerified = 8,
+
+    /// <summary>
+    /// A valid sign-in attempt triggered a replacement email verification link.
+    /// </summary>
+    EmailVerificationResent = 9
 }

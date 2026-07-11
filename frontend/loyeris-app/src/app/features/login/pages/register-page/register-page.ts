@@ -17,7 +17,7 @@ import { AuthLayout } from '../../components/ui-auth-layout/auth-layout';
 import { AuthSubmissionError } from '../../components/ui-auth-submission-error/auth-submission-error';
 import { FormField } from '../../components/ui-form-field/form-field';
 import { PasswordChecklist } from '../../components/ui-password-checklist/password-checklist';
-import { IdentityAccessApi } from '../../services/identity-access-api';
+import { IdentityAccessApi } from '../../../../core/auth/identity-access-api';
 
 interface RegistrationErrorViewModel {
   message: string;

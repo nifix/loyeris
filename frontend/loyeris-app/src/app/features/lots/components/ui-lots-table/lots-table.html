@@ -32,7 +32,7 @@
               <td>{{ lot.rent }}</td>
               <td><ui-status-badge [tone]="lot.statusTone">{{ lot.status }}</ui-status-badge></td>
               <td>
-                <a class="btn btn-sm btn-ghost text-primary" [href]="lot.detailUrl">Voir →</a>
+                <a class="btn btn-sm btn-ghost text-primary" [routerLink]="lot.detailUrl">Voir →</a>
               </td>
             </tr>
           }
