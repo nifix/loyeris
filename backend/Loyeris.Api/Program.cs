@@ -16,6 +16,7 @@ using Loyeris.TaxPreparation.Infrastructure;
 using Loyeris.Shared.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
 using System.Text;
 using System.Threading.RateLimiting;
 
@@ -23,6 +24,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 builder.Services.Configure<ApplicationUrlOptions>(
     builder.Configuration.GetSection(ApplicationUrlOptions.SectionName));
 builder.Services.Configure<SmtpOptions>(
@@ -60,73 +65,45 @@ builder.Services.AddRateLimiter(options =>
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
     options.AddPolicy("identity-registration", httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-            _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 5,
-                Window = TimeSpan.FromMinutes(15),
-                QueueLimit = 0
-            }));
+    {
+        return CreateFixedWindowPartition(httpContext, 5, TimeSpan.FromMinutes(15));
+    });
 
     options.AddPolicy("identity-email-verification", httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-            _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 20,
-                Window = TimeSpan.FromMinutes(1),
-                QueueLimit = 0
-            }));
+    {
+        return CreateFixedWindowPartition(httpContext, 20, TimeSpan.FromMinutes(1));
+    });
 
     options.AddPolicy("identity-password-reset-request", httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-            _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 5,
-                Window = TimeSpan.FromMinutes(15),
-                QueueLimit = 0
-            }));
+    {
+        return CreateFixedWindowPartition(httpContext, 5, TimeSpan.FromMinutes(15));
+    });
 
     options.AddPolicy("identity-password-reset-token", httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-            _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 20,
-                Window = TimeSpan.FromMinutes(1),
-                QueueLimit = 0
-            }));
+    {
+        return CreateFixedWindowPartition(httpContext, 20, TimeSpan.FromMinutes(1));
+    });
 
     options.AddPolicy("identity-login", httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-            _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 10,
-                Window = TimeSpan.FromMinutes(15),
-                QueueLimit = 0
-            }));
+    {
+        return CreateFixedWindowPartition(httpContext, 10, TimeSpan.FromMinutes(15));
+    });
 
     options.AddPolicy("identity-refresh", httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-            _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = 30,
-                Window = TimeSpan.FromMinutes(1),
-                QueueLimit = 0
-            }));
+    {
+        return CreateFixedWindowPartition(httpContext, 30, TimeSpan.FromMinutes(1));
+    });
 });
 builder.Services.AddMediatR(cfg =>
+{
     cfg.RegisterServicesFromAssemblies(
         typeof(IdentityAccessApplicationAssemblyReference).Assembly,
         typeof(PortfolioApplicationAssemblyReference).Assembly,
         typeof(LeasingApplicationAssemblyReference).Assembly,
         typeof(RentCollectionApplicationAssemblyReference).Assembly,
         typeof(TaxPreparationApplicationAssemblyReference).Assembly,
-        typeof(MessagingApplicationAssemblyReference).Assembly));
+        typeof(MessagingApplicationAssemblyReference).Assembly);
+});
 builder.Services.AddIdentityAccessInfrastructure(builder.Configuration);
 builder.Services.AddPortfolioInfrastructure(builder.Configuration);
 builder.Services.AddLeasingInfrastructure(builder.Configuration);
@@ -156,3 +133,23 @@ app.RegisterTaxPreparationEndpointGroup();
 app.RegisterMessagingEndpointGroup();
 
 app.Run();
+
+static RateLimitPartition<string> CreateFixedWindowPartition(
+    HttpContext httpContext,
+    int permitLimit,
+    TimeSpan window)
+{
+    return RateLimitPartition.GetFixedWindowLimiter(
+        httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        _ => CreateFixedWindowOptions(permitLimit, window));
+}
+
+static FixedWindowRateLimiterOptions CreateFixedWindowOptions(int permitLimit, TimeSpan window)
+{
+    return new FixedWindowRateLimiterOptions
+    {
+        PermitLimit = permitLimit,
+        Window = window,
+        QueueLimit = 0
+    };
+}

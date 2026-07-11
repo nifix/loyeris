@@ -103,13 +103,17 @@ public class RequestPasswordResetCommandHandler(
     }
 
     private static bool IsValidEmail(string email)
-        => !string.IsNullOrWhiteSpace(email)
-           && email.Length <= 320
-           && MailAddress.TryCreate(email, out var parsed)
-           && string.Equals(parsed.Address, email, StringComparison.OrdinalIgnoreCase);
+    {
+        return !string.IsNullOrWhiteSpace(email)
+               && email.Length <= 320
+               && MailAddress.TryCreate(email, out var parsed)
+               && string.Equals(parsed.Address, email, StringComparison.OrdinalIgnoreCase);
+    }
 
     private static string Truncate(string value, int maximumLength)
-        => string.IsNullOrEmpty(value) || value.Length <= maximumLength
+    {
+        return string.IsNullOrEmpty(value) || value.Length <= maximumLength
             ? value
             : value[..maximumLength];
+    }
 }

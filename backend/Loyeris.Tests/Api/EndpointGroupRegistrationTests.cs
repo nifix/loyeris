@@ -54,6 +54,7 @@ public class EndpointGroupRegistrationTests
             "api/identity-access/auth-sessions",
             "api/identity-access/auth-events",
             "api/portfolio/scis",
+            "api/portfolio/scis/{sciId:guid}",
             "api/portfolio/sci-associates",
             "api/portfolio/lots",
             "api/leasing/tenants",
@@ -67,5 +68,7 @@ public class EndpointGroupRegistrationTests
             "api/messaging/notification-preferences",
             "api/messaging/outbox-messages"
         ]);
+        routes.Count(route => route == "api/portfolio/scis").Should().Be(2);
+        routes.Count(route => route == "api/portfolio/scis/{sciId:guid}").Should().Be(2);
     }
 }

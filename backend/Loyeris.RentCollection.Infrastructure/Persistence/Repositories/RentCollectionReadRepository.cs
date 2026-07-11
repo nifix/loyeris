@@ -11,7 +11,8 @@ public class RentCollectionReadRepository(RentCollectionDbContext dbContext) : I
 {
     /// <inheritdoc />
     public async Task<IReadOnlyList<RentDeadlineDto>> ListDeadlinesAsync(CancellationToken cancellationToken)
-        => await dbContext.RentDeadlines
+    {
+        return await dbContext.RentDeadlines
             .AsNoTracking()
             .OrderByDescending(deadline => deadline.PeriodMonth)
             .ThenBy(deadline => deadline.DueOn)
@@ -30,10 +31,12 @@ public class RentCollectionReadRepository(RentCollectionDbContext dbContext) : I
                 deadline.CreatedAt,
                 deadline.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<RentPaymentDto>> ListPaymentsAsync(CancellationToken cancellationToken)
-        => await dbContext.RentPayments
+    {
+        return await dbContext.RentPayments
             .AsNoTracking()
             .OrderByDescending(payment => payment.PaidOn)
             .Select(payment => new RentPaymentDto(
@@ -48,10 +51,12 @@ public class RentCollectionReadRepository(RentCollectionDbContext dbContext) : I
                 payment.CreatedAt,
                 payment.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<RentReminderDto>> ListRemindersAsync(CancellationToken cancellationToken)
-        => await dbContext.RentReminders
+    {
+        return await dbContext.RentReminders
             .AsNoTracking()
             .OrderByDescending(reminder => reminder.ScheduledFor ?? reminder.CreatedAt)
             .Select(reminder => new RentReminderDto(
@@ -67,4 +72,5 @@ public class RentCollectionReadRepository(RentCollectionDbContext dbContext) : I
                 reminder.CreatedAt,
                 reminder.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 }

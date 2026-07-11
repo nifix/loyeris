@@ -156,18 +156,22 @@ public class RegisterAccountCommandHandler(
         string email,
         string password,
         bool termsAccepted)
-        => termsAccepted
-           && !string.IsNullOrWhiteSpace(firstName)
-           && firstName.Length <= 120
-           && !string.IsNullOrWhiteSpace(lastName)
-           && lastName.Length <= 120
-           && IsValidEmail(email)
-           && AccountPasswordPolicy.IsValid(password);
+    {
+        return termsAccepted
+               && !string.IsNullOrWhiteSpace(firstName)
+               && firstName.Length <= 120
+               && !string.IsNullOrWhiteSpace(lastName)
+               && lastName.Length <= 120
+               && IsValidEmail(email)
+               && AccountPasswordPolicy.IsValid(password);
+    }
 
     private static bool IsValidEmail(string email)
-        => !string.IsNullOrWhiteSpace(email)
-           && email.Length <= 320
-           && MailAddress.TryCreate(email, out var parsed)
-           && string.Equals(parsed.Address, email, StringComparison.OrdinalIgnoreCase);
+    {
+        return !string.IsNullOrWhiteSpace(email)
+               && email.Length <= 320
+               && MailAddress.TryCreate(email, out var parsed)
+               && string.Equals(parsed.Address, email, StringComparison.OrdinalIgnoreCase);
+    }
 
 }

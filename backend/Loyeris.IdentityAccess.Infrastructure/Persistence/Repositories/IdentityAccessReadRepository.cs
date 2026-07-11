@@ -1,5 +1,6 @@
 using Loyeris.IdentityAccess.App.Dtos;
 using Loyeris.IdentityAccess.App.Persistence;
+using Loyeris.IdentityAccess.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Loyeris.IdentityAccess.Infrastructure.Persistence.Repositories;
@@ -10,8 +11,23 @@ namespace Loyeris.IdentityAccess.Infrastructure.Persistence.Repositories;
 public class IdentityAccessReadRepository(IdentityAccessDbContext dbContext) : IIdentityAccessReadRepository
 {
     /// <inheritdoc />
+    public Task<WorkspaceAccessDto> GetPrimaryWorkspaceAccessAsync(
+        Guid userId,
+        CancellationToken cancellationToken)
+    {
+        return dbContext.WorkspaceMembers
+            .AsNoTracking()
+            .Where(member => member.UserId == userId && member.Workspace.Status == WorkspaceStatus.Active)
+            .OrderBy(member => member.Role == WorkspaceRole.Owner ? 0 : member.Role == WorkspaceRole.Admin ? 1 : 2)
+            .ThenBy(member => member.JoinedAt)
+            .Select(member => new WorkspaceAccessDto(member.WorkspaceId, member.Role))
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
     public async Task<IReadOnlyList<UserDto>> ListUsersAsync(CancellationToken cancellationToken)
-        => await dbContext.AppUsers
+    {
+        return await dbContext.AppUsers
             .AsNoTracking()
             .OrderBy(user => user.LastName)
             .ThenBy(user => user.FirstName)
@@ -28,10 +44,12 @@ public class IdentityAccessReadRepository(IdentityAccessDbContext dbContext) : I
                 user.CreatedAt,
                 user.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<WorkspaceDto>> ListWorkspacesAsync(CancellationToken cancellationToken)
-        => await dbContext.Workspaces
+    {
+        return await dbContext.Workspaces
             .AsNoTracking()
             .OrderBy(workspace => workspace.Name)
             .Select(workspace => new WorkspaceDto(
@@ -43,10 +61,12 @@ public class IdentityAccessReadRepository(IdentityAccessDbContext dbContext) : I
                 workspace.UpdatedAt,
                 workspace.ArchivedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<WorkspaceMemberDto>> ListWorkspaceMembersAsync(CancellationToken cancellationToken)
-        => await dbContext.WorkspaceMembers
+    {
+        return await dbContext.WorkspaceMembers
             .AsNoTracking()
             .OrderByDescending(member => member.JoinedAt)
             .Select(member => new WorkspaceMemberDto(
@@ -58,10 +78,12 @@ public class IdentityAccessReadRepository(IdentityAccessDbContext dbContext) : I
                 member.CreatedAt,
                 member.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<AuthSessionDto>> ListAuthSessionsAsync(CancellationToken cancellationToken)
-        => await dbContext.AuthSessions
+    {
+        return await dbContext.AuthSessions
             .AsNoTracking()
             .OrderByDescending(session => session.CreatedAt)
             .Select(session => new AuthSessionDto(
@@ -77,10 +99,12 @@ public class IdentityAccessReadRepository(IdentityAccessDbContext dbContext) : I
                 session.RevokedAt,
                 session.RevokedReason))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<AuthEventDto>> ListAuthEventsAsync(CancellationToken cancellationToken)
-        => await dbContext.AuthEvents
+    {
+        return await dbContext.AuthEvents
             .AsNoTracking()
             .OrderByDescending(authEvent => authEvent.OccurredAt)
             .Select(authEvent => new AuthEventDto(
@@ -94,4 +118,5 @@ public class IdentityAccessReadRepository(IdentityAccessDbContext dbContext) : I
                 authEvent.UserAgent,
                 authEvent.FailureReason))
             .ToListAsync(cancellationToken);
+    }
 }

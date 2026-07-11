@@ -25,9 +25,11 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("LoyerisDatabase");
 
         services.AddDbContext<TaxPreparationDbContext>(options =>
+        {
             options.UseNpgsql(
                 connectionString,
-                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "tax")));
+                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "tax"));
+        });
 
         services.AddScoped<ITaxPreparationReadRepository, TaxPreparationReadRepository>();
 

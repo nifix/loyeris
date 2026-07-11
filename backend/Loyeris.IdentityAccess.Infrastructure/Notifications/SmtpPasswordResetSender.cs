@@ -78,7 +78,8 @@ public class SmtpPasswordResetSender(
     }
 
     private static string CreatePlainTextBody(string firstName, string resetUrl)
-        => $"""
+    {
+        return $"""
            Bonjour {firstName},
 
            Une demande de réinitialisation de votre mot de passe Loyeris a été effectuée.
@@ -92,6 +93,7 @@ public class SmtpPasswordResetSender(
            L'équipe Loyeris
            Gestion locative claire pour vos SCI
            """;
+    }
 
     private static string CreateHtmlBody(string firstName, string resetUrl)
     {

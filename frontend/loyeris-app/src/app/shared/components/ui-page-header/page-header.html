@@ -15,7 +15,21 @@
 
     @if (actionLabel()) {
       <div class="page-toolbar">
-        <button type="button" class="btn btn-sm btn-primary">
+        @if (actionUrl()?.startsWith('/')) {
+          <a class="btn btn-sm btn-primary" [routerLink]="actionUrl()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              class="h-4 w-4"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            {{ actionLabel() }}
+          </a>
+        } @else {
+          <button type="button" class="btn btn-sm btn-primary">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -26,7 +40,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
           {{ actionLabel() }}
-        </button>
+          </button>
+        }
       </div>
     }
   </div>

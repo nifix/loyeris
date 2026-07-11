@@ -153,7 +153,9 @@ public class RefreshSessionCommandHandler(
     }
 
     private static string Truncate(string value, int maximumLength)
-        => string.IsNullOrEmpty(value) || value.Length <= maximumLength
+    {
+        return string.IsNullOrEmpty(value) || value.Length <= maximumLength
             ? value
             : value[..maximumLength];
+    }
 }

@@ -25,9 +25,11 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("LoyerisDatabase");
 
         services.AddDbContext<MessagingDbContext>(options =>
+        {
             options.UseNpgsql(
                 connectionString,
-                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "messaging")));
+                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "messaging"));
+        });
 
         services.AddScoped<IMessagingReadRepository, MessagingReadRepository>();
 

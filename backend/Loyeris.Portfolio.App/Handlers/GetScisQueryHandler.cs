@@ -14,5 +14,8 @@ public class GetScisQueryHandler(IPortfolioReadRepository repository)
 {
     /// <inheritdoc />
     public async Task<Result<IReadOnlyList<SciDto>>> Handle(GetScisQuery request, CancellationToken cancellationToken)
-        => Result<IReadOnlyList<SciDto>>.Success(await repository.ListScisAsync(cancellationToken));
+    {
+        return Result<IReadOnlyList<SciDto>>.Success(
+            await repository.ListScisAsync(request.WorkspaceId, cancellationToken));
+    }
 }

@@ -6,9 +6,26 @@ import { of } from 'rxjs';
 import { App } from './app';
 import { routes } from './app.routes';
 import { AuthSession } from './core/auth/auth-session';
+import { SciApi } from './features/scis/services/sci-api';
 
 describe('App', () => {
   const authenticated = signal(false);
+  const sci = {
+    id: 'sci-id',
+    workspaceId: 'workspace-id',
+    name: 'SCI Les Tilleuls',
+    siren: '123456789',
+    taxRegime: 'IR',
+    status: 'Active',
+    street: '12 rue des Tilleuls',
+    postalCode: '69000',
+    city: 'Lyon',
+    country: 'FR',
+    incorporatedOn: '2024-01-10',
+    createdAt: '2026-07-12T08:00:00Z',
+    updatedAt: '2026-07-12T08:00:00Z',
+    archivedAt: null,
+  };
 
   beforeEach(async () => {
     authenticated.set(false);
@@ -32,6 +49,13 @@ describe('App', () => {
                   }
                 : null,
             logout: () => of(undefined),
+          },
+        },
+        {
+          provide: SciApi,
+          useValue: {
+            list: () => of([sci]),
+            get: () => of(sci),
           },
         },
       ],
@@ -109,6 +133,22 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-scis-page')).toBeTruthy();
     expect(compiled.textContent).toContain('SCI Les Tilleuls');
+  });
+
+  it('should render the SCI edit page with the existing values', async () => {
+    authenticated.set(true);
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/scis/sci-id/edit');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-create-sci-page')).toBeTruthy();
+    expect(compiled.textContent).toContain('Modifier la SCI');
+    expect((compiled.querySelector('#sci-name') as HTMLInputElement).value).toBe('SCI Les Tilleuls');
   });
 
   it('should navigate between authenticated pages without reloading the application', async () => {

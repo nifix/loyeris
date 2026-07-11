@@ -439,12 +439,16 @@ public class DomainDbContextModelTests
     }
 
     private static IEntityType GetEntity(DbContext context, Type entityType)
-        => context.Model.FindEntityType(entityType)
-           ?? throw new InvalidOperationException($"Entity {entityType.Name} was not found in the EF model.");
+    {
+        return context.Model.FindEntityType(entityType)
+               ?? throw new InvalidOperationException($"Entity {entityType.Name} was not found in the EF model.");
+    }
 
     private static IIndex FindIndex(IEntityType entityType, params string[] propertyNames)
-        => entityType.GetIndexes().Single(index =>
+    {
+        return entityType.GetIndexes().Single(index =>
             index.Properties.Select(property => property.Name).SequenceEqual(propertyNames));
+    }
 
     private static Type? GetProviderType(DbContext context, Type entityType, string propertyName)
     {

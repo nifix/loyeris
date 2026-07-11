@@ -18,9 +18,11 @@ public class AuthEventRepository(IdentityAccessDbContext dbContext) : IAuthEvent
         Guid userId,
         int count,
         CancellationToken cancellationToken)
-        => await dbContext.AuthEvents
+    {
+        return await dbContext.AuthEvents
             .Where(authEvent => authEvent.UserId == userId)
             .OrderByDescending(authEvent => authEvent.OccurredAt)
             .Take(count)
             .ToListAsync(cancellationToken);
+    }
 }

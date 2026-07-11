@@ -11,7 +11,8 @@ public class TaxPreparationReadRepository(TaxPreparationDbContext dbContext) : I
 {
     /// <inheritdoc />
     public async Task<IReadOnlyList<FiscalPeriodDto>> ListFiscalPeriodsAsync(CancellationToken cancellationToken)
-        => await dbContext.FiscalPeriods
+    {
+        return await dbContext.FiscalPeriods
             .AsNoTracking()
             .OrderByDescending(period => period.Year)
             .Select(period => new FiscalPeriodDto(
@@ -24,10 +25,12 @@ public class TaxPreparationReadRepository(TaxPreparationDbContext dbContext) : I
                 period.CreatedAt,
                 period.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<RentalExpenseDto>> ListRentalExpensesAsync(CancellationToken cancellationToken)
-        => await dbContext.RentalExpenses
+    {
+        return await dbContext.RentalExpenses
             .AsNoTracking()
             .OrderByDescending(expense => expense.ExpenseDate)
             .Select(expense => new RentalExpenseDto(
@@ -44,4 +47,5 @@ public class TaxPreparationReadRepository(TaxPreparationDbContext dbContext) : I
                 expense.CreatedAt,
                 expense.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 }

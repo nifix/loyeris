@@ -9,8 +9,10 @@ public static class AccountPasswordPolicy
     /// Determines whether a password satisfies the account security requirements.
     /// </summary>
     public static bool IsValid(string password)
-        => password is { Length: >= 8 and <= 128 }
-           && password.Any(char.IsUpper)
-           && password.Any(char.IsDigit)
-           && password.Any(character => !char.IsLetterOrDigit(character));
+    {
+        return password is { Length: >= 8 and <= 128 }
+               && password.Any(char.IsUpper)
+               && password.Any(char.IsDigit)
+               && password.Any(character => !char.IsLetterOrDigit(character));
+    }
 }

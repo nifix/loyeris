@@ -49,13 +49,16 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="type">The error type that needs to be mapped to an HTTP status code.</param>
     /// <returns>The HTTP status code corresponding to the specified <see cref="ErrorType"/>.</returns>
-    private static int MapErrorStatusCode(ErrorType type) => type switch
+    private static int MapErrorStatusCode(ErrorType type)
     {
-        ErrorType.Forbidden => StatusCodes.Status403Forbidden,
-        ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
-        ErrorType.NotFound => StatusCodes.Status404NotFound,
-        ErrorType.Conflict => StatusCodes.Status409Conflict,
-        ErrorType.Validation => StatusCodes.Status422UnprocessableEntity,
-        _ => StatusCodes.Status400BadRequest
-    };
+        return type switch
+        {
+            ErrorType.Forbidden => StatusCodes.Status403Forbidden,
+            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.Conflict => StatusCodes.Status409Conflict,
+            ErrorType.Validation => StatusCodes.Status422UnprocessableEntity,
+            _ => StatusCodes.Status400BadRequest
+        };
+    }
 }

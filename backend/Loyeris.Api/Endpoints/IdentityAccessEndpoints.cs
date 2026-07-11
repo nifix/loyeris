@@ -77,9 +77,12 @@ public static class IdentityAccessEndpoints
                 ValidatePasswordResetTokenRequest request,
                 IMediator mediator,
                 CancellationToken cancellationToken) =>
-                (await mediator.Send(
-                    new ValidatePasswordResetTokenQuery(request.Token),
-                    cancellationToken)).ToHttpResult())
+            {
+                return (await mediator.Send(
+                        new ValidatePasswordResetTokenQuery(request.Token),
+                        cancellationToken))
+                    .ToHttpResult();
+            })
             .WithName("ValidateIdentityAccessPasswordResetToken")
             .RequireRateLimiting("identity-password-reset-token");
 
@@ -167,39 +170,51 @@ public static class IdentityAccessEndpoints
             .WithName("LogoutIdentityAccessSession");
 
         group.MapGet("/users", async (IMediator mediator) =>
-                (await mediator.Send(new GetUsersQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetUsersQuery())).ToHttpResult();
+            })
             .WithName("GetIdentityAccessUsers")
             .RequireAuthorization();
 
         group.MapGet("/workspaces", async (IMediator mediator) =>
-                (await mediator.Send(new GetWorkspacesQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetWorkspacesQuery())).ToHttpResult();
+            })
             .WithName("GetIdentityAccessWorkspaces")
             .RequireAuthorization();
 
         group.MapGet("/workspace-members", async (IMediator mediator) =>
-                (await mediator.Send(new GetWorkspaceMembersQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetWorkspaceMembersQuery())).ToHttpResult();
+            })
             .WithName("GetIdentityAccessWorkspaceMembers")
             .RequireAuthorization();
 
         group.MapGet("/auth-sessions", async (IMediator mediator) =>
-                (await mediator.Send(new GetAuthSessionsQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetAuthSessionsQuery())).ToHttpResult();
+            })
             .WithName("GetIdentityAccessAuthSessions")
             .RequireAuthorization();
 
         group.MapGet("/auth-events", async (IMediator mediator) =>
-                (await mediator.Send(new GetAuthEventsQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetAuthEventsQuery())).ToHttpResult();
+            })
             .WithName("GetIdentityAccessAuthEvents")
             .RequireAuthorization();
     }
 
     private static AuthenticationResponse ToAuthenticationResponse(Loyeris.IdentityAccess.App.Dtos.AuthenticationSessionDto session)
-        => new(
+    {
+        return new(
             session.AccessToken,
             session.AccessTokenExpiresAt,
             session.UserId,
             session.Email,
             session.FirstName,
             session.LastName);
+    }
 
     private static void SetRefreshCookie(
         HttpContext httpContext,
@@ -217,13 +232,15 @@ public static class IdentityAccessEndpoints
         => httpContext.Response.Cookies.Delete(options.RefreshCookieName, CreateCookieOptions(httpContext));
 
     private static CookieOptions CreateCookieOptions(HttpContext httpContext)
-        => new()
+    {
+        return new()
         {
             HttpOnly = true,
             Secure = httpContext.Request.IsHttps,
             SameSite = SameSiteMode.Strict,
             Path = "/api/identity-access/auth"
         };
+    }
 
     private static string GetIpAddress(HttpContext httpContext)
         => httpContext.Connection.RemoteIpAddress?.ToString();

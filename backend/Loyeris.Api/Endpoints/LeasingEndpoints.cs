@@ -18,15 +18,21 @@ public static class LeasingEndpoints
         var group = routes.MapGroup("api/leasing").WithTags("Leasing").RequireAuthorization();
 
         group.MapGet("/tenants", async (IMediator mediator) =>
-                (await mediator.Send(new GetTenantsQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetTenantsQuery())).ToHttpResult();
+            })
             .WithName("GetLeasingTenants");
 
         group.MapGet("/leases", async (IMediator mediator) =>
-                (await mediator.Send(new GetLeasesQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetLeasesQuery())).ToHttpResult();
+            })
             .WithName("GetLeasingLeases");
 
         group.MapGet("/lease-tenants", async (IMediator mediator) =>
-                (await mediator.Send(new GetLeaseTenantsQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetLeaseTenantsQuery())).ToHttpResult();
+            })
             .WithName("GetLeasingLeaseTenants");
     }
 }

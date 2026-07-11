@@ -1,0 +1,3 @@
+﻿[*.cs]
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_local_functions = when_on_single_line:suggestion

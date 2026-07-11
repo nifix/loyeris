@@ -7,4 +7,4 @@ namespace Loyeris.Portfolio.App.Queries;
 /// <summary>
 /// Query that lists SCI structures.
 /// </summary>
-public record GetScisQuery() : IRequest<Result<IReadOnlyList<SciDto>>>;
+public record GetScisQuery(Guid WorkspaceId) : IRequest<Result<IReadOnlyList<SciDto>>>;

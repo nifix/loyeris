@@ -4,6 +4,7 @@ using Loyeris.Portfolio.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Loyeris.Portfolio.Infrastructure;
 
@@ -25,11 +26,15 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("LoyerisDatabase");
 
         services.AddDbContext<PortfolioDbContext>(options =>
+        {
             options.UseNpgsql(
                 connectionString,
-                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "portfolio")));
+                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "portfolio"));
+        });
 
         services.AddScoped<IPortfolioReadRepository, PortfolioReadRepository>();
+        services.AddScoped<ISciRepository, SciRepository>();
+        services.TryAddSingleton(TimeProvider.System);
 
         return services;
     }

@@ -18,11 +18,15 @@ public static class MessagingEndpoints
         var group = routes.MapGroup("api/messaging").WithTags("Messaging").RequireAuthorization();
 
         group.MapGet("/notification-preferences", async (IMediator mediator) =>
-                (await mediator.Send(new GetNotificationPreferencesQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetNotificationPreferencesQuery())).ToHttpResult();
+            })
             .WithName("GetMessagingNotificationPreferences");
 
         group.MapGet("/outbox-messages", async (IMediator mediator) =>
-                (await mediator.Send(new GetOutboxMessagesQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetOutboxMessagesQuery())).ToHttpResult();
+            })
             .WithName("GetMessagingOutboxMessages");
     }
 }

@@ -18,15 +18,21 @@ public static class RentCollectionEndpoints
         var group = routes.MapGroup("api/rent-collection").WithTags("Rent Collection").RequireAuthorization();
 
         group.MapGet("/deadlines", async (IMediator mediator) =>
-                (await mediator.Send(new GetRentDeadlinesQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetRentDeadlinesQuery())).ToHttpResult();
+            })
             .WithName("GetRentCollectionDeadlines");
 
         group.MapGet("/payments", async (IMediator mediator) =>
-                (await mediator.Send(new GetRentPaymentsQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetRentPaymentsQuery())).ToHttpResult();
+            })
             .WithName("GetRentCollectionPayments");
 
         group.MapGet("/reminders", async (IMediator mediator) =>
-                (await mediator.Send(new GetRentRemindersQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetRentRemindersQuery())).ToHttpResult();
+            })
             .WithName("GetRentCollectionReminders");
     }
 }
