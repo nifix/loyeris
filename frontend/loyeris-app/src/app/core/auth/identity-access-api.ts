@@ -34,6 +34,11 @@ export interface AuthenticationResponse extends AuthenticatedUser {
   accessTokenExpiresAt: string;
 }
 
+export interface ResetPasswordRequest {
+  newPassword: string;
+  token: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class IdentityAccessApi {
   private readonly http = inject(HttpClient);
@@ -47,6 +52,18 @@ export class IdentityAccessApi {
 
   verifyEmail(token: string): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/email-verifications`, { token });
+  }
+
+  requestPasswordReset(email: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/password-reset-requests`, { email });
+  }
+
+  validatePasswordResetToken(token: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/password-reset-validations`, { token });
+  }
+
+  resetPassword(request: ResetPasswordRequest): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/password-resets`, request);
   }
 
   login(request: LoginRequest): Observable<AuthenticationResponse> {

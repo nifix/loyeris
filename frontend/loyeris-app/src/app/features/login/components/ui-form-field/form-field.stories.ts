@@ -1,9 +1,11 @@
 import {
+  applicationConfig,
   componentWrapperDecorator,
   moduleMetadata,
   type Meta,
   type StoryObj,
 } from '@storybook/angular';
+import { provideRouter } from '@angular/router';
 
 import { FormField } from './form-field';
 
@@ -15,6 +17,7 @@ const meta: Meta<FormField> = {
     layout: 'centered',
   },
   decorators: [
+    applicationConfig({ providers: [provideRouter([])] }),
     moduleMetadata({
       imports: [FormField],
     }),
@@ -36,6 +39,9 @@ const meta: Meta<FormField> = {
       control: 'text',
     },
     forgotLabel: {
+      control: 'text',
+    },
+    forgotUrl: {
       control: 'text',
     },
     errorMessage: {
@@ -85,6 +91,7 @@ export const Password: Story = {
     label: 'Mot de passe',
     placeholder: 'Votre mot de passe',
     forgotLabel: 'Mot de passe oublié ?',
+    forgotUrl: '/forgot-password',
     type: 'password',
   },
 };
@@ -130,6 +137,7 @@ export const LoginForm: Story = {
           autocomplete="current-password"
           placeholder="********"
           forgotLabel="Mot de passe oublié ?"
+          forgotUrl="/forgot-password"
         />
       </form>
     `,

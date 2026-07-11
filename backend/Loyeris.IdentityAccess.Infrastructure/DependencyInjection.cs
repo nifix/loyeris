@@ -45,6 +45,7 @@ public static class DependencyInjection
         services.AddSingleton<IAccountPasswordHasher, AccountPasswordHasher>();
         services.AddSingleton<IOneTimeTokenService, OneTimeTokenService>();
         services.AddSingleton<IEmailVerificationSender, SmtpEmailVerificationSender>();
+        services.AddSingleton<IPasswordResetSender, SmtpPasswordResetSender>();
         services.TryAddSingleton(TimeProvider.System);
 
         return services;

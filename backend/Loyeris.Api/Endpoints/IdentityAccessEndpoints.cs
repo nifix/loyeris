@@ -57,6 +57,49 @@ public static class IdentityAccessEndpoints
             .WithName("VerifyIdentityAccessEmail")
             .RequireRateLimiting("identity-email-verification");
 
+        group.MapPost("/password-reset-requests", async (
+                RequestPasswordResetRequest request,
+                HttpContext httpContext,
+                IMediator mediator,
+                CancellationToken cancellationToken) =>
+            {
+                var command = new RequestPasswordResetCommand(
+                    request.Email,
+                    GetIpAddress(httpContext),
+                    GetUserAgent(httpContext));
+
+                return (await mediator.Send(command, cancellationToken)).ToHttpResult();
+            })
+            .WithName("RequestIdentityAccessPasswordReset")
+            .RequireRateLimiting("identity-password-reset-request");
+
+        group.MapPost("/password-reset-validations", async (
+                ValidatePasswordResetTokenRequest request,
+                IMediator mediator,
+                CancellationToken cancellationToken) =>
+                (await mediator.Send(
+                    new ValidatePasswordResetTokenQuery(request.Token),
+                    cancellationToken)).ToHttpResult())
+            .WithName("ValidateIdentityAccessPasswordResetToken")
+            .RequireRateLimiting("identity-password-reset-token");
+
+        group.MapPost("/password-resets", async (
+                ResetPasswordRequest request,
+                HttpContext httpContext,
+                IMediator mediator,
+                CancellationToken cancellationToken) =>
+            {
+                var command = new ResetPasswordCommand(
+                    request.Token,
+                    request.NewPassword,
+                    GetIpAddress(httpContext),
+                    GetUserAgent(httpContext));
+
+                return (await mediator.Send(command, cancellationToken)).ToHttpResult();
+            })
+            .WithName("ResetIdentityAccessPassword")
+            .RequireRateLimiting("identity-password-reset-token");
+
         group.MapPost("/auth/login", async (
                 LoginRequest request,
                 HttpContext httpContext,

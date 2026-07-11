@@ -53,5 +53,15 @@ public enum AuthEventType
     /// <summary>
     /// A valid sign-in attempt triggered a replacement email verification link.
     /// </summary>
-    EmailVerificationResent = 9
+    EmailVerificationResent = 9,
+
+    /// <summary>
+    /// A password reset link was issued for an eligible account.
+    /// </summary>
+    PasswordResetRequested = 10,
+
+    /// <summary>
+    /// A password was replaced through a one-time reset token.
+    /// </summary>
+    PasswordResetCompleted = 11
 }

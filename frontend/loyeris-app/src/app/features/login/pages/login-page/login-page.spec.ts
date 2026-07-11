@@ -33,6 +33,7 @@ describe('LoginPage', () => {
     expect(compiled.querySelector('input[type="email"]')).toBeTruthy();
     expect(compiled.querySelector('input[type="password"]')).toBeTruthy();
     expect(compiled.querySelector('a[href="/register"]')).toBeTruthy();
+    expect(compiled.querySelector('a[href="/forgot-password"]')).toBeTruthy();
     expect(compiled.querySelector('[role="alert"]')).toBeNull();
   });
 

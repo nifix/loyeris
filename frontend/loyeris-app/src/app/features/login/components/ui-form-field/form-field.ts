@@ -1,8 +1,10 @@
 import { Component, forwardRef, input, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'ui-form-field',
+  imports: [RouterLink],
   templateUrl: './form-field.html',
   styleUrl: './form-field.css',
   providers: [
@@ -18,6 +20,7 @@ export class FormField implements ControlValueAccessor {
   readonly errorMessage = input<string>();
   readonly fieldId = input.required<string>();
   readonly forgotLabel = input<string>();
+  readonly forgotUrl = input('#');
   readonly label = input.required<string>();
   readonly placeholder = input.required<string>();
   readonly required = input(false);
