@@ -92,7 +92,8 @@ public class ReadQueryHandlerTests
         repository.Setup(repo => repo.GetSciAsync(workspaceId, sciId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(sci);
         repository.Setup(repo => repo.ListSciAssociatesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Array.Empty<SciAssociateDto>());
-        repository.Setup(repo => repo.ListLotsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Array.Empty<LotDto>());
+        repository.Setup(repo => repo.ListLotsAsync(workspaceId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Array.Empty<LotDto>());
 
         // Act
         var scis = await new GetScisQueryHandler(repository.Object).Handle(
@@ -104,7 +105,9 @@ public class ReadQueryHandlerTests
             CancellationToken.None);
         
         var associates = await new GetSciAssociatesQueryHandler(repository.Object).Handle(new GetSciAssociatesQuery(), CancellationToken.None);
-        var lots = await new GetLotsQueryHandler(repository.Object).Handle(new GetLotsQuery(), CancellationToken.None);
+        var lots = await new GetLotsQueryHandler(repository.Object).Handle(
+            new GetLotsQuery(workspaceId),
+            CancellationToken.None);
 
         // Assert
         new[] { scis.IsSuccess, singleSci.IsSuccess, associates.IsSuccess, lots.IsSuccess }

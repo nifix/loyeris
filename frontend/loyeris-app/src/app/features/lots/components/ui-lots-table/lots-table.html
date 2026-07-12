@@ -1,10 +1,24 @@
 <section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
   <div class="card-body gap-5">
-    <div>
-      <h2 class="card-title text-xl">Liste des lots</h2>
-      <p class="text-sm leading-6 text-slate-500">
-        Vue d'ensemble des logements et locaux avec une lecture plus rapide des statuts.
-      </p>
+    <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+      <div>
+        <h2 class="card-title text-xl">Liste des lots</h2>
+        <p class="text-sm leading-6 text-slate-500">
+          Vue d'ensemble des logements et locaux avec une lecture plus rapide des statuts.
+        </p>
+      </div>
+      <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-base-200 bg-base-200/35 px-4 py-3">
+        <input
+          type="checkbox"
+          class="checkbox checkbox-primary checkbox-sm mt-0.5"
+          [checked]="showAllArchived()"
+          (change)="archivedVisibilityChanged($event)"
+        />
+        <span>
+          <span class="block text-sm font-semibold">Afficher tous les lots archivés</span>
+          <span class="mt-0.5 block text-xs text-base-content/55">Ceux ayant un montant à percevoir restent toujours visibles.</span>
+        </span>
+      </label>
     </div>
 
     <div class="overflow-x-auto">
@@ -16,23 +30,50 @@
             <th>Adresse</th>
             <th>Type</th>
             <th>Occupation</th>
-            <th>Loyer</th>
+            <th>Potentiel mensuel</th>
             <th>Statut</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          @for (lot of lots(); track lot.reference) {
-            <tr>
+          @for (lot of visibleLots(); track lot.id) {
+            <tr
+              class="cursor-pointer focus-visible:bg-primary/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary/40"
+              role="link"
+              tabindex="0"
+              [attr.aria-label]="'Voir la fiche du lot ' + lot.reference"
+              (click)="openLot(lot.editUrl)"
+              (keydown.enter)="openLot(lot.editUrl)"
+            >
               <td class="font-semibold text-slate-900">{{ lot.reference }}</td>
               <td>{{ lot.sci }}</td>
               <td>{{ lot.address }}</td>
               <td>{{ lot.type }}</td>
               <td>{{ lot.occupation }}</td>
-              <td>{{ lot.rent }}</td>
+              <td>
+                <div class="flex flex-col gap-0.5">
+                  <span [class.font-semibold]="lot.amount !== '—'" [class.text-primary]="lot.amount !== '—'">
+                    {{ lot.amount }}
+                  </span>
+                  @if (lot.amountBreakdown) {
+                    <span class="text-xs text-base-content/60">{{ lot.amountBreakdown }}</span>
+                  }
+                </div>
+              </td>
               <td><ui-status-badge [tone]="lot.statusTone">{{ lot.status }}</ui-status-badge></td>
               <td>
-                <a class="btn btn-sm btn-ghost text-primary" [routerLink]="lot.detailUrl">Voir →</a>
+                <a
+                  class="btn btn-sm btn-ghost text-primary"
+                  [routerLink]="lot.editUrl"
+                  (click)="$event.stopPropagation()"
+                  (keydown.enter)="$event.stopPropagation()"
+                >Voir</a>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="8" class="py-10 text-center text-sm text-base-content/55">
+                Aucun lot actif ou montant à percevoir pour ce mois.
               </td>
             </tr>
           }

@@ -14,5 +14,8 @@ public class GetLotsQueryHandler(IPortfolioReadRepository repository)
 {
     /// <inheritdoc />
     public async Task<Result<IReadOnlyList<LotDto>>> Handle(GetLotsQuery request, CancellationToken cancellationToken)
-        => Result<IReadOnlyList<LotDto>>.Success(await repository.ListLotsAsync(cancellationToken));
+    {
+        return Result<IReadOnlyList<LotDto>>.Success(
+            await repository.ListLotsAsync(request.WorkspaceId, cancellationToken));
+    }
 }

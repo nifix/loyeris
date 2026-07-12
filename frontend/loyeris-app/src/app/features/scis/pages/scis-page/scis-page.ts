@@ -1,13 +1,30 @@
 import { Component, computed, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { take } from 'rxjs';
+import { forkJoin, take } from 'rxjs';
 import { AppShell } from '../../../../core/layouts/app-shell/app-shell';
 import { MetricCard } from '../../../../shared/components/ui-metric-card/metric-card';
 import { PageHeader } from '../../../../shared/components/ui-page-header/page-header';
+import {
+  currentBusinessDate,
+  leaseIncludesDate,
+} from '../../../../shared/utils/lease-period';
+import { portfolioMonthlyRentalPotentialCents } from '../../../../shared/utils/rental-potential';
+import { LotApi, type Lot } from '../../../lots/services/lot-api';
+import {
+  LotOccupancyApi,
+  type LotOccupancy,
+} from '../../../lots/services/lot-occupancy-api';
 import { SciCard } from '../../components/ui-sci-card/sci-card';
 import { type Sci, SciApi } from '../../services/sci-api';
 
 export type SciListState = 'loading' | 'loaded' | 'error';
+
+interface SciIndicators {
+  readonly lotCount: number;
+  readonly tenantCount: number;
+  readonly occupancyRate: number;
+  readonly monthlyPotential: string;
+}
 
 @Component({
   selector: 'app-scis-page',
@@ -17,17 +34,24 @@ export type SciListState = 'loading' | 'loaded' | 'error';
 })
 export class ScisPage implements OnInit, OnDestroy {
   readonly presentationScis = input<readonly Sci[] | null>(null);
+  readonly presentationLots = input<readonly Lot[] | null>(null);
+  readonly presentationOccupancies = input<readonly LotOccupancy[] | null>(null);
   readonly presentationState = input<SciListState | null>(null);
   readonly creationSucceeded = input(false);
   readonly updateSucceeded = input(false);
 
-  private readonly api = inject(SciApi);
+  private readonly sciApi = inject(SciApi);
+  private readonly lotApi = inject(LotApi);
+  private readonly occupancyApi = inject(LotOccupancyApi);
   private readonly route = inject(ActivatedRoute);
   private readonly loadedScis = signal<readonly Sci[]>([]);
+  private readonly loadedLots = signal<readonly Lot[]>([]);
+  private readonly loadedOccupancies = signal<readonly LotOccupancy[]>([]);
   private readonly localState = signal<SciListState>('loading');
   private readonly createdFromNavigation = signal(false);
   private readonly updatedFromNavigation = signal(false);
   private readonly creationMessageDismissed = signal(false);
+  protected readonly showArchivedScis = signal(false);
   private creationMessageTimer: ReturnType<typeof setTimeout> | undefined;
 
   protected readonly scis = computed(() =>
@@ -37,6 +61,51 @@ export class ScisPage implements OnInit, OnDestroy {
     }),
   );
   protected readonly state = computed(() => this.presentationState() ?? this.localState());
+  protected readonly lots = computed(() => this.presentationLots() ?? this.loadedLots());
+  protected readonly occupancies = computed(
+    () => this.presentationOccupancies() ?? this.loadedOccupancies(),
+  );
+  protected readonly activeScis = computed(() =>
+    this.scis().filter((sci) => sci.status === 'Active'),
+  );
+  protected readonly archivedScis = computed(() =>
+    this.scis().filter((sci) => sci.status === 'Archived'),
+  );
+  protected readonly indicators = computed(() => {
+    const result = new Map<string, SciIndicators>();
+    const currentDate = currentBusinessDate();
+
+    for (const sci of this.scis().filter((item) => item.status === 'Active')) {
+      const sciLots = this.lots().filter((lot) => lot.sciId === sci.id);
+      const activeLots = sciLots.filter((lot) => lot.status === 'Active');
+      const activeLotIds = new Set(activeLots.map((lot) => lot.id));
+      const currentOccupancies = this.occupancies().filter((occupancy) =>
+        activeLotIds.has(occupancy.lotId) && leaseIncludesDate(occupancy, currentDate),
+      );
+      const occupiedLotCount = new Set(
+        currentOccupancies.map((occupancy) => occupancy.lotId),
+      ).size;
+      const tenantCount = new Set(
+        currentOccupancies.map((occupancy) => occupancy.tenantId),
+      ).size;
+      const potentialCents = portfolioMonthlyRentalPotentialCents(
+        activeLots,
+        this.occupancies().filter((occupancy) => activeLotIds.has(occupancy.lotId)),
+        currentDate,
+      );
+
+      result.set(sci.id, {
+        lotCount: activeLots.length,
+        tenantCount,
+        occupancyRate: activeLots.length === 0
+          ? 0
+          : Math.round(occupiedLotCount / activeLots.length * 100),
+        monthlyPotential: this.currency(potentialCents),
+      });
+    }
+
+    return result;
+  });
   protected readonly showCreatedMessage = computed(
     () => !this.creationMessageDismissed()
       && (this.creationSucceeded() || this.createdFromNavigation()),
@@ -99,12 +168,17 @@ export class ScisPage implements OnInit, OnDestroy {
 
   protected load(): void {
     this.localState.set('loading');
-    this.api
-      .list()
+    forkJoin({
+      scis: this.sciApi.list(),
+      lots: this.lotApi.list(),
+      occupancies: this.occupancyApi.list(),
+    })
       .pipe(take(1))
       .subscribe({
-        next: (scis) => {
+        next: ({ scis, lots, occupancies }) => {
           this.loadedScis.set(scis);
+          this.loadedLots.set(lots);
+          this.loadedOccupancies.set(occupancies);
           this.localState.set('loaded');
         },
         error: () => this.localState.set('error'),
@@ -133,5 +207,30 @@ export class ScisPage implements OnInit, OnDestroy {
 
     const [year, month, day] = value.split('-');
     return `${day}/${month}/${year}`;
+  }
+
+  protected formattedArchivedDate(value: string | null): string | undefined {
+    if (!value) {
+      return undefined;
+    }
+
+    return new Intl.DateTimeFormat('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(new Date(value));
+  }
+
+  protected toggleArchivedScis(): void {
+    this.showArchivedScis.update((visible) => !visible);
+  }
+
+  private currency(cents: number): string {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(cents / 100);
   }
 }

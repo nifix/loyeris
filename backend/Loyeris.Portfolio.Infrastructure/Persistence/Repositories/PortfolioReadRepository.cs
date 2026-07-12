@@ -86,14 +86,48 @@ public class PortfolioReadRepository(PortfolioDbContext dbContext) : IPortfolioR
     }
 
     /// <inheritdoc />
-    public async Task<IReadOnlyList<LotDto>> ListLotsAsync(CancellationToken cancellationToken)
+    public Task<LotDto> GetLotAsync(Guid workspaceId, Guid lotId, CancellationToken cancellationToken)
     {
-        return await dbContext.Lots
+        return dbContext.Lots
             .AsNoTracking()
-            .OrderBy(lot => lot.Reference)
+            .Where(lot => lot.Id == lotId && lot.Sci.WorkspaceId == workspaceId)
             .Select(lot => new LotDto(
                 lot.Id,
                 lot.SciId,
+                lot.Sci.Name,
+                lot.Reference,
+                lot.Type,
+                lot.Status,
+                lot.Street,
+                lot.PostalCode,
+                lot.City,
+                lot.Country,
+                lot.SurfaceSqm,
+                lot.PotentialRentExcludingChargesCents,
+                lot.PotentialChargesCents,
+                lot.SuggestedDepositCents,
+                lot.Notes,
+                lot.CreatedAt,
+                lot.UpdatedAt,
+                lot.ArchivedAt))
+            .SingleOrDefaultAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<LotDto>> ListLotsAsync(
+        Guid workspaceId,
+        CancellationToken cancellationToken)
+    {
+        return await dbContext.Lots
+            .AsNoTracking()
+            .Where(lot => lot.Sci.WorkspaceId == workspaceId)
+            .OrderBy(lot => lot.Status == LotStatus.Active ? 0 : 1)
+            .ThenBy(lot => lot.Sci.Name)
+            .ThenBy(lot => lot.Reference)
+            .Select(lot => new LotDto(
+                lot.Id,
+                lot.SciId,
+                lot.Sci.Name,
                 lot.Reference,
                 lot.Type,
                 lot.Status,

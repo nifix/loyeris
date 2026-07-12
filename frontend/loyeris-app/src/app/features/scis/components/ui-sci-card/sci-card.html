@@ -8,9 +8,10 @@
             {{ status() === 'Active' ? 'Active' : 'Archivée' }}
           </ui-status-badge>
         </div>
-        <p class="mt-2 text-sm leading-6 text-slate-500">
-          {{ address() }} · Créée le {{ createdAt() }}
-        </p>
+        <div class="mt-2 space-y-1">
+          <p class="text-sm leading-6 text-slate-600">{{ address() }}</p>
+          <p class="text-xs text-slate-400">Créée le {{ createdAt() }}</p>
+        </div>
       </div>
 
       <div class="flex flex-col items-stretch gap-3 sm:items-end">
@@ -35,12 +36,43 @@
             <div class="stat-title">Constitution</div>
             <div class="stat-value text-lg text-slate-900">{{ incorporatedOn() || 'Non renseignée' }}</div>
           </div>
+          @if (status() === 'Archived') {
+            <div class="stat px-5">
+              <div class="stat-title">Archivée le</div>
+              <div class="stat-value text-lg text-slate-900">{{ archivedOn() || 'Non renseignée' }}</div>
+            </div>
+          }
         </div>
       </div>
     </div>
 
-    <div class="rounded-lg border border-dashed border-base-300 bg-base-200/35 px-4 py-3 text-sm text-base-content/60">
-      Les lots, loyers et indicateurs d’occupation apparaîtront ici lorsqu’ils seront rattachés à cette SCI.
-    </div>
+    @if (showIndicators()) {
+      <div class="grid overflow-hidden rounded-lg border border-base-200 bg-slate-50 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="border-b border-base-200 px-5 py-4 sm:border-r xl:border-b-0">
+          <p class="text-xs font-medium text-base-content/55">Potentiel mensuel</p>
+          <p class="mt-1 text-xl font-bold text-primary">{{ monthlyPotential() }}</p>
+          <p class="mt-1 text-xs text-base-content/50">Loyers et charges, sans prorata</p>
+        </div>
+        <div class="border-b border-base-200 px-5 py-4 xl:border-b-0 xl:border-r">
+          <p class="text-xs font-medium text-base-content/55">Logements</p>
+          <p class="mt-1 text-xl font-bold text-slate-900">{{ lotCount() }}</p>
+          <p class="mt-1 text-xs text-base-content/50">Lots actifs rattachés</p>
+        </div>
+        <div class="border-b border-base-200 px-5 py-4 sm:border-b-0 sm:border-r">
+          <p class="text-xs font-medium text-base-content/55">Locataires</p>
+          <p class="mt-1 text-xl font-bold text-slate-900">{{ tenantCount() }}</p>
+          <p class="mt-1 text-xs text-base-content/50">Locataires actuels</p>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-xs font-medium text-base-content/55">Taux d’occupation</p>
+          <p class="mt-1 text-xl font-bold text-success">{{ occupancyRate() }} %</p>
+          <progress class="progress progress-success mt-2 h-1.5" [value]="occupancyRate()" max="100"></progress>
+        </div>
+      </div>
+    } @else {
+      <div class="rounded-lg border border-dashed border-base-300 bg-base-200/35 px-4 py-3 text-sm text-base-content/60">
+        Les indicateurs opérationnels sont masqués pour cette SCI archivée.
+      </div>
+    }
   </div>
 </article>

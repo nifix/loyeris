@@ -7,4 +7,4 @@ namespace Loyeris.Portfolio.App.Queries;
 /// <summary>
 /// Query that lists rental lots.
 /// </summary>
-public record GetLotsQuery() : IRequest<Result<IReadOnlyList<LotDto>>>;
+public record GetLotsQuery(Guid WorkspaceId) : IRequest<Result<IReadOnlyList<LotDto>>>;

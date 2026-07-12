@@ -65,19 +65,57 @@
       </section>
     } @else {
       <section class="grid items-stretch gap-6">
-      @for (sci of scis(); track sci.id) {
-      <ui-sci-card
-        [id]="sci.id"
-        [name]="sci.name"
-        [status]="sci.status"
-        [address]="address(sci)"
-        [createdAt]="formattedDate(sci.createdAt)!"
-        [incorporatedOn]="formattedIncorporationDate(sci.incorporatedOn)"
-        [siren]="sci.siren ?? undefined"
-        [taxRegime]="sci.taxRegime"
-      />
-      }
+        @for (sci of activeScis(); track sci.id) {
+          <ui-sci-card
+            [id]="sci.id"
+            [name]="sci.name"
+            [status]="sci.status"
+            [address]="address(sci)"
+            [createdAt]="formattedDate(sci.createdAt)!"
+            [incorporatedOn]="formattedIncorporationDate(sci.incorporatedOn)"
+            [siren]="sci.siren ?? undefined"
+            [taxRegime]="sci.taxRegime"
+            [showIndicators]="true"
+            [lotCount]="indicators().get(sci.id)?.lotCount ?? 0"
+            [tenantCount]="indicators().get(sci.id)?.tenantCount ?? 0"
+            [occupancyRate]="indicators().get(sci.id)?.occupancyRate ?? 0"
+            [monthlyPotential]="indicators().get(sci.id)?.monthlyPotential ?? '0,00 €'"
+          />
+        }
       </section>
+
+      @if (archivedScis().length > 0) {
+        <div class="flex justify-center">
+          <button
+            type="button"
+            class="btn btn-sm rounded-full border-base-300 bg-base-100 px-5 shadow-sm hover:border-primary/30 hover:bg-primary/5"
+            [attr.aria-expanded]="showArchivedScis()"
+            (click)="toggleArchivedScis()"
+          >
+            {{ showArchivedScis() ? 'Masquer les SCI archivées' : 'Afficher les SCI archivées' }}
+            <span class="badge badge-sm badge-ghost">{{ archivedScis().length }}</span>
+          </button>
+        </div>
+
+        @if (showArchivedScis()) {
+          <section class="archived-scis-enter grid items-stretch gap-6" aria-label="SCI archivées">
+            @for (sci of archivedScis(); track sci.id) {
+              <ui-sci-card
+                [id]="sci.id"
+                [name]="sci.name"
+                [status]="sci.status"
+                [address]="address(sci)"
+                [createdAt]="formattedDate(sci.createdAt)!"
+                [incorporatedOn]="formattedIncorporationDate(sci.incorporatedOn)"
+                [archivedOn]="formattedArchivedDate(sci.archivedAt)"
+                [siren]="sci.siren ?? undefined"
+                [taxRegime]="sci.taxRegime"
+                [showIndicators]="false"
+              />
+            }
+          </section>
+        }
+      }
     }
   }
 </ui-app-shell>

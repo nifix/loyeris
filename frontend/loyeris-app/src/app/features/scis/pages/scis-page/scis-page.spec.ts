@@ -21,11 +21,39 @@ describe('ScisPage', () => {
   it('should load and display only the SCI data returned by the API', () => {
     const fixture = TestBed.createComponent(ScisPage);
     fixture.detectChanges();
-    const request = TestBed.inject(HttpTestingController).expectOne('/api/portfolio/scis');
+    const http = TestBed.inject(HttpTestingController);
+    const request = http.expectOne('/api/portfolio/scis');
     expect(request.request.method).toBe('GET');
     request.flush([
-      createSci({ id: 'sci-2', name: 'SCI Carnot', status: 'Archived', siren: null }),
+      createSci({
+        id: 'sci-2',
+        name: 'SCI Carnot',
+        status: 'Archived',
+        siren: null,
+        archivedAt: '2026-06-30T08:00:00Z',
+      }),
       createSci({ id: 'sci-1', name: 'SCI Les Tilleuls', status: 'Active' }),
+    ]);
+    http.expectOne('/api/portfolio/lots').flush([
+      createLot({ id: 'lot-1', sciId: 'sci-1', reference: 'A01' }),
+      createLot({ id: 'lot-2', sciId: 'sci-1', reference: 'A02' }),
+    ]);
+    http.expectOne('/api/leasing/lot-occupancies').flush([
+      {
+        lotId: 'lot-1',
+        leaseId: 'lease-1',
+        tenantId: 'tenant-1',
+        tenantFirstName: 'Camille',
+        tenantLastName: 'Robert',
+        startsOn: currentMonthDate(1),
+        endsOn: null,
+        rentDueDay: 5,
+        rentExcludingChargesCents: 65000,
+        chargesCents: 5000,
+        depositCents: 65000,
+        paymentTerms: null,
+        notes: null,
+      },
     ]);
     fixture.detectChanges();
 
@@ -35,19 +63,41 @@ describe('ScisPage', () => {
     expect(compiled.textContent).toContain('2 structures suivies');
     expect(compiled.textContent).not.toContain('Workspace courant');
     expect(compiled.textContent).toContain('SCI Les Tilleuls');
-    expect(compiled.textContent).toContain('SCI Carnot');
+    expect(compiled.textContent).not.toContain('SCI Carnot');
+    expect(compiled.textContent).toContain('Afficher les SCI archivées');
     expect(compiled.textContent).toContain('10/01/2024');
-    expect(cards).toHaveLength(2);
+    expect(cards).toHaveLength(1);
     expect(cards[0].textContent).toContain('SCI Les Tilleuls');
-    expect(cards[1].textContent).toContain('SCI Carnot');
+    expect(cards[0].textContent).toContain('1 400,00');
+    expect(cards[0].textContent).toContain('Potentiel mensuel');
+    expect(cards[0].textContent).toContain('sans prorata');
+    expect(cards[0].textContent).toContain('2');
+    expect(cards[0].textContent).toContain('1');
+    expect(cards[0].textContent).toContain('50 %');
     expect(compiled.querySelector('a[href="/scis/sci-1/edit"]')).toBeTruthy();
     expect(compiled.textContent).not.toContain('4 320 €');
+
+    const archivedToggle = [...compiled.querySelectorAll('button')]
+      .find((button) => button.textContent?.includes('Afficher les SCI archivées'))!;
+    archivedToggle.click();
+    fixture.detectChanges();
+
+    const expandedCards = compiled.querySelectorAll('ui-sci-card');
+    expect(expandedCards).toHaveLength(2);
+    expect(expandedCards[1].textContent).toContain('SCI Carnot');
+    expect(expandedCards[1].textContent).toContain('Archivée le');
+    expect(expandedCards[1].textContent).toContain('30/06/2026');
+    expect(expandedCards[1].textContent).toContain('indicateurs opérationnels sont masqués');
+    expect(compiled.querySelector('[aria-label="SCI archivées"]')).toBeTruthy();
   });
 
   it('should render an empty state when the workspace has no SCI', () => {
     const fixture = TestBed.createComponent(ScisPage);
     fixture.detectChanges();
-    TestBed.inject(HttpTestingController).expectOne('/api/portfolio/scis').flush([]);
+    const http = TestBed.inject(HttpTestingController);
+    http.expectOne('/api/portfolio/scis').flush([]);
+    http.expectOne('/api/portfolio/lots').flush([]);
+    http.expectOne('/api/leasing/lot-occupancies').flush([]);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Ajoutez votre première SCI');
@@ -91,4 +141,35 @@ function createSci(overrides: Record<string, unknown> = {}) {
     archivedAt: null,
     ...overrides,
   };
+}
+
+function createLot(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'lot-id',
+    sciId: 'sci-id',
+    sciName: 'SCI Test',
+    reference: 'Lot A01',
+    type: 'T2',
+    status: 'Active',
+    street: '12 rue des Tilleuls',
+    postalCode: '69000',
+    city: 'Lyon',
+    country: 'FR',
+    surfaceSqm: 42,
+    potentialRentExcludingChargesCents: 65000,
+    potentialChargesCents: 5000,
+    suggestedDepositCents: 65000,
+    notes: null,
+    createdAt: '2026-07-12T08:00:00Z',
+    updatedAt: '2026-07-12T08:00:00Z',
+    archivedAt: null,
+    ...overrides,
+  };
+}
+
+function currentMonthDate(day: number): string {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  return `${year}-${month}-${String(day).padStart(2, '0')}`;
 }

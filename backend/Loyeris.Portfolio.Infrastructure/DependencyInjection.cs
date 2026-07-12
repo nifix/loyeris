@@ -34,6 +34,7 @@ public static class DependencyInjection
 
         services.AddScoped<IPortfolioReadRepository, PortfolioReadRepository>();
         services.AddScoped<ISciRepository, SciRepository>();
+        services.AddScoped<ILotRepository, LotRepository>();
         services.TryAddSingleton(TimeProvider.System);
 
         return services;
