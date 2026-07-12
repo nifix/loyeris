@@ -49,9 +49,7 @@ jobs:
           path: TestResults/backend/*.trx
           reporter: dotnet-trx
           use-actions-summary: true
-          list-suites: failed
-          list-tests: failed
-          max-annotations: 20
+          only-summary: true
 
   frontend:
     name: Frontend
@@ -94,9 +92,7 @@ jobs:
           path: frontend/loyeris-app/TestResults/vitest-junit.xml
           reporter: java-junit
           use-actions-summary: true
-          list-suites: failed
-          list-tests: failed
-          max-annotations: 20
+          only-summary: true
 
       - name: Build application
         run: yarn build
