@@ -21,7 +21,8 @@ This is a mono-repo with two independent projects, container orchestration, and 
 | `compose.dev.yaml` | Daily full-stack development with Compose Watch and hot reload |
 | `compose.yaml` | Local production-like stack used for validation and CI smoke tests |
 | `deploy/` | Production Compose manifest and deployment script, kept ready for a future VPS |
-| `.github/workflows/ci-cd.yml` | Pull-request checks plus a disabled future VPS deployment job |
+| `.github/workflows/ci-cd.yml` | Pull-request-only checks through the complete Docker smoke test |
+| `.github/workflows/deploy-production.yml` | Main-push-only future VPS deployment, explicitly disabled |
 | `docs/ui-kit/` | Static HTML/CSS design reference using Tailwind 4 and daisyUI 5 |
 
 More specific instructions exist in:
@@ -86,7 +87,7 @@ Stop a stack with the matching Compose file. Add `--volumes` only when intention
 
 ## CI and images
 
-`.github/workflows/ci-cd.yml` validates the backend, frontend, Compose manifests, and complete Docker stack. NUnit produces TRX and Vitest produces JUnit; the pinned test reporter publishes both as GitHub checks and job summaries. The `production` job contains the future GHCR publication and VPS deployment flow, but it is explicitly disabled with an always-false condition. CI currently stops after the Docker smoke test on both pull requests and `main`.
+`.github/workflows/ci-cd.yml` runs only for pull requests and validates the backend, frontend, Compose manifests, and complete Docker stack. NUnit produces TRX and Vitest produces JUnit; the pinned test reporter publishes both as GitHub checks and job summaries. `.github/workflows/deploy-production.yml` runs only for pushes to `main`; its single `production` job contains the future GHCR publication and VPS deployment flow, but is explicitly disabled with an always-false condition. The production job must never be added to the pull-request workflow.
 
 ## Design reference
 
