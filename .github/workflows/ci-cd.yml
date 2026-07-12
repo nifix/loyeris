@@ -43,7 +43,7 @@ jobs:
       - name: Publish backend test report
         if: ${{ !cancelled() }}
         continue-on-error: true
-        uses: dorny/test-reporter@d3cb5605561a46347256b466ef836b85076ad522 # v2.5.0
+        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3
         with:
           name: Backend unit tests
           path: TestResults/backend/*.trx
@@ -86,7 +86,7 @@ jobs:
       - name: Publish frontend test report
         if: ${{ !cancelled() }}
         continue-on-error: true
-        uses: dorny/test-reporter@d3cb5605561a46347256b466ef836b85076ad522 # v2.5.0
+        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3
         with:
           name: Frontend unit tests
           path: frontend/loyeris-app/TestResults/vitest-junit.xml

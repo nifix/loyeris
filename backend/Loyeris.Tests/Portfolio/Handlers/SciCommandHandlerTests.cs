@@ -227,7 +227,7 @@ public class SciCommandHandlerTests
         result.Error.Type.Should().Be(ErrorType.Conflict);
     }
 
-    private static CreateSciCommand CreateCommand(string name, string siren)
+    private static CreateSciCommand CreateCommand(string name, string? siren)
     {
         return new CreateSciCommand(
             Guid.NewGuid(),
