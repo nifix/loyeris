@@ -1,9 +1,10 @@
 ﻿# Déploiement du VPS
 
 > Le déploiement VPS n'est pas encore activé dans GitHub Actions. Le job
-> `Deploy production (disabled)` regroupe la publication des images GHCR et le
-> déploiement, mais sa condition est volontairement toujours fausse. La CI
-> s'arrête donc au smoke test tant que le VPS n'est pas prêt.
+> `Deploy production (disabled)` vit dans un workflow réservé aux pushs sur
+> `main`. Il regroupe la publication des images GHCR et le déploiement, mais sa
+> condition est volontairement toujours fausse. Il n'apparaît donc jamais dans
+> les contrôles des pull requests.
 
 ## Préparation unique
 

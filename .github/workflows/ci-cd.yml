@@ -1,10 +1,7 @@
-﻿name: CI et images Docker
+﻿name: CI
 
 on:
   pull_request:
-  push:
-    branches:
-      - main
 
 permissions:
   contents: read
@@ -186,91 +183,3 @@ jobs:
       - name: Stop the stack
         if: always()
         run: docker compose down --volumes --remove-orphans
-
-  production:
-    name: Deploy production (disabled)
-    # Replace this condition with the main-branch condition once the VPS is ready.
-    if: ${{ false }}
-    needs:
-      - docker-smoke
-    runs-on: ubuntu-latest
-    environment: production
-    concurrency:
-      group: production
-      cancel-in-progress: false
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
-
-      - name: Login to GHCR
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and publish API image
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
-        with:
-          context: ./backend
-          file: ./backend/Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: |
-            ghcr.io/nifix/loyeris-api:${{ github.sha }}
-            ghcr.io/nifix/loyeris-api:latest
-          cache-from: type=gha,scope=loyeris-api
-          cache-to: type=gha,mode=max,scope=loyeris-api
-
-      - name: Build and publish web image
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
-        with:
-          context: ./frontend/loyeris-app
-          file: ./frontend/loyeris-app/Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: |
-            ghcr.io/nifix/loyeris-web:${{ github.sha }}
-            ghcr.io/nifix/loyeris-web:latest
-          cache-from: type=gha,scope=loyeris-web
-          cache-to: type=gha,mode=max,scope=loyeris-web
-
-      - name: Configure SSH
-        env:
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
-        run: |
-          install --directory --mode 700 ~/.ssh
-          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
-          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
-
-      - name: Transfer production files and deploy
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GHCR_USER: ${{ github.actor }}
-        run: |
-          remote="$DEPLOY_USER@$DEPLOY_HOST"
-          scp -o BatchMode=yes \
-            deploy/compose.production.yaml \
-            deploy/deploy.sh \
-            "$remote:/opt/loyeris/"
-
-          cleanup() {
-            ssh -o BatchMode=yes "$remote" 'docker logout ghcr.io' || true
-          }
-          trap cleanup EXIT
-
-          printf '%s' "$GHCR_TOKEN" | \
-            ssh -o BatchMode=yes "$remote" \
-              "docker login ghcr.io --username '$GHCR_USER' --password-stdin"
-          ssh -o BatchMode=yes "$remote" \
-            "chmod 700 /opt/loyeris/deploy.sh && /opt/loyeris/deploy.sh '$GITHUB_SHA'"
