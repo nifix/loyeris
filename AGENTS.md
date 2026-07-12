@@ -21,7 +21,7 @@ This is a mono-repo with two independent projects, container orchestration, and 
 | `compose.dev.yaml` | Daily full-stack development with Compose Watch and hot reload |
 | `compose.yaml` | Local production-like stack used for validation and CI smoke tests |
 | `deploy/` | Production Compose manifest and deployment script, kept ready for a future VPS |
-| `.github/workflows/ci-cd.yml` | Pull-request checks and GHCR image publication from `main` |
+| `.github/workflows/ci-cd.yml` | Pull-request checks plus a disabled future VPS deployment job |
 | `docs/ui-kit/` | Static HTML/CSS design reference using Tailwind 4 and daisyUI 5 |
 
 More specific instructions exist in:
@@ -86,7 +86,7 @@ Stop a stack with the matching Compose file. Add `--volumes` only when intention
 
 ## CI and images
 
-`.github/workflows/ci-cd.yml` validates the backend, frontend, Compose manifests, and complete Docker stack. NUnit produces TRX and Vitest produces JUnit; the pinned test reporter publishes both as GitHub checks and job summaries. On a successful push to `main`, the workflow publishes immutable SHA-tagged API and web images to `ghcr.io/nifix/` and also updates the informational `latest` tags. There is currently no VPS deployment job; files under `deploy/` are inactive until a VPS is provisioned.
+`.github/workflows/ci-cd.yml` validates the backend, frontend, Compose manifests, and complete Docker stack. NUnit produces TRX and Vitest produces JUnit; the pinned test reporter publishes both as GitHub checks and job summaries. The `production` job contains the future GHCR publication and VPS deployment flow, but it is explicitly disabled with an always-false condition. CI currently stops after the Docker smoke test on both pull requests and `main`.
 
 ## Design reference
 

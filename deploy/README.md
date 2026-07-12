@@ -1,8 +1,9 @@
 ﻿# Déploiement du VPS
 
-> Le déploiement VPS n'est pas encore activé dans GitHub Actions. Le workflow
-> actuel construit et publie uniquement les images GHCR. Cette documentation et
-> les scripts sont conservés pour l'activation future du déploiement.
+> Le déploiement VPS n'est pas encore activé dans GitHub Actions. Le job
+> `Deploy production (disabled)` regroupe la publication des images GHCR et le
+> déploiement, mais sa condition est volontairement toujours fausse. La CI
+> s'arrête donc au smoke test tant que le VPS n'est pas prêt.
 
 ## Préparation unique
 
