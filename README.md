@@ -79,7 +79,7 @@ Les stacks `loyeris-dev` et `loyeris` utilisent des volumes PostgreSQL séparés
 ## Production
 
 Le manifeste et la préparation future du VPS sont documentés dans
-[`deploy/README.md`](deploy/README.md). Pour l'instant, une fusion valide sur
-Le job de production regroupe la publication des images GHCR et le déploiement
-vers le VPS, mais reste explicitement désactivé. La CI s'arrête actuellement au
-smoke test, y compris sur `main`.
+[`deploy/README.md`](deploy/README.md). Le job de production regroupe la
+publication des images GHCR et le déploiement vers le VPS, mais reste
+explicitement désactivé. La CI s'arrête actuellement au smoke test, y compris
+sur `main`.
