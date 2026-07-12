@@ -1,14 +1,46 @@
-<ui-app-shell activeItem="sci" mobileActionLabel="Ajouter">
+<ui-app-shell activeItem="sci" mobileActionLabel="Ajouter" mobileActionUrl="/scis/new">
   <ui-page-header
     badge="Portefeuille"
     title="SCI"
-    description="Gérez plusieurs structures depuis un seul cockpit tout en gardant la vision exploitation et rendement."
-    [chips]="headerChips"
+    description="Centralisez les informations juridiques de vos structures avant d’y rattacher progressivement lots, associés et locataires."
+    [chips]="headerChips()"
     actionLabel="Ajouter une SCI"
+    actionUrl="/scis/new"
   />
 
-  <section class="grid items-stretch gap-4 md:grid-cols-3">
-    @for (metric of metrics; track metric.title) {
+  @if (showCreatedMessage()) {
+    <div class="alert border-success/20 bg-success/10 text-success" role="status">
+      <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="m5 12 4 4L19 6" />
+      </svg>
+      <span>La SCI a bien été ajoutée à votre portefeuille.</span>
+    </div>
+  }
+
+  @if (showUpdatedMessage()) {
+    <div class="alert border-success/20 bg-success/10 text-success" role="status">
+      <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="m5 12 4 4L19 6" />
+      </svg>
+      <span>Les informations de la SCI ont bien été mises à jour.</span>
+    </div>
+  }
+
+  @if (state() === 'loading') {
+    <section class="grid gap-4 md:grid-cols-3" aria-label="Chargement du portefeuille">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="skeleton h-32 rounded-lg"></div>
+      }
+    </section>
+    <div class="skeleton h-56 rounded-lg"></div>
+  } @else if (state() === 'error') {
+    <div class="alert alert-error items-start" role="alert">
+      <span>Impossible de charger vos SCI pour le moment.</span>
+      <button type="button" class="btn btn-sm" (click)="load()">Réessayer</button>
+    </div>
+  } @else {
+    <section class="grid items-stretch gap-4 md:grid-cols-3">
+    @for (metric of metrics(); track metric.title) {
       <ui-metric-card
         [title]="metric.title"
         [value]="metric.value"
@@ -16,21 +48,36 @@
         [tone]="metric.tone"
       />
     }
-  </section>
+    </section>
 
-  <section class="grid items-stretch gap-6">
-    @for (sci of scis; track sci.name) {
+    @if (scis().length === 0) {
+      <section class="card rounded-lg border border-dashed border-base-300 bg-base-100 shadow-sm">
+        <div class="card-body items-center py-14 text-center">
+          <div class="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <span class="text-2xl font-bold">SCI</span>
+          </div>
+          <h2 class="mt-2 text-2xl font-bold text-base-content">Ajoutez votre première SCI</h2>
+          <p class="max-w-lg text-sm leading-6 text-base-content/65">
+            Commencez par renseigner sa fiche juridique. Les lots et les locataires pourront ensuite y être rattachés.
+          </p>
+          <a class="btn btn-primary mt-3" routerLink="/scis/new">Ajouter une SCI</a>
+        </div>
+      </section>
+    } @else {
+      <section class="grid items-stretch gap-6">
+      @for (sci of scis(); track sci.id) {
       <ui-sci-card
+        [id]="sci.id"
         [name]="sci.name"
-        [address]="sci.address"
-        [createdAt]="sci.createdAt"
-        [lots]="sci.lots"
-        [tenants]="sci.tenants"
-        [monthlyRent]="sci.monthlyRent"
-        [occupancy]="sci.occupancy"
-        [performance]="sci.performance"
-        [performanceTone]="sci.performanceTone"
+        [status]="sci.status"
+        [address]="address(sci)"
+        [createdAt]="formattedDate(sci.createdAt)!"
+        [incorporatedOn]="formattedIncorporationDate(sci.incorporatedOn)"
+        [siren]="sci.siren ?? undefined"
+        [taxRegime]="sci.taxRegime"
       />
+      }
+      </section>
     }
-  </section>
+  }
 </ui-app-shell>

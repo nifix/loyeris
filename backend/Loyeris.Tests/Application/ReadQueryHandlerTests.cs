@@ -15,6 +15,7 @@ using Loyeris.Portfolio.App.Dtos;
 using Loyeris.Portfolio.App.Handlers;
 using Loyeris.Portfolio.App.Persistence;
 using Loyeris.Portfolio.App.Queries;
+using Loyeris.Portfolio.Core.Enums;
 using Loyeris.RentCollection.App.Dtos;
 using Loyeris.RentCollection.App.Handlers;
 using Loyeris.RentCollection.App.Persistence;
@@ -66,20 +67,52 @@ public class ReadQueryHandlerTests
     public async Task PortfolioReadHandlers_ShouldReturnSuccessfulResults()
     {
         // Arrange
+        var workspaceId = Guid.NewGuid();
         var repository = new Mock<IPortfolioReadRepository>();
-        repository.Setup(repo => repo.ListScisAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Array.Empty<SciDto>());
+        repository.Setup(repo => repo.ListScisAsync(workspaceId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Array.Empty<SciDto>());
+        
+        var sciId = Guid.NewGuid();
+        var sci = new SciDto(
+            sciId,
+            workspaceId,
+            "SCI Test",
+            null,
+            TaxRegime.IR,
+            SciStatus.Active,
+            null,
+            null,
+            null,
+            "FR",
+            null,
+            DateTimeOffset.UtcNow,
+            DateTimeOffset.UtcNow,
+            null);
+        
+        repository.Setup(repo => repo.GetSciAsync(workspaceId, sciId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(sci);
         repository.Setup(repo => repo.ListSciAssociatesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Array.Empty<SciAssociateDto>());
         repository.Setup(repo => repo.ListLotsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Array.Empty<LotDto>());
 
         // Act
-        var scis = await new GetScisQueryHandler(repository.Object).Handle(new GetScisQuery(), CancellationToken.None);
+        var scis = await new GetScisQueryHandler(repository.Object).Handle(
+            new GetScisQuery(workspaceId),
+            CancellationToken.None);
+        
+        var singleSci = await new GetSciQueryHandler(repository.Object).Handle(
+            new GetSciQuery(workspaceId, sciId),
+            CancellationToken.None);
+        
         var associates = await new GetSciAssociatesQueryHandler(repository.Object).Handle(new GetSciAssociatesQuery(), CancellationToken.None);
         var lots = await new GetLotsQueryHandler(repository.Object).Handle(new GetLotsQuery(), CancellationToken.None);
 
         // Assert
-        new[] { scis.IsSuccess, associates.IsSuccess, lots.IsSuccess }
+        new[] { scis.IsSuccess, singleSci.IsSuccess, associates.IsSuccess, lots.IsSuccess }
             .Should()
             .OnlyContain(isSuccess => isSuccess);
+        
+        repository.Verify(repo => repo.ListScisAsync(workspaceId, It.IsAny<CancellationToken>()), Times.Once);
+        repository.Verify(repo => repo.GetSciAsync(workspaceId, sciId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     /// <summary>

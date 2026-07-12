@@ -306,7 +306,8 @@ public class PasswordResetCommandHandlerTests
     private static RequestPasswordResetCommandHandler CreateRequestHandler(
         Mock<IAppUserAuthRepository> users,
         Mock<IPasswordResetSender> sender)
-        => new(
+    {
+        return new RequestPasswordResetCommandHandler(
             users.Object,
             Mock.Of<IAuthOneTimeTokenRepository>(),
             Mock.Of<IAuthEventRepository>(),
@@ -314,6 +315,7 @@ public class PasswordResetCommandHandlerTests
             Mock.Of<IOneTimeTokenService>(),
             sender.Object,
             TimeProvider.System);
+    }
 
     private static Mock<IIdentityAccessUnitOfWork> CreateTransactionalUnitOfWork(List<string> persistenceSteps)
     {
@@ -334,7 +336,8 @@ public class PasswordResetCommandHandlerTests
     }
 
     private static AppUser CreateActiveUser()
-        => new()
+    {
+        return new AppUser
         {
             Id = Guid.NewGuid(),
             Email = "camille@example.fr",
@@ -345,9 +348,11 @@ public class PasswordResetCommandHandlerTests
             SecurityStamp = "old-security-stamp",
             Status = UserStatus.Active
         };
+    }
 
     private static AuthOneTimeToken CreateResetToken(AppUser user)
-        => new()
+    {
+        return new AuthOneTimeToken
         {
             Id = Guid.NewGuid(),
             UserId = user.Id,
@@ -356,4 +361,5 @@ public class PasswordResetCommandHandlerTests
             TokenHash = "RESET-HASH",
             ExpiresAt = DateTimeOffset.UtcNow.AddHours(1)
         };
+    }
 }

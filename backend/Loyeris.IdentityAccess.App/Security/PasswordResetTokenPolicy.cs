@@ -12,12 +12,14 @@ public static class PasswordResetTokenPolicy
     /// Determines whether a token belongs to an active account and can still be consumed.
     /// </summary>
     public static bool IsUsable(AuthOneTimeToken oneTimeToken, DateTimeOffset now)
-        => oneTimeToken is
-           {
-               Purpose: OneTimeTokenPurpose.PasswordReset,
-               ConsumedAt: null,
-               RevokedAt: null,
-               User.Status: UserStatus.Active
-           }
-           && oneTimeToken.ExpiresAt > now;
+    {
+        return oneTimeToken is
+               {
+                   Purpose: OneTimeTokenPurpose.PasswordReset,
+                   ConsumedAt: null,
+                   RevokedAt: null,
+                   User.Status: UserStatus.Active
+               }
+               && oneTimeToken.ExpiresAt > now;
+    }
 }

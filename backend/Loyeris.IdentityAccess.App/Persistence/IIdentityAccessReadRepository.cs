@@ -8,6 +8,16 @@ namespace Loyeris.IdentityAccess.App.Persistence;
 public interface IIdentityAccessReadRepository
 {
     /// <summary>
+    /// Resolves the primary active workspace available to a user.
+    /// </summary>
+    /// <param name="userId">The authenticated user identifier.</param>
+    /// <param name="cancellationToken">The cancellation token for the asynchronous operation.</param>
+    /// <returns>The workspace access, or null when the user has no active workspace.</returns>
+    Task<WorkspaceAccessDto> GetPrimaryWorkspaceAccessAsync(
+        Guid userId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
     /// Lists application users without sensitive authentication data.
     /// </summary>
     /// <param name="cancellationToken">The cancellation token for the asynchronous operation.</param>

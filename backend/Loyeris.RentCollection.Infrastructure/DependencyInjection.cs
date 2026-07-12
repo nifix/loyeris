@@ -25,9 +25,11 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("LoyerisDatabase");
 
         services.AddDbContext<RentCollectionDbContext>(options =>
+        {
             options.UseNpgsql(
                 connectionString,
-                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "collection")));
+                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "collection"));
+        });
 
         services.AddScoped<IRentCollectionReadRepository, RentCollectionReadRepository>();
 

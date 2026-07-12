@@ -18,11 +18,15 @@ public static class TaxPreparationEndpoints
         var group = routes.MapGroup("api/tax-preparation").WithTags("Tax Preparation").RequireAuthorization();
 
         group.MapGet("/fiscal-periods", async (IMediator mediator) =>
-                (await mediator.Send(new GetFiscalPeriodsQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetFiscalPeriodsQuery())).ToHttpResult();
+            })
             .WithName("GetTaxPreparationFiscalPeriods");
 
         group.MapGet("/rental-expenses", async (IMediator mediator) =>
-                (await mediator.Send(new GetRentalExpensesQuery())).ToHttpResult())
+            {
+                return (await mediator.Send(new GetRentalExpensesQuery())).ToHttpResult();
+            })
             .WithName("GetTaxPreparationRentalExpenses");
     }
 }

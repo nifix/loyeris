@@ -11,7 +11,8 @@ public class MessagingReadRepository(MessagingDbContext dbContext) : IMessagingR
 {
     /// <inheritdoc />
     public async Task<IReadOnlyList<NotificationPreferenceDto>> ListNotificationPreferencesAsync(CancellationToken cancellationToken)
-        => await dbContext.NotificationPreferences
+    {
+        return await dbContext.NotificationPreferences
             .AsNoTracking()
             .OrderBy(preference => preference.UserId)
             .Select(preference => new NotificationPreferenceDto(
@@ -24,10 +25,12 @@ public class MessagingReadRepository(MessagingDbContext dbContext) : IMessagingR
                 preference.CreatedAt,
                 preference.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<OutboxMessageDto>> ListOutboxMessagesAsync(CancellationToken cancellationToken)
-        => await dbContext.OutboxMessages
+    {
+        return await dbContext.OutboxMessages
             .AsNoTracking()
             .OrderBy(message => message.Status)
             .ThenBy(message => message.AvailableAt)
@@ -41,4 +44,5 @@ public class MessagingReadRepository(MessagingDbContext dbContext) : IMessagingR
                 message.CreatedAt,
                 message.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 }

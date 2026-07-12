@@ -70,7 +70,8 @@ public class SmtpEmailVerificationSender(
     }
 
     private static string CreatePlainTextBody(string firstName, string verificationUrl)
-        => $"""
+    {
+        return $"""
            Bonjour {firstName},
 
            Bienvenue sur Loyeris ! Votre espace de gestion locative est prêt.
@@ -83,6 +84,7 @@ public class SmtpEmailVerificationSender(
            L'équipe Loyeris
            Gestion locative claire pour vos SCI
            """;
+    }
 
     private static string CreateHtmlBody(string firstName, string verificationUrl)
     {

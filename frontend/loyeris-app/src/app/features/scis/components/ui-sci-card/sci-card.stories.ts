@@ -18,23 +18,15 @@ const meta: Meta<SciCard> = {
         `<div data-theme="corporate" class="w-[72rem] max-w-[calc(100vw-2rem)] bg-slate-100 p-6 text-slate-900">${story}</div>`,
     ),
   ],
-  argTypes: {
-    performanceTone: {
-      control: 'radio',
-      options: ['primary', 'success'],
-    },
-  },
   args: {
+    id: 'sci-1',
     name: 'SCI Les Tilleuls',
     status: 'Active',
     address: '12 rue des Tilleuls, Lyon',
     createdAt: '14 janvier 2024',
-    lots: 5,
-    tenants: 4,
-    monthlyRent: '2 760 €',
-    occupancy: '80%',
-    performance: 79,
-    performanceTone: 'primary',
+    incorporatedOn: '06/12/2023',
+    siren: '123456789',
+    taxRegime: 'IR',
   },
 };
 
@@ -44,16 +36,14 @@ type Story = StoryObj<SciCard>;
 
 export const Default: Story = {};
 
-export const StrongPerformance: Story = {
+export const ArchivedWithoutLegalDetails: Story = {
   args: {
     name: 'SCI Carnot',
+    status: 'Archived',
     address: '8 boulevard Carnot, Villeurbanne',
     createdAt: '3 mars 2025',
-    lots: 4,
-    tenants: 3,
-    monthlyRent: '1 560 €',
-    occupancy: '75%',
-    performance: 87,
-    performanceTone: 'success',
+    incorporatedOn: undefined,
+    siren: undefined,
+    taxRegime: 'IR',
   },
 };

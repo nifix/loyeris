@@ -9,16 +9,12 @@ import { StatusBadge } from '../../../../shared/components/ui-status-badge/statu
   styleUrl: './sci-card.css',
 })
 export class SciCard {
+  readonly id = input.required<string>();
   readonly name = input.required<string>();
-  readonly status = input('Active');
+  readonly status = input.required<'Active' | 'Archived'>();
   readonly address = input.required<string>();
   readonly createdAt = input.required<string>();
-  readonly lots = input.required<number>();
-  readonly tenants = input.required<number>();
-  readonly monthlyRent = input.required<string>();
-  readonly occupancy = input.required<string>();
-  readonly performance = input.required<number>();
-  readonly performanceTone = input<'primary' | 'success'>('primary');
-  readonly lotsUrl = input('#');
-  readonly rentsUrl = input('#');
+  readonly incorporatedOn = input<string>();
+  readonly siren = input<string>();
+  readonly taxRegime = input.required<string>();
 }

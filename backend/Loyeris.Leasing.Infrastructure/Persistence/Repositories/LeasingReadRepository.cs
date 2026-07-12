@@ -11,7 +11,8 @@ public class LeasingReadRepository(LeasingDbContext dbContext) : ILeasingReadRep
 {
     /// <inheritdoc />
     public async Task<IReadOnlyList<TenantDto>> ListTenantsAsync(CancellationToken cancellationToken)
-        => await dbContext.Tenants
+    {
+        return await dbContext.Tenants
             .AsNoTracking()
             .OrderBy(tenant => tenant.LastName)
             .ThenBy(tenant => tenant.FirstName)
@@ -27,10 +28,12 @@ public class LeasingReadRepository(LeasingDbContext dbContext) : ILeasingReadRep
                 tenant.UpdatedAt,
                 tenant.ArchivedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<LeaseDto>> ListLeasesAsync(CancellationToken cancellationToken)
-        => await dbContext.Leases
+    {
+        return await dbContext.Leases
             .AsNoTracking()
             .OrderByDescending(lease => lease.StartsOn)
             .Select(lease => new LeaseDto(
@@ -48,10 +51,12 @@ public class LeasingReadRepository(LeasingDbContext dbContext) : ILeasingReadRep
                 lease.CreatedAt,
                 lease.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<LeaseTenantDto>> ListLeaseTenantsAsync(CancellationToken cancellationToken)
-        => await dbContext.LeaseTenants
+    {
+        return await dbContext.LeaseTenants
             .AsNoTracking()
             .OrderBy(leaseTenant => leaseTenant.LeaseId)
             .ThenBy(leaseTenant => leaseTenant.Role)
@@ -63,4 +68,5 @@ public class LeasingReadRepository(LeasingDbContext dbContext) : ILeasingReadRep
                 leaseTenant.CreatedAt,
                 leaseTenant.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 }

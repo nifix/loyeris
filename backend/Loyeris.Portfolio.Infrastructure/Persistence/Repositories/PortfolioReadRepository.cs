@@ -1,5 +1,6 @@
 using Loyeris.Portfolio.App.Dtos;
 using Loyeris.Portfolio.App.Persistence;
+using Loyeris.Portfolio.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Loyeris.Portfolio.Infrastructure.Persistence.Repositories;
@@ -10,10 +11,42 @@ namespace Loyeris.Portfolio.Infrastructure.Persistence.Repositories;
 public class PortfolioReadRepository(PortfolioDbContext dbContext) : IPortfolioReadRepository
 {
     /// <inheritdoc />
-    public async Task<IReadOnlyList<SciDto>> ListScisAsync(CancellationToken cancellationToken)
-        => await dbContext.Scis
+    public Task<SciDto> GetSciAsync(
+        Guid workspaceId,
+        Guid sciId,
+        CancellationToken cancellationToken)
+    {
+        return dbContext.Scis
             .AsNoTracking()
-            .OrderBy(sci => sci.Name)
+            .Where(sci => sci.WorkspaceId == workspaceId && sci.Id == sciId)
+            .Select(sci => new SciDto(
+                sci.Id,
+                sci.WorkspaceId,
+                sci.Name,
+                sci.Siren,
+                sci.TaxRegime,
+                sci.Status,
+                sci.Street,
+                sci.PostalCode,
+                sci.City,
+                sci.Country,
+                sci.IncorporatedOn,
+                sci.CreatedAt,
+                sci.UpdatedAt,
+                sci.ArchivedAt))
+            .SingleOrDefaultAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<SciDto>> ListScisAsync(
+        Guid workspaceId,
+        CancellationToken cancellationToken)
+    {
+        return await dbContext.Scis
+            .AsNoTracking()
+            .Where(sci => sci.WorkspaceId == workspaceId)
+            .OrderBy(sci => sci.Status == SciStatus.Active ? 0 : 1)
+            .ThenBy(sci => sci.Name)
             .Select(sci => new SciDto(
                 sci.Id,
                 sci.WorkspaceId,
@@ -30,10 +63,12 @@ public class PortfolioReadRepository(PortfolioDbContext dbContext) : IPortfolioR
                 sci.UpdatedAt,
                 sci.ArchivedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<SciAssociateDto>> ListSciAssociatesAsync(CancellationToken cancellationToken)
-        => await dbContext.SciAssociates
+    {
+        return await dbContext.SciAssociates
             .AsNoTracking()
             .OrderBy(associate => associate.LastName)
             .ThenBy(associate => associate.FirstName)
@@ -48,10 +83,12 @@ public class PortfolioReadRepository(PortfolioDbContext dbContext) : IPortfolioR
                 associate.CreatedAt,
                 associate.UpdatedAt))
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<LotDto>> ListLotsAsync(CancellationToken cancellationToken)
-        => await dbContext.Lots
+    {
+        return await dbContext.Lots
             .AsNoTracking()
             .OrderBy(lot => lot.Reference)
             .Select(lot => new LotDto(
@@ -73,4 +110,5 @@ public class PortfolioReadRepository(PortfolioDbContext dbContext) : IPortfolioR
                 lot.UpdatedAt,
                 lot.ArchivedAt))
             .ToListAsync(cancellationToken);
+    }
 }

@@ -30,9 +30,11 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("LoyerisDatabase");
 
         services.AddDbContext<IdentityAccessDbContext>(options =>
+        {
             options.UseNpgsql(
                 connectionString,
-                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "identity")));
+                npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history", "identity"));
+        });
 
         services.AddScoped<IAppUserAuthRepository, AppUserAuthRepository>();
         services.AddScoped<IAccountRegistrationRepository, AccountRegistrationRepository>();

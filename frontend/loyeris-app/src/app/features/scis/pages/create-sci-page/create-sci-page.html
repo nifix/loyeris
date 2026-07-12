@@ -1,0 +1,184 @@
+﻿<ui-app-shell activeItem="sci" mobileActionLabel="">
+  <ui-page-header
+    [badge]="headerBadge()"
+    [title]="headerTitle()"
+    [description]="headerDescription()"
+    [chips]="['Identité juridique', 'Siège social', 'Statut de gestion']"
+  />
+
+  @if (isLoading()) {
+    <section class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]" aria-label="Chargement de la SCI">
+      <div class="space-y-6">
+        <div class="skeleton h-80 rounded-lg"></div>
+        <div class="skeleton h-72 rounded-lg"></div>
+      </div>
+      <div class="skeleton h-96 rounded-lg"></div>
+    </section>
+  } @else if (loadError()) {
+    <section class="card mx-auto max-w-2xl rounded-lg border border-base-200 bg-base-100 shadow-sm">
+      <div class="card-body items-center gap-4 py-12 text-center">
+        <h2 class="text-xl font-bold text-base-content">Impossible de charger cette SCI</h2>
+        <p class="text-sm leading-6 text-base-content/65">Elle n’existe peut-être plus ou vous n’avez pas accès à son espace.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <button type="button" class="btn btn-primary" (click)="loadSci()">Réessayer</button>
+          <a class="btn btn-ghost" routerLink="/scis">Retour aux SCI</a>
+        </div>
+      </div>
+    </section>
+  } @else {
+  <form class="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="space-y-6">
+      <section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
+        <div class="card-body gap-5 p-6">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">01 · Identité</p>
+            <h2 class="mt-2 text-xl font-bold text-base-content">Informations juridiques</h2>
+            <p class="mt-1 text-sm text-base-content/60">Le nom est obligatoire. Le SIREN pourra être complété plus tard.</p>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-2">
+            <label class="form-control md:col-span-2">
+              <span class="label-text mb-2 font-semibold">Nom de la SCI <span class="text-error">*</span></span>
+              <input
+                id="sci-name"
+                class="input input-bordered w-full rounded-xl"
+                type="text"
+                autocomplete="organization"
+                placeholder="SCI Les Tilleuls"
+                formControlName="name"
+                [class.input-error]="fieldError('name')"
+              />
+              @if (fieldError('name'); as error) {
+                <span class="mt-1 text-xs font-medium text-error">{{ error }}</span>
+              }
+            </label>
+
+            <label class="form-control">
+              <span class="label-text mb-2 font-semibold">Numéro SIREN</span>
+              <input
+                id="sci-siren"
+                class="input input-bordered w-full rounded-xl font-mono tracking-wider"
+                type="text"
+                inputmode="numeric"
+                maxlength="9"
+                placeholder="123456789"
+                formControlName="siren"
+                [class.input-error]="fieldError('siren')"
+              />
+              @if (fieldError('siren'); as error) {
+                <span class="mt-1 text-xs font-medium text-error">{{ error }}</span>
+              } @else {
+                <span class="mt-1 text-xs text-base-content/50">9 chiffres, sans espaces</span>
+              }
+            </label>
+
+            <label class="form-control">
+              <span class="label-text mb-2 font-semibold">Régime fiscal</span>
+              <select id="sci-tax-regime" class="select select-bordered w-full rounded-xl" formControlName="taxRegime">
+                <option value="IR">Impôt sur le revenu (IR)</option>
+              </select>
+            </label>
+
+            <label class="form-control">
+              <span class="label-text mb-2 font-semibold">Date de constitution</span>
+              <input
+                id="sci-incorporated-on"
+                class="input input-bordered w-full rounded-xl"
+                type="date"
+                [max]="today"
+                formControlName="incorporatedOn"
+                [class.input-error]="fieldError('incorporatedOn')"
+              />
+              @if (fieldError('incorporatedOn'); as error) {
+                <span class="mt-1 text-xs font-medium text-error">{{ error }}</span>
+              }
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
+        <div class="card-body gap-5 p-6">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">02 · Adresse</p>
+            <h2 class="mt-2 text-xl font-bold text-base-content">Siège social</h2>
+            <p class="mt-1 text-sm text-base-content/60">Ces informations sont facultatives et peuvent être complétées progressivement.</p>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-2">
+            <label class="form-control md:col-span-2">
+              <span class="label-text mb-2 font-semibold">Adresse</span>
+              <input id="sci-street" class="input input-bordered w-full rounded-xl" type="text" autocomplete="street-address" placeholder="12 rue des Tilleuls" formControlName="street" />
+            </label>
+            <label class="form-control">
+              <span class="label-text mb-2 font-semibold">Code postal</span>
+              <input id="sci-postal-code" class="input input-bordered w-full rounded-xl" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="69000" formControlName="postalCode" [class.input-error]="fieldError('postalCode')" />
+              @if (fieldError('postalCode'); as error) {
+                <span class="mt-1 text-xs font-medium text-error">{{ error }}</span>
+              }
+            </label>
+            <label class="form-control">
+              <span class="label-text mb-2 font-semibold">Ville</span>
+              <input id="sci-city" class="input input-bordered w-full rounded-xl" type="text" autocomplete="address-level2" placeholder="Lyon" formControlName="city" />
+            </label>
+            <label class="form-control md:col-span-2">
+              <span class="label-text mb-2 font-semibold">Pays</span>
+              <select id="sci-country" class="select select-bordered w-full rounded-xl" formControlName="country">
+                <option value="FR">France</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="card rounded-lg border border-base-200 bg-base-100 shadow-sm xl:sticky xl:top-8">
+      <div class="card-body gap-5 p-6">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">03 · Gestion</p>
+          <h2 class="mt-2 text-xl font-bold text-base-content">Activation</h2>
+        </div>
+
+        <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-base-200 bg-base-200/40 p-4">
+          <input class="toggle toggle-primary mt-0.5" type="checkbox" formControlName="active" />
+          <span>
+            <span class="block font-semibold text-base-content">SCI active</span>
+            <span class="mt-1 block text-xs leading-5 text-base-content/60">Une SCI active apparaît dans le portefeuille courant et pourra recevoir des lots.</span>
+          </span>
+        </label>
+
+        <div class="rounded-xl border border-primary/15 bg-primary/5 p-4 text-sm leading-6 text-base-content/65">
+          @if (isEditing()) {
+            Désactivez la SCI pour l’archiver. Vous pourrez la réactiver ultérieurement sans perdre ses informations.
+          } @else {
+            Vous pourrez modifier ces informations et archiver la structure ultérieurement depuis sa fiche.
+          }
+        </div>
+
+        @if (errorCode()) {
+          <div class="alert alert-error items-start text-sm" role="alert">
+            <span>
+              @switch (errorCode()) {
+                @case ('duplicate-name') { Une SCI portant ce nom existe déjà dans votre espace. }
+                @case ('duplicate-siren') { Ce numéro SIREN est déjà utilisé par une autre SCI. }
+                @case ('forbidden') { Vous ne disposez pas des droits nécessaires pour {{ isEditing() ? 'modifier' : 'ajouter' }} une SCI. }
+                @default { L’enregistrement est momentanément impossible. Vérifiez les informations puis réessayez. }
+              }
+            </span>
+          </div>
+        }
+
+        <button type="submit" class="btn btn-primary h-12 rounded-xl text-base font-semibold" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            <span class="loading loading-spinner loading-sm" aria-hidden="true"></span>
+            {{ isEditing() ? 'Enregistrement en cours…' : 'Création en cours…' }}
+          } @else {
+            {{ isEditing() ? 'Enregistrer les modifications' : 'Ajouter la SCI' }}
+          }
+        </button>
+        <a class="btn btn-ghost h-11 rounded-xl font-semibold" routerLink="/scis">Annuler</a>
+      </div>
+    </aside>
+  </form>
+  }
+</ui-app-shell>

@@ -16,10 +16,12 @@ public class AuthSessionRepository(IdentityAccessDbContext dbContext) : IAuthSes
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<AuthSession>> ListActiveByUserIdAsync(Guid userId, CancellationToken cancellationToken)
-        => await dbContext.AuthSessions
+    {
+        return await dbContext.AuthSessions
             .Where(session => session.UserId == userId && session.Status == AuthSessionStatus.Active)
             .OrderByDescending(session => session.LastSeenAt ?? session.CreatedAt)
             .ToListAsync(cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task AddAsync(AuthSession session, CancellationToken cancellationToken)

@@ -12,21 +12,25 @@ public class AuthOneTimeTokenRepository(IdentityAccessDbContext dbContext) : IAu
 {
     /// <inheritdoc />
     public Task<AuthOneTimeToken> GetByTokenHashAsync(string tokenHash, CancellationToken cancellationToken)
-        => dbContext.AuthOneTimeTokens
+    {
+        return dbContext.AuthOneTimeTokens
             .Include(oneTimeToken => oneTimeToken.User)
             .SingleOrDefaultAsync(oneTimeToken => oneTimeToken.TokenHash == tokenHash, cancellationToken);
+    }
 
     /// <inheritdoc />
     public Task<AuthOneTimeToken> GetActiveByUserAndPurposeAsync(
         Guid userId,
         OneTimeTokenPurpose purpose,
         CancellationToken cancellationToken)
-        => dbContext.AuthOneTimeTokens.SingleOrDefaultAsync(
+    {
+        return dbContext.AuthOneTimeTokens.SingleOrDefaultAsync(
             oneTimeToken => oneTimeToken.UserId == userId
                             && oneTimeToken.Purpose == purpose
                             && oneTimeToken.ConsumedAt == null
                             && oneTimeToken.RevokedAt == null,
             cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task AddAsync(AuthOneTimeToken oneTimeToken, CancellationToken cancellationToken)

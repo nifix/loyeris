@@ -278,7 +278,8 @@ public class AuthenticationCommandHandlerTests
         Mock<IOneTimeTokenService> tokens,
         Mock<IAccessTokenService> accessTokens,
         Mock<IAuthenticationLifetimeProvider> lifetimes)
-        => new(
+    {
+        return new LoginCommandHandler(
             users.Object,
             sessions.Object,
             Mock.Of<IAuthOneTimeTokenRepository>(),
@@ -290,9 +291,11 @@ public class AuthenticationCommandHandlerTests
             lifetimes.Object,
             Mock.Of<IEmailVerificationSender>(),
             TimeProvider.System);
+    }
 
     private static AppUser CreateUser(UserStatus status)
-        => new()
+    {
+        return new AppUser
         {
             Id = Guid.NewGuid(),
             Email = "camille@example.fr",
@@ -303,9 +306,11 @@ public class AuthenticationCommandHandlerTests
             LastName = "Robert",
             Status = status
         };
+    }
 
     private static AuthSession CreateSession(AppUser user)
-        => new()
+    {
+        return new()
         {
             Id = Guid.NewGuid(),
             UserId = user.Id,
@@ -314,4 +319,5 @@ public class AuthenticationCommandHandlerTests
             CreatedAt = DateTimeOffset.UtcNow.AddHours(-1),
             ExpiresAt = DateTimeOffset.UtcNow.AddDays(1)
         };
+    }
 }

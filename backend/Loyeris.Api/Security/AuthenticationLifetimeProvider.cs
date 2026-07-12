@@ -12,9 +12,11 @@ public class AuthenticationLifetimeProvider(IOptions<JwtOptions> options) : IAut
 {
     /// <inheritdoc />
     public DateTimeOffset GetRefreshTokenExpiration(DateTimeOffset createdAt, bool persistent)
-        => persistent
+    {
+        return persistent
             ? createdAt.AddDays(options.Value.PersistentRefreshTokenLifetimeDays)
             : createdAt.AddHours(options.Value.RefreshTokenLifetimeHours);
+    }
 
     /// <inheritdoc />
     public bool UsesPersistentCookie(AuthSession session)

@@ -17,6 +17,8 @@ public class AccountPasswordHasher : IAccountPasswordHasher
 
     /// <inheritdoc />
     public bool VerifyPassword(AppUser user, string password)
-        => passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password)
-           != PasswordVerificationResult.Failed;
+    {
+        return passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password)
+               != PasswordVerificationResult.Failed;
+    }
 }
