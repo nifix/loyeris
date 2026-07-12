@@ -1,4 +1,4 @@
-﻿name: loyeris
+name: loyeris
 
 x-logging: &default-logging
   driver: json-file
@@ -30,7 +30,7 @@ x-api-environment: &api-environment
 
 services:
   db:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
