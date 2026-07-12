@@ -1,4 +1,4 @@
-﻿# syntax=docker/dockerfile:1.7
+# syntax=docker/dockerfile:1.7
 
 FROM node:24-alpine AS build
 WORKDIR /app
@@ -10,7 +10,7 @@ RUN yarn install --frozen-lockfile --non-interactive
 COPY . .
 RUN yarn build
 
-FROM caddy:2.10-alpine AS runtime
+FROM caddy:2.11-alpine AS runtime
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/dist/loyeris-app/browser /srv
 
