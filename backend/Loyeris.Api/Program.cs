@@ -1,4 +1,7 @@
 using Loyeris.Api.Endpoints;
+using Loyeris.Api.Configuration;
+using Loyeris.Api.Health;
+using Loyeris.Api.Operations;
 using Loyeris.Api.Security;
 using Loyeris.IdentityAccess.App;
 using Loyeris.IdentityAccess.App.Security;
@@ -15,6 +18,7 @@ using Loyeris.TaxPreparation.App;
 using Loyeris.TaxPreparation.Infrastructure;
 using Loyeris.Shared.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
 using System.Text;
@@ -24,14 +28,29 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy(), ["live"])
+    .AddCheck<PostgreSqlHealthCheck>("postgresql", tags: ["ready"]);
+
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
-builder.Services.Configure<ApplicationUrlOptions>(
-    builder.Configuration.GetSection(ApplicationUrlOptions.SectionName));
-builder.Services.Configure<SmtpOptions>(
-    builder.Configuration.GetSection(SmtpOptions.SectionName));
+
+builder.Services.AddOptions<ApplicationUrlOptions>()
+    .Bind(builder.Configuration.GetSection(ApplicationUrlOptions.SectionName))
+    .Validate(ConfigurationValidation.HasValidFrontendBaseUrl,
+        "ApplicationUrls:FrontendBaseUrl must be an absolute HTTP or HTTPS URL.")
+    .ValidateOnStart();
+
+builder.Services.AddOptions<SmtpOptions>()
+    .Bind(builder.Configuration.GetSection(SmtpOptions.SectionName))
+    .Validate(ConfigurationValidation.HasValidSmtpEndpoint,
+        "Smtp:Host, Smtp:Port and Smtp:FromAddress must define a valid SMTP endpoint.")
+    .Validate(ConfigurationValidation.HasMatchingSmtpCredentials,
+        "Smtp:Username and Smtp:Password must either both be set or both be empty.")
+    .ValidateOnStart();
+
 builder.Services.AddOptions<JwtOptions>()
     .Bind(builder.Configuration.GetSection(JwtOptions.SectionName))
     .Validate(options => !string.IsNullOrWhiteSpace(options.Issuer), "Jwt:Issuer is required.")
@@ -60,6 +79,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddAuthorization();
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -111,7 +136,16 @@ builder.Services.AddRentCollectionInfrastructure(builder.Configuration);
 builder.Services.AddTaxPreparationInfrastructure(builder.Configuration);
 builder.Services.AddMessagingInfrastructure(builder.Configuration);
 
+if (string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("LoyerisDatabase")))
+    throw new InvalidOperationException("ConnectionStrings:LoyerisDatabase is required.");
+
 var app = builder.Build();
+
+if (args.Contains("--migrate", StringComparer.Ordinal))
+{
+    await DatabaseMigrator.MigrateAsync(app.Services, app.Logger, CancellationToken.None);
+    return;
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -119,7 +153,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.UseForwardedHeaders();
+if (builder.Configuration.GetValue("HttpsRedirection:Enabled", true))
+    app.UseHttpsRedirection();
 app.UseRouting();
 app.UseRateLimiter();
 app.UseAuthentication();
@@ -131,6 +167,7 @@ app.RegisterLeasingEndpointGroup();
 app.RegisterRentCollectionEndpointGroup();
 app.RegisterTaxPreparationEndpointGroup();
 app.RegisterMessagingEndpointGroup();
+app.RegisterHealthEndpointGroup();
 
 app.Run();
 

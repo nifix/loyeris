@@ -51,9 +51,22 @@ dotnet run
 dotnet test
 ```
 
-The API runs on `http://localhost:5000` when launched from `Loyeris.Api/`.
+The API runs on `http://localhost:5130` when launched from `Loyeris.Api/` with the development launch profile.
 
-Development PostgreSQL is configured through `Loyeris.Api/appsettings.Development.json` with the `LoyerisDatabase` connection string.
+Connection strings and secrets are not stored in `appsettings.Development.json`. Native development must provide the required environment variables; the Compose stacks inject them from their environment and `.env` values.
+
+## Containers and operational behavior
+
+- `Dockerfile` is the multi-stage production build. It publishes `Loyeris.Api`, listens on internal port `8080`, includes `curl` for health checks, and runs as a non-root user.
+- `Dockerfile.dev` is used only by `compose.dev.yaml`. It retains the .NET SDK and runs the API through `dotnet watch`.
+- Backend source is synchronized through Compose Watch. Do not add broad host bind mounts or sync `bin/` and `obj/`; Windows build artifacts are incompatible with the Linux container runtime.
+- `compose.dev.yaml` publishes PostgreSQL on `127.0.0.1:${POSTGRES_HOST_PORT:-5432}` for local database tools. It uses a dedicated `db-host-access` network because the API/PostgreSQL `data` network is internal. Production PostgreSQL must remain unexposed.
+- `StaticWebAssetsEnabled=false` in `Loyeris.Api.csproj` is intentional. The API does not serve static assets, and disabling this avoids static-web-assets failures during containerized `dotnet watch`.
+- Public health endpoints are `GET /api/health/live` for process liveness and `GET /api/health/ready` for API plus PostgreSQL readiness.
+- `Loyeris.Api --migrate` applies migrations for all six domain `DbContext` instances and exits non-zero on failure. Compose runs it as a one-shot `migrations` service before starting the API. Normal API startup must never apply migrations automatically.
+- Required runtime configuration uses .NET environment variable names such as `ConnectionStrings__LoyerisDatabase`, `Jwt__SigningKey`, `ApplicationUrls__FrontendBaseUrl`, and `Smtp__*`. SMTP username and password are optional, but must be supplied together.
+- Caddy terminates HTTPS in production. Keep forwarded-header processing before HTTPS redirection, rate limiting, and authentication so client IPs and secure-cookie behavior remain correct behind the proxy.
+- When changing containers or operational behavior, validate both `compose.dev.yaml` and the production-like root `compose.yaml`.
 
 ## Architecture
 
@@ -70,6 +83,7 @@ Development PostgreSQL is configured through `Loyeris.Api/appsettings.Developmen
 Current API shape:
 
 - `Program.cs` registers OpenAPI, MediatR, all domain infrastructure services, and endpoint groups.
+- `Program.cs` also configures validated runtime options, forwarded headers, health checks, and the explicit migration mode.
 - Endpoint groups currently expose starter GET routes for `IdentityAccess`, `Portfolio`, `Leasing`, `RentCollection`, `TaxPreparation`, and `Messaging`.
 - Every endpoint sends a MediatR query and converts the `Result<T>` through `ToHttpResult()`.
 - Endpoints are read-only starters for now; do not add write endpoints unless the task explicitly asks for commands to be exposed.

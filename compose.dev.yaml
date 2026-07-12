@@ -1,0 +1,161 @@
+﻿name: loyeris-dev
+
+x-api-environment: &api-environment
+  ASPNETCORE_ENVIRONMENT: Development
+  ASPNETCORE_URLS: http://+:8080
+  DOTNET_USE_POLLING_FILE_WATCHER: "true"
+  DOTNET_WATCH_RESTART_ON_RUDE_EDIT: "true"
+  HttpsRedirection__Enabled: "false"
+  ConnectionStrings__LoyerisDatabase: Host=db;Port=5432;Database=${POSTGRES_DB:-loyeris};Username=${POSTGRES_USER:-loyeris};Password=${POSTGRES_PASSWORD:-loyeris-local-password}
+  ApplicationUrls__FrontendBaseUrl: http://localhost:8080
+  Jwt__Issuer: Loyeris.Api
+  Jwt__Audience: Loyeris.App
+  Jwt__SigningKey: ${JWT_SIGNING_KEY:-loyeris-local-signing-key-with-at-least-32-bytes}
+  Jwt__AccessTokenLifetimeMinutes: "15"
+  Jwt__RefreshTokenLifetimeHours: "24"
+  Jwt__PersistentRefreshTokenLifetimeDays: "30"
+  Jwt__RefreshCookieName: loyeris.refresh_token
+  Smtp__Host: maildev
+  Smtp__Port: "1025"
+  Smtp__EnableSsl: "false"
+  Smtp__FromAddress: no-reply@loyeris.local
+  Smtp__FromName: Loyeris
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-loyeris}
+      POSTGRES_USER: ${POSTGRES_USER:-loyeris}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-loyeris-local-password}
+    ports:
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - data
+      - db-host-access
+
+  maildev:
+    image: maildev/maildev:3.0.0-rc.1
+    restart: unless-stopped
+    ports:
+      - "1080:1080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:1080/api/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - app
+
+  migrations:
+    image: loyeris-api:dev
+    command:
+      - dotnet
+      - run
+      - --project
+      - Loyeris.Api/Loyeris.Api.csproj
+      - --no-launch-profile
+      - --
+      - --migrate
+    restart: "no"
+    environment: *api-environment
+    volumes:
+      - nuget-packages:/root/.nuget/packages
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - data
+
+  api:
+    image: loyeris-api:dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    environment: *api-environment
+    volumes:
+      - nuget-packages:/root/.nuget/packages
+    ports:
+      - "5130:8080"
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+      maildev:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "--show-error", "http://localhost:8080/api/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+    networks:
+      - app
+      - data
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /src
+          ignore:
+            - "**/bin/"
+            - "**/obj/"
+            - Dockerfile
+            - Dockerfile.dev
+
+  web:
+    image: loyeris-web:dev
+    build:
+      context: ./frontend/loyeris-app
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports:
+      - "8080:4200"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:4200/login"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+    networks:
+      - app
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/loyeris-app
+          target: /app
+          ignore:
+            - node_modules/
+            - dist/
+            - storybook-static/
+            - Dockerfile
+            - Dockerfile.dev
+            - package.json
+            - yarn.lock
+        - action: rebuild
+          path: ./frontend/loyeris-app/package.json
+        - action: rebuild
+          path: ./frontend/loyeris-app/yarn.lock
+
+volumes:
+  postgres-dev-data:
+  nuget-packages:
+
+networks:
+  app:
+  data:
+    internal: true
+  db-host-access:

@@ -1,0 +1,13 @@
+﻿.angular
+.storybook
+dist
+node_modules
+storybook-static
+coverage
+.git
+.gitignore
+Dockerfile*
+README.md
+AGENTS.md
+**/AGENTS.md
+*.log

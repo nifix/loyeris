@@ -1,0 +1,112 @@
+﻿name: loyeris
+
+x-api-environment: &api-environment
+  ASPNETCORE_ENVIRONMENT: Development
+  ASPNETCORE_URLS: http://+:8080
+  HttpsRedirection__Enabled: "false"
+  ConnectionStrings__LoyerisDatabase: Host=db;Port=5432;Database=${POSTGRES_DB:-loyeris};Username=${POSTGRES_USER:-loyeris};Password=${POSTGRES_PASSWORD:-loyeris-local-password}
+  ApplicationUrls__FrontendBaseUrl: http://localhost:8080
+  Jwt__Issuer: Loyeris.Api
+  Jwt__Audience: Loyeris.App
+  Jwt__SigningKey: ${JWT_SIGNING_KEY:-loyeris-local-signing-key-with-at-least-32-bytes}
+  Jwt__AccessTokenLifetimeMinutes: "15"
+  Jwt__RefreshTokenLifetimeHours: "24"
+  Jwt__PersistentRefreshTokenLifetimeDays: "30"
+  Jwt__RefreshCookieName: loyeris.refresh_token
+  Smtp__Host: maildev
+  Smtp__Port: "1025"
+  Smtp__EnableSsl: "false"
+  Smtp__FromAddress: no-reply@loyeris.local
+  Smtp__FromName: Loyeris
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-loyeris}
+      POSTGRES_USER: ${POSTGRES_USER:-loyeris}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-loyeris-local-password}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - data
+
+  maildev:
+    image: maildev/maildev:3.0.0-rc.1
+    restart: unless-stopped
+    ports:
+      - "1080:1080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:1080/api/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - app
+
+  migrations:
+    image: loyeris-api:local
+    command: ["--migrate"]
+    restart: "no"
+    environment: *api-environment
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - data
+
+  api:
+    image: loyeris-api:local
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment: *api-environment
+    ports:
+      - "5130:8080"
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+      maildev:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "--show-error", "http://localhost:8080/api/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - app
+      - data
+
+  web:
+    image: loyeris-web:local
+    build:
+      context: ./frontend/loyeris-app
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_SITE_ADDRESS: http://localhost
+    ports:
+      - "8080:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - app
+
+volumes:
+  postgres-data:
+
+networks:
+  app:
+  data:
+    internal: true

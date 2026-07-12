@@ -34,6 +34,18 @@ yarn build-storybook  # ng run loyeris-app:build-storybook
 
 There is no `ng lint` setup and no separate typecheck script.
 
+## Containers
+
+- `Dockerfile` is the production multi-stage build: Node.js 24 and Yarn 1.22.22 build Angular, then Caddy serves `dist/loyeris-app/browser`.
+- `Caddyfile` proxies `/api/*` to `api:8080` without rewriting the path, applies the Angular `index.html` fallback, compresses responses, caches hashed assets, and prevents long-lived caching of `index.html`.
+- Frontend API calls must remain relative to `/api`. Do not hardcode a backend host or introduce CORS for the normal Caddy-served application.
+- `Dockerfile.dev` is used only by `compose.dev.yaml` and runs `ng serve` with hot reload on container port `4200`.
+- Native `yarn start` uses `proxy.conf.json` and targets the host API at `http://localhost:5130`. Container development uses `proxy.docker.conf.json` and targets `http://api:8080`; do not merge these two proxy targets.
+- Compose Watch synchronizes frontend source and rebuilds the development image when `package.json` or `yarn.lock` changes. Do not bind-mount or synchronize host `node_modules/`, `dist/`, or `storybook-static/` into the Linux container.
+- Start the complete hot-reload environment from the repository root with `docker compose --file compose.dev.yaml up --build --watch`; the frontend is then available at `http://localhost:8080`.
+- The root `compose.yaml` uses the final Caddy image and is the appropriate stack for production-like validation and CI smoke tests.
+- Keep Yarn v1 as the only package manager in every Docker stage and container workflow.
+
 ## Tooling details
 
 - `packageManager` is `yarn@1.22.22`.

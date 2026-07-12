@@ -1,0 +1,20 @@
+﻿# syntax=docker/dockerfile:1.7
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0
+
+USER root
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+COPY . .
+RUN dotnet restore Loyeris.slnx
+
+ENV ASPNETCORE_URLS=http://+:8080 \
+    DOTNET_USE_POLLING_FILE_WATCHER=true \
+    DOTNET_WATCH_RESTART_ON_RUDE_EDIT=true
+
+EXPOSE 8080
+
+CMD ["dotnet", "watch", "--project", "Loyeris.Api/Loyeris.Api.csproj", "run", "--no-launch-profile"]
