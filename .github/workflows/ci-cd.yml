@@ -107,7 +107,7 @@ jobs:
             http://localhost:8080/api/identity-access/accounts
 
           for attempt in {1..20}; do
-            if curl --fail --silent http://localhost:1080/email | grep --quiet 'ci@loyeris.local'; then
+            if curl --fail --silent http://localhost:1080/api/email | grep --quiet 'ci@loyeris.local'; then
               exit 0
             fi
             sleep 2

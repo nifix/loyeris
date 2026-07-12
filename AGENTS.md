@@ -64,7 +64,7 @@ docker compose --file compose.dev.yaml up --build --watch
 
 - Angular is available at `http://localhost:8080`, the API at `http://localhost:5130`, MailDev at `http://localhost:1080`, and development PostgreSQL at `localhost:${POSTGRES_HOST_PORT:-5432}`.
 - The development PostgreSQL port is bound to `127.0.0.1` through a dedicated `db-host-access` network because the private `data` network is internal. Configure `POSTGRES_HOST_PORT` in `.env` if port `5432` is already occupied; production PostgreSQL must remain unexposed.
-- Local stacks pin MailDev to the official `3.0.0-rc.1` image. Keep an exact tag while v3 remains a release candidate; its REST endpoint is used by the Docker CI smoke test. Preserve the IPv4 `/api/healthz` override because the image's `localhost` healthcheck resolves incorrectly under Docker Desktop.
+- Local stacks pin MailDev to the official `3.0.0-rc.1` image. Keep an exact tag while v3 remains a release candidate; the Docker CI smoke test reads messages from `/api/email`. Preserve the IPv4 `/api/healthz` override because the image's `localhost` healthcheck resolves incorrectly under Docker Desktop.
 - Compose Watch synchronizes source changes and provides Angular and .NET hot reload. Keep its sync rules instead of adding broad bind mounts: host `bin/`, `obj/`, and `node_modules/` artifacts must not be mixed with Linux container artifacts.
 - The development stack uses isolated project names and volumes, so it does not share PostgreSQL data or dependency caches with the production-like stack.
 - After creating an EF migration, rebuild the API image and run the migration task explicitly:
