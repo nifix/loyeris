@@ -1,4 +1,4 @@
-﻿name: loyeris-dev
+name: loyeris-dev
 
 x-api-environment: &api-environment
   ASPNETCORE_ENVIRONMENT: Development
@@ -23,7 +23,7 @@ x-api-environment: &api-environment
 
 services:
   db:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-loyeris}
