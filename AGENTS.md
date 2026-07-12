@@ -86,7 +86,7 @@ Stop a stack with the matching Compose file. Add `--volumes` only when intention
 
 ## CI and images
 
-`.github/workflows/ci-cd.yml` validates the backend, frontend, Compose manifests, and complete Docker stack. On a successful push to `main`, it publishes immutable SHA-tagged API and web images to `ghcr.io/nifix/` and also updates the informational `latest` tags. There is currently no VPS deployment job; files under `deploy/` are inactive until a VPS is provisioned.
+`.github/workflows/ci-cd.yml` validates the backend, frontend, Compose manifests, and complete Docker stack. NUnit produces TRX and Vitest produces JUnit; the pinned test reporter publishes both as GitHub checks and job summaries. On a successful push to `main`, the workflow publishes immutable SHA-tagged API and web images to `ghcr.io/nifix/` and also updates the informational `latest` tags. There is currently no VPS deployment job; files under `deploy/` are inactive until a VPS is provisioned.
 
 ## Design reference
 

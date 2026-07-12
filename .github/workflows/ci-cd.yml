@@ -13,6 +13,10 @@ jobs:
   backend:
     name: Backend
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      checks: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
@@ -29,11 +33,33 @@ jobs:
         run: dotnet build backend/Loyeris.slnx --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test backend/Loyeris.Tests/Loyeris.Tests.csproj --configuration Release --no-build
+        run: >-
+          dotnet test backend/Loyeris.Tests/Loyeris.Tests.csproj
+          --configuration Release
+          --no-build
+          --logger "trx;LogFileName=backend-tests.trx"
+          --results-directory TestResults/backend
+
+      - name: Publish backend test report
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        uses: dorny/test-reporter@d3cb5605561a46347256b466ef836b85076ad522 # v2.5.0
+        with:
+          name: Backend unit tests
+          path: TestResults/backend/*.trx
+          reporter: dotnet-trx
+          use-actions-summary: true
+          list-suites: failed
+          list-tests: failed
+          max-annotations: 20
 
   frontend:
     name: Frontend
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      checks: write
+      contents: read
     defaults:
       run:
         working-directory: frontend/loyeris-app
@@ -52,7 +78,25 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Test
-        run: yarn test --watch=false
+        run: >-
+          yarn test
+          --watch=false
+          --reporters=junit
+          --reporters=default
+          --output-file=TestResults/vitest-junit.xml
+
+      - name: Publish frontend test report
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        uses: dorny/test-reporter@d3cb5605561a46347256b466ef836b85076ad522 # v2.5.0
+        with:
+          name: Frontend unit tests
+          path: frontend/loyeris-app/TestResults/vitest-junit.xml
+          reporter: java-junit
+          use-actions-summary: true
+          list-suites: failed
+          list-tests: failed
+          max-annotations: 20
 
       - name: Build application
         run: yarn build
