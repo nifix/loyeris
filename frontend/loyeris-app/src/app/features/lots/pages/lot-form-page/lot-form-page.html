@@ -1,0 +1,384 @@
+<ui-app-shell activeItem="lots" mobileActionLabel="">
+  <ui-page-header
+    badge="Parc immobilier"
+    [title]="headerTitle()"
+    [description]="headerDescription()"
+    [chips]="['Rattachement SCI', 'Caractéristiques', 'Occupation']"
+  />
+
+  @if (readOnly()) {
+    <div class="flex justify-end">
+      <button type="button" class="btn btn-primary rounded-xl" (click)="enableEditing()">
+        Modifier le lot
+      </button>
+    </div>
+  }
+
+  @if (savedMessage()) {
+    <div class="alert alert-success text-sm" role="status">Les informations du lot ont bien été enregistrées.</div>
+  }
+
+  @if (isLoading()) {
+    <section class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]" aria-label="Chargement du lot">
+      <div class="space-y-6">
+        <div class="skeleton h-80 rounded-lg"></div>
+        <div class="skeleton h-80 rounded-lg"></div>
+      </div>
+      <div class="skeleton h-[32rem] rounded-lg"></div>
+    </section>
+  } @else if (loadError()) {
+    <section class="card mx-auto max-w-2xl rounded-lg border border-base-200 bg-base-100 shadow-sm">
+      <div class="card-body items-center gap-4 py-12 text-center">
+        <h2 class="text-xl font-bold">Impossible de charger le formulaire</h2>
+        <p class="text-sm text-base-content/65">Vérifiez que le lot existe et que les services sont disponibles.</p>
+        <div class="flex gap-3">
+          <button type="button" class="btn btn-primary" (click)="load()">Réessayer</button>
+          <a class="btn btn-ghost" routerLink="/lots">Retour aux lots</a>
+        </div>
+      </div>
+    </section>
+  } @else {
+    <form class="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]" [class.lot-readonly]="readOnly()" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="space-y-6">
+        <section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
+          <div class="card-body gap-5 p-6">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">01 · Identification</p>
+              <h2 class="mt-2 text-xl font-bold">Rattachement et référence</h2>
+              <p class="mt-1 text-sm text-base-content/60">Chaque référence est unique au sein de la SCI sélectionnée.</p>
+            </div>
+            @if (scis().length === 0) {
+              <div class="alert alert-warning text-sm">Ajoutez d’abord une SCI avant de créer un lot.</div>
+            }
+            <div class="grid gap-5 md:grid-cols-2">
+              <label class="form-control md:col-span-2">
+                <span class="label-text mb-2 font-semibold">SCI propriétaire <span class="text-error">*</span></span>
+                <select id="lot-sci" class="select select-bordered w-full rounded-xl" formControlName="sciId" [class.select-error]="fieldInvalid('sciId')">
+                  <option value="" disabled>Sélectionnez une SCI</option>
+                  @for (sci of scis(); track sci.id) {
+                    <option [value]="sci.id">{{ sci.name }}{{ sci.status === 'Archived' ? ' — Archivée' : '' }}</option>
+                  }
+                </select>
+              </label>
+              <label class="form-control">
+                <span class="label-text mb-2 font-semibold">Référence <span class="text-error">*</span></span>
+                <input id="lot-reference" class="input input-bordered rounded-xl" formControlName="reference" placeholder="Lot A01" [class.input-error]="fieldInvalid('reference')" />
+                @if (fieldInvalid('reference')) { <span class="mt-1 text-xs text-error">La référence est obligatoire (80 caractères maximum).</span> }
+              </label>
+              <label class="form-control">
+                <span class="label-text mb-2 font-semibold">Type de lot</span>
+                <select id="lot-type" class="select select-bordered rounded-xl" formControlName="type">
+                  <option value="Studio">Studio</option>
+                  <option value="T1">T1</option>
+                  <option value="T2">T2</option>
+                  <option value="T3">T3</option>
+                  <option value="T4">T4</option>
+                  <option value="T5">T5</option>
+                  <option value="Garage">Garage / parking</option>
+                  <option value="Local">Local commercial</option>
+                  <option value="Other">Autre</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
+          <div class="card-body gap-5 p-6">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">02 · Bien</p>
+              <h2 class="mt-2 text-xl font-bold">Adresse et caractéristiques</h2>
+            </div>
+            <div class="grid gap-5 md:grid-cols-2">
+              <label class="form-control md:col-span-2">
+                <span class="label-text mb-2 font-semibold">Adresse <span class="text-error">*</span></span>
+                <input id="lot-street" class="input input-bordered rounded-xl" formControlName="street" autocomplete="street-address" [class.input-error]="fieldInvalid('street')" />
+              </label>
+              <label class="form-control">
+                <span class="label-text mb-2 font-semibold">Code postal <span class="text-error">*</span></span>
+                <input id="lot-postal-code" class="input input-bordered rounded-xl" formControlName="postalCode" autocomplete="postal-code" [class.input-error]="fieldInvalid('postalCode')" />
+              </label>
+              <label class="form-control">
+                <span class="label-text mb-2 font-semibold">Ville <span class="text-error">*</span></span>
+                <input id="lot-city" class="input input-bordered rounded-xl" formControlName="city" autocomplete="address-level2" [class.input-error]="fieldInvalid('city')" />
+              </label>
+              <label class="form-control">
+                <span class="label-text mb-2 font-semibold">Pays</span>
+                <select class="select select-bordered rounded-xl" formControlName="country"><option value="FR">France</option></select>
+              </label>
+              <label class="form-control">
+                <span class="label-text mb-2 font-semibold">Surface</span>
+                <div class="input input-bordered flex w-full items-center gap-2 rounded-xl" [class.input-error]="fieldInvalid('surfaceSqm')">
+                  <input id="lot-surface" class="grow" formControlName="surfaceSqm" inputmode="decimal" placeholder="42,50" />
+                  <span class="text-sm text-base-content/50">m²</span>
+                </div>
+              </label>
+              <label class="form-control md:col-span-2">
+                <span class="label-text mb-2 font-semibold">Notes internes</span>
+                <textarea id="lot-notes" class="textarea textarea-bordered min-h-24 rounded-xl" formControlName="notes" placeholder="Informations utiles sur le bien…"></textarea>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
+          <div class="card-body gap-5 p-6">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">03 · Potentiel locatif</p>
+              <h2 class="mt-2 text-xl font-bold">Montants de référence</h2>
+              <p class="mt-1 text-sm text-base-content/60">Ces montants servent de base lors de la préparation d’une location.</p>
+            </div>
+            <div class="grid gap-5 md:grid-cols-3">
+              <label class="form-control">
+                <span class="label-text mb-2 font-semibold">Loyer hors charges</span>
+                <div class="input input-bordered flex w-full items-center gap-2 rounded-xl" [class.input-error]="fieldInvalid('potentialRent')">
+                  <input id="lot-potential-rent" class="grow" formControlName="potentialRent" inputmode="decimal" /> <span>€</span>
+                </div>
+              </label>
+              <label class="form-control">
+                <span class="label-text mb-2 font-semibold">Charges</span>
+                <div class="input input-bordered flex w-full items-center gap-2 rounded-xl" [class.input-error]="fieldInvalid('potentialCharges')">
+                  <input id="lot-potential-charges" class="grow" formControlName="potentialCharges" inputmode="decimal" /> <span>€</span>
+                </div>
+              </label>
+              <label class="form-control">
+                <span class="label-text mb-2 font-semibold">Dépôt conseillé</span>
+                <div class="input input-bordered flex w-full items-center gap-2 rounded-xl" [class.input-error]="fieldInvalid('suggestedDeposit')">
+                  <input id="lot-suggested-deposit" class="grow" formControlName="suggestedDeposit" inputmode="decimal" /> <span>€</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card rounded-lg border border-base-200 bg-base-100 shadow-sm">
+          <div class="card-body gap-5 p-6">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">04 · Occupation</p>
+                <h2 class="mt-2 text-xl font-bold">Baux et occupation</h2>
+                <p class="mt-1 text-sm text-base-content/60">Consultez les derniers baux ou préparez une nouvelle affectation.</p>
+              </div>
+              @if (editMode()) {
+                <button
+                  type="button"
+                  class="btn btn-outline btn-primary rounded-xl"
+                  [disabled]="!form.controls.active.value"
+                  (click)="openAssignment()"
+                >
+                  <span aria-hidden="true">＋</span> Assigner un locataire
+                </button>
+              }
+            </div>
+
+            @if (leaseMessage()) {
+              <div class="alert alert-success text-sm" role="status">
+                {{ leaseMessage() === 'saved' ? 'Le bail a bien été enregistré.' : 'Le bail a bien été supprimé.' }}
+              </div>
+            }
+
+            @if (leases().length > 0) {
+              <div class="grid gap-3" aria-label="Derniers baux du lot">
+                @for (lease of leases(); track lease.leaseId) {
+                  <article class="grid gap-4 rounded-xl border border-base-200 bg-base-200/25 p-4 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_auto] md:items-center">
+                    <div class="min-w-0">
+                      <div class="flex flex-wrap items-center gap-2">
+                        <p class="font-semibold text-base-content">{{ lease.tenantFirstName }} {{ lease.tenantLastName }}</p>
+                        <span class="badge badge-sm" [class.badge-success]="leaseStatus(lease) === 'En cours'" [class.badge-ghost]="leaseStatus(lease) !== 'En cours'">
+                          {{ leaseStatus(lease) }}
+                        </span>
+                      </div>
+                      <p class="mt-1 text-sm text-base-content/60">{{ leasePeriod(lease) }}</p>
+                    </div>
+                    <div>
+                      <p class="font-semibold text-base-content">{{ leaseAmount(lease) }} / mois</p>
+                      <p class="mt-1 text-xs text-base-content/55">{{ leaseBreakdown(lease) }}</p>
+                    </div>
+                    @if (editMode()) {
+                      <button type="button" class="btn btn-sm btn-ghost text-primary" (click)="editLease(lease)">
+                        Modifier
+                      </button>
+                    }
+                  </article>
+                  @if (leaseEditorMode() === 'edit' && editingLease()?.leaseId === lease.leaseId) {
+                    <ng-container [ngTemplateOutlet]="leaseEditorPanel" />
+                  }
+                }
+              </div>
+            } @else {
+              <div class="rounded-xl border border-dashed border-base-300 bg-base-200/20 px-5 py-6 text-center">
+                <p class="font-semibold">Aucun bail enregistré</p>
+                <p class="mt-1 text-sm text-base-content/55">Ce lot ne possède pas encore d’historique locatif.</p>
+              </div>
+            }
+
+            @if (leaseEditorMode() === 'assign') {
+              <ng-container [ngTemplateOutlet]="leaseEditorPanel" />
+            }
+
+            <ng-template #leaseEditorPanel>
+              <div class="rounded-xl border border-primary/20 bg-primary/5 p-5">
+                <div class="mb-5 flex items-start justify-between gap-4">
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
+                      {{ leaseEditorMode() === 'assign' ? 'Nouvelle affectation' : 'Modification du bail' }}
+                    </p>
+                    <h3 class="mt-1 text-lg font-bold">
+                      {{ leaseEditorMode() === 'assign' ? 'Assigner un locataire' : 'Conditions contractuelles' }}
+                    </h3>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-ghost" (click)="closeLeaseEditor()">Fermer</button>
+                </div>
+
+                @if (leaseEditorMode() === 'assign') {
+                  <label class="form-control mb-5">
+                    <span class="label-text mb-2 font-semibold">Locataire <span class="text-error">*</span></span>
+                    <select id="lot-tenant" class="select select-bordered w-full rounded-xl" formControlName="tenantId" (change)="tenantChanged()">
+                      <option value="" disabled>Sélectionnez un locataire disponible</option>
+                      @for (tenant of assignmentTenants(); track tenant.id) {
+                        <option [value]="tenant.id">{{ tenant.firstName }} {{ tenant.lastName }}{{ tenant.email ? ' — ' + tenant.email : '' }}</option>
+                      }
+                    </select>
+                    <span class="mt-1 text-xs text-base-content/55">Seuls les locataires disponibles sont proposés.</span>
+                  </label>
+                } @else if (editingLease(); as lease) {
+                  <div class="mb-5 rounded-lg border border-primary/10 bg-base-100/75 px-4 py-3">
+                    <p class="text-xs uppercase tracking-wide text-base-content/50">Locataire du bail</p>
+                    <p class="mt-1 font-semibold">{{ lease.tenantFirstName }} {{ lease.tenantLastName }}</p>
+                  </div>
+                }
+
+                <div class="grid gap-5 md:grid-cols-3">
+                <label class="form-control">
+                  <span class="label-text mb-2 font-semibold">Date d’entrée</span>
+                  <input id="lease-starts-on" type="date" class="input input-bordered rounded-xl" formControlName="leaseStartsOn" [class.input-error]="fieldInvalid('leaseStartsOn')" />
+                </label>
+                <label class="form-control">
+                  <span class="label-text mb-2 font-semibold">Date de fin prévue</span>
+                  <input id="lease-ends-on" type="date" class="input input-bordered rounded-xl" formControlName="leaseEndsOn" [min]="leaseEditorMode() === 'assign' ? today : null" />
+                  <span class="mt-1 text-xs text-base-content/55">Facultative : le lot reste occupé jusqu’à cette date incluse.</span>
+                </label>
+                <label class="form-control">
+                  <span class="label-text mb-2 font-semibold">Jour d’échéance</span>
+                  <input id="lease-due-day" type="number" min="1" max="28" class="input input-bordered rounded-xl" formControlName="rentDueDay" [class.input-error]="fieldInvalid('rentDueDay')" />
+                </label>
+                <label class="form-control">
+                  <span class="label-text mb-2 font-semibold">Loyer hors charges</span>
+                  <div class="input input-bordered flex w-full items-center gap-2 rounded-xl"><input id="lease-rent" class="grow" formControlName="leaseRent" inputmode="decimal" /> <span>€</span></div>
+                </label>
+                <label class="form-control">
+                  <span class="label-text mb-2 font-semibold">Charges</span>
+                  <div class="input input-bordered flex w-full items-center gap-2 rounded-xl"><input id="lease-charges" class="grow" formControlName="leaseCharges" inputmode="decimal" /> <span>€</span></div>
+                </label>
+                <label class="form-control">
+                  <span class="label-text mb-2 font-semibold">Dépôt de garantie</span>
+                  <div class="input input-bordered flex w-full items-center gap-2 rounded-xl"><input id="lease-deposit" class="grow" formControlName="leaseDeposit" inputmode="decimal" /> <span>€</span></div>
+                </label>
+                <label class="form-control md:col-span-3">
+                  <span class="label-text mb-2 font-semibold">Modalités de paiement</span>
+                  <input id="lease-payment-terms" class="input input-bordered rounded-xl" formControlName="paymentTerms" placeholder="Virement mensuel" />
+                </label>
+                <label class="form-control md:col-span-3">
+                  <span class="label-text mb-2 font-semibold">Notes sur le bail</span>
+                  <textarea id="lease-notes" class="textarea textarea-bordered rounded-xl" formControlName="leaseNotes"></textarea>
+                </label>
+                </div>
+
+                @if (leaseError()) {
+                  <div class="alert alert-error mt-5 text-sm" role="alert">
+                    @switch (leaseError()) {
+                      @case ('overlap') { Ces dates chevauchent un autre bail enregistré pour ce lot. }
+                      @case ('invalid') { Vérifiez le locataire, les dates et les montants du bail. }
+                      @case ('forbidden') { Vous ne disposez pas des droits nécessaires pour modifier ce bail. }
+                      @default { L’enregistrement du bail est momentanément impossible. }
+                    }
+                  </div>
+                }
+
+                @if (confirmingDeletion()) {
+                  <div class="mt-5 rounded-xl border border-error/25 bg-error/5 p-4">
+                    <p class="font-semibold text-error">Supprimer ce bail ?</p>
+                    <p class="mt-1 text-sm text-base-content/65">
+                      Il sera retiré de l’occupation et des montants à percevoir. Son identifiant restera conservé pour l’historique comptable.
+                    </p>
+                    <div class="mt-4 flex flex-wrap justify-end gap-2">
+                      <button type="button" class="btn btn-sm btn-ghost" [disabled]="leaseSubmitting()" (click)="cancelLeaseDeletion()">Annuler</button>
+                      <button type="button" class="btn btn-sm btn-error" [disabled]="leaseSubmitting()" (click)="deleteLease()">
+                        @if (leaseSubmitting()) { <span class="loading loading-spinner loading-xs"></span> }
+                        Confirmer la suppression
+                      </button>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="mt-5 flex flex-wrap items-center gap-3 border-t border-primary/10 pt-5">
+                    @if (leaseEditorMode() === 'edit' && isEditing()) {
+                      <button type="button" class="btn btn-ghost text-error" [disabled]="leaseSubmitting()" (click)="requestLeaseDeletion()">
+                        Supprimer le bail
+                      </button>
+                    }
+                    <div class="ml-auto flex flex-wrap gap-2">
+                      <button type="button" class="btn btn-ghost" [disabled]="leaseSubmitting()" (click)="closeLeaseEditor()">Annuler</button>
+                      @if (isEditing()) {
+                        <button type="button" class="btn btn-primary" [disabled]="leaseSubmitting()" (click)="saveLease()">
+                          @if (leaseSubmitting()) { <span class="loading loading-spinner loading-sm"></span> Enregistrement… }
+                          @else { Sauvegarder le bail }
+                        </button>
+                      } @else {
+                        <span class="self-center text-xs text-base-content/55">Le bail sera enregistré avec la création du lot.</span>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </ng-template>
+          </div>
+        </section>
+      </div>
+
+      <aside class="card rounded-lg border border-base-200 bg-base-100 shadow-sm xl:sticky xl:top-8">
+        <div class="card-body gap-5 p-6">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">05 · Gestion</p>
+            <h2 class="mt-2 text-xl font-bold">Statut du lot</h2>
+          </div>
+          <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-base-200 bg-base-200/40 p-4">
+            <input class="toggle toggle-primary mt-0.5" type="checkbox" formControlName="active" />
+            <span><span class="block font-semibold">Lot actif</span><span class="mt-1 block text-xs leading-5 text-base-content/60">Un lot archivé reste visible dans l’historique mais ne peut pas être occupé.</span></span>
+          </label>
+
+          @if (errorCode()) {
+            <div class="alert alert-error items-start text-sm" role="alert">
+              <span>
+                @switch (errorCode()) {
+                  @case ('duplicate-reference') { Cette référence existe déjà dans la SCI sélectionnée. }
+                  @case ('tenant-unavailable') { Ce locataire vient d’être affecté à un autre lot. }
+                  @case ('archived-occupied') { Retirez le locataire avant d’archiver ce lot. }
+                  @case ('invalid-lease-dates') { Vérifiez les dates du bail. Pour une nouvelle affectation, la date de fin ne peut pas être passée. }
+                  @case ('lease-overlap') { Ces dates chevauchent un autre bail enregistré pour ce lot. }
+                  @case ('tenant-required') { Sélectionnez un locataire avant d’enregistrer l’affectation. }
+                  @case ('forbidden') { Vous ne disposez pas des droits nécessaires pour enregistrer ce lot. }
+                  @case ('assignment') { Le lot a été créé, mais l’affectation du locataire a échoué. Corrigez les informations puis réessayez : aucun doublon ne sera créé. }
+                  @default { L’enregistrement est momentanément impossible. Vérifiez les informations puis réessayez. }
+                }
+              </span>
+            </div>
+          }
+
+          @if (readOnly()) {
+            <a class="btn btn-ghost h-11 rounded-xl" routerLink="/lots">Retour aux lots</a>
+          } @else {
+            <button type="submit" class="btn btn-primary h-12 rounded-xl font-semibold" [disabled]="isSubmitting() || scis().length === 0">
+              @if (isSubmitting()) { <span class="loading loading-spinner loading-sm"></span> Enregistrement… }
+              @else { {{ isEditing() ? 'Enregistrer le lot' : 'Ajouter le lot' }} }
+            </button>
+            @if (isEditing()) {
+              <button type="button" class="btn btn-ghost h-11 rounded-xl" (click)="cancelEditing()">Annuler les modifications</button>
+            } @else {
+              <a class="btn btn-ghost h-11 rounded-xl" routerLink="/lots">Annuler</a>
+            }
+          }
+        </div>
+      </aside>
+    </form>
+  }
+</ui-app-shell>

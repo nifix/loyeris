@@ -1,22 +1,58 @@
-<ui-app-shell activeItem="lots" mobileActionLabel="Nouveau">
+<ui-app-shell activeItem="lots" mobileActionLabel="Nouveau" mobileActionUrl="/lots/new">
   <ui-page-header
     badge="Parc immobilier"
     title="Lots"
-    description="Liste des biens gérés par SCI avec l'occupation actuelle, le loyer et l'accès direct à la fiche détaillée."
-    [chips]="headerChips"
+    description="Liste des biens gérés par SCI avec leur occupation et leur potentiel locatif mensuel."
+    [chips]="headerChips()"
     actionLabel="Ajouter un lot"
+    actionUrl="/lots/new"
   />
 
-  <section class="grid items-stretch gap-4 md:grid-cols-3">
-    @for (metric of metrics; track metric.title) {
-      <ui-metric-card
-        [title]="metric.title"
-        [value]="metric.value"
-        [description]="metric.description"
-        [tone]="metric.tone"
-      />
-    }
-  </section>
+  @if (message()) {
+    <div class="alert border-success/20 bg-success/10 text-success" role="status">
+      <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="m5 12 4 4L19 6" />
+      </svg>
+      <span>{{ message() === 'created' ? 'Le lot a bien été ajouté.' : 'Le lot a bien été mis à jour.' }}</span>
+    </div>
+  }
 
-  <ui-lots-table [lots]="lots" />
+  @if (state() === 'loading') {
+    <section class="grid gap-4 md:grid-cols-3" aria-label="Chargement des lots">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="skeleton h-32 rounded-lg"></div>
+      }
+    </section>
+    <div class="skeleton h-72 rounded-lg"></div>
+  } @else if (state() === 'error') {
+    <div class="alert alert-error items-start" role="alert">
+      <span>Impossible de charger les lots pour le moment.</span>
+      <button type="button" class="btn btn-sm" (click)="load()">Réessayer</button>
+    </div>
+  } @else {
+    <section class="grid items-stretch gap-4 md:grid-cols-3">
+      @for (metric of metrics(); track metric.title) {
+        <ui-metric-card
+          [title]="metric.title"
+          [value]="metric.value"
+          [description]="metric.description"
+          [tone]="metric.tone"
+        />
+      }
+    </section>
+
+    @if (lots().length === 0) {
+      <section class="card rounded-lg border border-dashed border-base-300 bg-base-100 shadow-sm">
+        <div class="card-body items-center py-14 text-center">
+          <h2 class="text-2xl font-bold text-base-content">Ajoutez votre premier lot</h2>
+          <p class="max-w-lg text-sm leading-6 text-base-content/65">
+            Renseignez le bien, son potentiel locatif et, si nécessaire, son locataire actuel.
+          </p>
+          <a class="btn btn-primary mt-3" routerLink="/lots/new">Ajouter un lot</a>
+        </div>
+      </section>
+    } @else {
+      <ui-lots-table [lots]="tableLots()" />
+    }
+  }
 </ui-app-shell>

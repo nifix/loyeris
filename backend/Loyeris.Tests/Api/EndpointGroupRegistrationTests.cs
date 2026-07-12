@@ -57,9 +57,15 @@ public class EndpointGroupRegistrationTests
             "api/portfolio/scis/{sciId:guid}",
             "api/portfolio/sci-associates",
             "api/portfolio/lots",
+            "api/portfolio/lots/{lotId:guid}",
             "api/leasing/tenants",
             "api/leasing/leases",
             "api/leasing/lease-tenants",
+            "api/leasing/available-tenants",
+            "api/leasing/lot-occupancies",
+            "api/leasing/lots/{lotId:guid}/occupancy",
+            "api/leasing/lots/{lotId:guid}/leases",
+            "api/leasing/lots/{lotId:guid}/leases/{leaseId:guid}",
             "api/rent-collection/deadlines",
             "api/rent-collection/payments",
             "api/rent-collection/reminders",
@@ -70,5 +76,10 @@ public class EndpointGroupRegistrationTests
         ]);
         routes.Count(route => route == "api/portfolio/scis").Should().Be(2);
         routes.Count(route => route == "api/portfolio/scis/{sciId:guid}").Should().Be(2);
+        routes.Count(route => route == "api/portfolio/lots").Should().Be(2);
+        routes.Count(route => route == "api/portfolio/lots/{lotId:guid}").Should().Be(2);
+        routes.Count(route => route == "api/leasing/lots/{lotId:guid}/occupancy").Should().Be(2);
+        routes.Count(route => route == "api/leasing/lots/{lotId:guid}/leases").Should().Be(1);
+        routes.Count(route => route == "api/leasing/lots/{lotId:guid}/leases/{leaseId:guid}").Should().Be(2);
     }
 }

@@ -25,6 +25,11 @@ public interface IPortfolioReadRepository
     Task<IReadOnlyList<SciDto>> ListScisAsync(Guid workspaceId, CancellationToken cancellationToken);
 
     /// <summary>
+    /// Gets one rental lot inside a workspace boundary.
+    /// </summary>
+    Task<LotDto> GetLotAsync(Guid workspaceId, Guid lotId, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Lists SCI associates.
     /// </summary>
     /// <param name="cancellationToken">The cancellation token for the asynchronous operation.</param>
@@ -36,5 +41,5 @@ public interface IPortfolioReadRepository
     /// </summary>
     /// <param name="cancellationToken">The cancellation token for the asynchronous operation.</param>
     /// <returns>The rental lots.</returns>
-    Task<IReadOnlyList<LotDto>> ListLotsAsync(CancellationToken cancellationToken);
+    Task<IReadOnlyList<LotDto>> ListLotsAsync(Guid workspaceId, CancellationToken cancellationToken);
 }

@@ -14,7 +14,7 @@ import { StatusBadge } from '../../../../shared/components/ui-status-badge/statu
 export class LotDetailPage {
   protected readonly headerChips = [
     '24 m²',
-    '620 € charges comprises',
+    '620,00 € charges comprises',
     'Prochaine échéance le 5 mai',
   ];
 
@@ -24,8 +24,8 @@ export class LotDetailPage {
   ];
 
   protected readonly paymentHistory = [
-    { month: 'Avril 2026', expected: '620 €', paid: '0 €', remaining: '620 €', status: 'En retard', tone: 'error' as const },
-    { month: 'Mars 2026', expected: '620 €', paid: '620 €', remaining: '0 €', status: 'Payé', tone: 'success' as const },
-    { month: 'Février 2026', expected: '620 €', paid: '620 €', remaining: '0 €', status: 'Payé', tone: 'success' as const },
+    { month: 'Avril 2026', expected: '620,00 €', paid: '0,00 €', remaining: '620,00 €', status: 'En retard', tone: 'error' as const },
+    { month: 'Mars 2026', expected: '620,00 €', paid: '620,00 €', remaining: '0,00 €', status: 'Payé', tone: 'success' as const },
+    { month: 'Février 2026', expected: '620,00 €', paid: '620,00 €', remaining: '0,00 €', status: 'Payé', tone: 'success' as const },
   ];
 }

@@ -15,6 +15,12 @@ export class SciCard {
   readonly address = input.required<string>();
   readonly createdAt = input.required<string>();
   readonly incorporatedOn = input<string>();
+  readonly archivedOn = input<string>();
   readonly siren = input<string>();
   readonly taxRegime = input.required<string>();
+  readonly showIndicators = input(false);
+  readonly lotCount = input(0);
+  readonly tenantCount = input(0);
+  readonly occupancyRate = input(0);
+  readonly monthlyPotential = input('0,00 €');
 }

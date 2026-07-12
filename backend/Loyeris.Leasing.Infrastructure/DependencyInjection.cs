@@ -4,6 +4,7 @@ using Loyeris.Leasing.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Loyeris.Leasing.Infrastructure;
 
@@ -32,6 +33,8 @@ public static class DependencyInjection
         });
 
         services.AddScoped<ILeasingReadRepository, LeasingReadRepository>();
+        services.AddScoped<ILotOccupancyRepository, LotOccupancyRepository>();
+        services.TryAddSingleton(TimeProvider.System);
 
         return services;
     }

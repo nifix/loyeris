@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+.form-control {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.form-control > :is(input, select, textarea, .input) {
+  width: 100%;
+}
+
+.input > input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+}
+
+.lot-readonly :is(input:not(.toggle), select, textarea):disabled {
+  cursor: default;
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-base-content);
+  opacity: 1;
+}
+
+.lot-readonly label {
+  cursor: default;
+}
+
+.lot-readonly .input:has(input:disabled) {
+  border-color: transparent;
+  background: transparent;
+}

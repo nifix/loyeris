@@ -27,6 +27,11 @@ const meta: Meta<SciCard> = {
     incorporatedOn: '06/12/2023',
     siren: '123456789',
     taxRegime: 'IR',
+    showIndicators: true,
+    lotCount: 4,
+    tenantCount: 3,
+    occupancyRate: 75,
+    monthlyPotential: '3 240,00 €',
   },
 };
 
@@ -43,7 +48,9 @@ export const ArchivedWithoutLegalDetails: Story = {
     address: '8 boulevard Carnot, Villeurbanne',
     createdAt: '3 mars 2025',
     incorporatedOn: undefined,
+    archivedOn: '30/06/2026',
     siren: undefined,
     taxRegime: 'IR',
+    showIndicators: false,
   },
 };

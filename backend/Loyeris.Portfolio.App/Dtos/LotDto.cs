@@ -8,6 +8,7 @@ namespace Loyeris.Portfolio.App.Dtos;
 public record LotDto(
     Guid Id,
     Guid SciId,
+    string SciName,
     string Reference,
     LotType Type,
     LotStatus Status,

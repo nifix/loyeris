@@ -38,5 +38,15 @@ public enum LotType
     /// <summary>
     /// A lot type not covered by the predefined categories.
     /// </summary>
-    Other = 6
+    Other = 6,
+
+    /// <summary>
+    /// A four-room apartment.
+    /// </summary>
+    T4 = 7,
+
+    /// <summary>
+    /// A five-room apartment.
+    /// </summary>
+    T5 = 8
 }
