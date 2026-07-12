@@ -1,4 +1,4 @@
-﻿name: CI et images Docker
+name: CI et images Docker
 
 on:
   pull_request:
@@ -238,7 +238,7 @@ jobs:
           provenance: mode=max
 
       - name: Attest image provenance
-        uses: actions/attest@f6bf1532d7d6793fce74eac584813a8eee607999 # v4
+        uses: actions/attest@a1948c3f048ba23858d222213b7c278aabede763 # v4
         with:
           subject-name: ghcr.io/nifix/${{ matrix.image }}
           subject-digest: ${{ steps.build.outputs.digest }}
