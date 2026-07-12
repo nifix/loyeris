@@ -129,8 +129,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
+      - name: Pull external service images with retries
+        run: |
+          for attempt in 1 2 3 4; do
+            if docker compose --env-file .env.example pull db maildev; then
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 4 ]; then
+              echo 'Unable to pull PostgreSQL or MailDev after four attempts.' >&2
+              exit 1
+            fi
+
+            delay=$((attempt * 15))
+            echo "Docker Hub pull failed; retrying in ${delay}s." >&2
+            sleep "$delay"
+          done
+
       - name: Build and start the complete stack
-        run: docker compose --env-file .env.example up --detach --build --wait --wait-timeout 240
+        run: >-
+          docker compose --env-file .env.example up
+          --detach
+          --build
+          --pull never
+          --wait
+          --wait-timeout 240
 
       - name: Verify liveness, readiness and SPA fallback
         run: |
