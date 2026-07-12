@@ -1,0 +1,182 @@
+﻿name: CI et images Docker
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore and audit
+        run: dotnet restore backend/Loyeris.slnx /warnaserror:NU1903,NU1904
+
+      - name: Build
+        run: dotnet build backend/Loyeris.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test backend/Loyeris.Tests/Loyeris.Tests.csproj --configuration Release --no-build
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend/loyeris-app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: 24.15.0
+          cache: yarn
+          cache-dependency-path: frontend/loyeris-app/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Test
+        run: yarn test --watch=false
+
+      - name: Build application
+        run: yarn build
+
+      - name: Build Storybook
+        run: yarn build-storybook
+
+  compose:
+    name: Compose
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Validate local manifest
+        run: docker compose --env-file .env.example config --quiet
+
+      - name: Validate development manifest
+        run: docker compose --env-file .env.example --file compose.dev.yaml config --quiet
+
+      - name: Validate production manifest
+        env:
+          IMAGE_TAG: 0000000000000000000000000000000000000000
+        run: docker compose --env-file deploy/.env.production.example --file deploy/compose.production.yaml config --quiet
+
+  docker-smoke:
+    name: Docker smoke test
+    needs:
+      - backend
+      - frontend
+      - compose
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Build and start the complete stack
+        run: docker compose --env-file .env.example up --detach --build --wait --wait-timeout 240
+
+      - name: Verify liveness, readiness and SPA fallback
+        run: |
+          curl --fail --silent --show-error http://localhost:8080/api/health/live
+          curl --fail --silent --show-error http://localhost:8080/api/health/ready
+          curl --fail --silent --show-error http://localhost:8080/login | grep --quiet '<app-root'
+          curl --fail --silent --show-error http://localhost:8080/scis | grep --quiet '<app-root'
+
+      - name: Verify account email delivery through MailDev
+        run: |
+          curl --fail --silent --show-error \
+            --header 'Content-Type: application/json' \
+            --data '{"firstName":"Intégration","lastName":"Continue","email":"ci@loyeris.local","password":"Loyeris-CI-2026!","termsAccepted":true}' \
+            http://localhost:8080/api/identity-access/accounts
+
+          for attempt in {1..20}; do
+            if curl --fail --silent http://localhost:1080/email | grep --quiet 'ci@loyeris.local'; then
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo 'MailDev did not receive the account verification email.' >&2
+          exit 1
+
+      - name: Show container logs after failure
+        if: failure()
+        run: docker compose logs --no-color
+
+      - name: Stop the stack
+        if: always()
+        run: docker compose down --volumes --remove-orphans
+
+  publish:
+    name: Publish ${{ matrix.image }}
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - docker-smoke
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    strategy:
+      matrix:
+        include:
+          - image: loyeris-api
+            context: ./backend
+            dockerfile: ./backend/Dockerfile
+          - image: loyeris-web
+            context: ./frontend/loyeris-app
+            dockerfile: ./frontend/loyeris-app/Dockerfile
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish image
+        id: build
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/nifix/${{ matrix.image }}:${{ github.sha }}
+            ghcr.io/nifix/${{ matrix.image }}:latest
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}
+          sbom: true
+          provenance: mode=max
+
+      - name: Attest image provenance
+        uses: actions/attest@f6bf1532d7d6793fce74eac584813a8eee607999 # v4
+        with:
+          subject-name: ghcr.io/nifix/${{ matrix.image }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true

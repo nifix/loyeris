@@ -22,6 +22,7 @@ public class EndpointGroupRegistrationTests
         // Arrange
         var builder = WebApplication.CreateBuilder();
         builder.Services.AddSingleton(Mock.Of<IMediator>());
+        builder.Services.AddHealthChecks();
         var app = builder.Build();
 
         // Act
@@ -31,6 +32,7 @@ public class EndpointGroupRegistrationTests
         app.RegisterRentCollectionEndpointGroup();
         app.RegisterTaxPreparationEndpointGroup();
         app.RegisterMessagingEndpointGroup();
+        app.RegisterHealthEndpointGroup();
 
         var routes = ((IEndpointRouteBuilder)app).DataSources
             .SelectMany(dataSource => dataSource.Endpoints)
@@ -72,7 +74,9 @@ public class EndpointGroupRegistrationTests
             "api/tax-preparation/fiscal-periods",
             "api/tax-preparation/rental-expenses",
             "api/messaging/notification-preferences",
-            "api/messaging/outbox-messages"
+            "api/messaging/outbox-messages",
+            "/api/health/live",
+            "/api/health/ready"
         ]);
         routes.Count(route => route == "api/portfolio/scis").Should().Be(2);
         routes.Count(route => route == "api/portfolio/scis/{sciId:guid}").Should().Be(2);

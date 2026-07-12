@@ -1,5 +1,6 @@
 using Loyeris.Api.Contracts.IdentityAccess;
 using Loyeris.Api.Extensions;
+using Loyeris.Api.Security;
 using Loyeris.IdentityAccess.App.Commands;
 using Loyeris.IdentityAccess.App.Queries;
 using MediatR;
@@ -221,7 +222,7 @@ public static class IdentityAccessEndpoints
         JwtOptions options,
         Loyeris.IdentityAccess.App.Dtos.AuthenticationSessionDto session)
     {
-        var cookieOptions = CreateCookieOptions(httpContext);
+        var cookieOptions = RefreshCookieOptions.Create(httpContext);
         if (session.PersistentRefreshCookie)
             cookieOptions.Expires = session.RefreshTokenExpiresAt;
 
@@ -229,18 +230,7 @@ public static class IdentityAccessEndpoints
     }
 
     private static void DeleteRefreshCookie(HttpContext httpContext, JwtOptions options)
-        => httpContext.Response.Cookies.Delete(options.RefreshCookieName, CreateCookieOptions(httpContext));
-
-    private static CookieOptions CreateCookieOptions(HttpContext httpContext)
-    {
-        return new()
-        {
-            HttpOnly = true,
-            Secure = httpContext.Request.IsHttps,
-            SameSite = SameSiteMode.Strict,
-            Path = "/api/identity-access/auth"
-        };
-    }
+        => httpContext.Response.Cookies.Delete(options.RefreshCookieName, RefreshCookieOptions.Create(httpContext));
 
     private static string GetIpAddress(HttpContext httpContext)
         => httpContext.Connection.RemoteIpAddress?.ToString();
